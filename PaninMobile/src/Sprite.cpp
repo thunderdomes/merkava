@@ -51,14 +51,6 @@ bool Sprite::load(const char* filename){
     m_width = static_cast<float>(sizeX);
     m_height = static_cast<float>(sizeY);
 
-//    m_vertices[0] = -m_width / 2;
-//    m_vertices[1] = -m_height / 2;
-//    m_vertices[2] =  m_width / 2;
-//    m_vertices[3] = -m_height / 2;
-//    m_vertices[4] = -m_width / 2;
-//    m_vertices[5] =  m_height / 2;
-//    m_vertices[6] =  m_width / 2;
-//    m_vertices[7] =  m_height / 2;
     m_vertices[0] = 0.0f;
     m_vertices[1] = 0.0f;
     m_vertices[2] = m_width;

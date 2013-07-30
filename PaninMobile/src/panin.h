@@ -37,7 +37,14 @@ private:
 
 	enum state {
 		LOADING = 0,
-		HOME
+		HOME,
+		RUNNING_TRADE,
+		STOCK_WATCH,
+		STOCK_QUOTE,
+		STOCK_SUMMARY,
+		BROKER_SUMMARY,
+		BROKER_QUOTE,
+		COMPLETE_BOOK
 	};
 
 	state m_state;
@@ -74,6 +81,11 @@ private:
 	Sprite m_latar;
 	Sprite m_header_bar_bg;
 	Sprite m_header_post;
+	Sprite m_btn_info_bg;
+	Sprite m_btn_menu_bg;
+	Sprite m_btn_sell_bg;
+	Sprite m_btn_buy_bg;
+	Sprite m_ihsg2;
 	button m_btn_info;
 	button m_btn_menu;
 	button m_btn_sell;
@@ -99,12 +111,17 @@ private:
 	button m_btn_sell_execute;
 	button m_btn_sell_x;
 
-	Sprite m_white_band;
-	Sprite m_confirmatioon_bg;
-	Sprite m_conf_ok;
-	Sprite m_conf_cancel;
+	//Sprite m_white_band;
+	Sprite m_dialog_bg;
+	Sprite m_blue_rect;
 	button m_btn_conf_ok;
 	button m_btn_conf_cancel;
+	// home setelan
+	Sprite m_setel_bg;
+	button m_btn_setel_default;
+	button m_btn_setel_set202;
+	button m_btn_setel_set107;
+	button m_btn_setel_save;
 
 	// untuk home
 	Sprite m_logo;
@@ -123,13 +140,6 @@ private:
 	button m_btn_login;
 	button m_btn_home_info;
 	button m_btn_home_setel;
-
-	// home setelan
-	Sprite m_setel_bg;
-	button m_setel_default;
-	button m_setel_set202;
-	button m_selet_set107;
-	button m_setel_save;
 
 	// running trade
 	Sprite m_rt_caption;
@@ -250,6 +260,16 @@ private:
 	// void renderLoading();
 	void enable2D();
 	void renderHome();
+	void renderCompleteBook();
+	void renderStockQuote();
+	void renderStockWatch();
+	void renderStockSummary();
+	void renderBrokerQuote();
+	void renderBrokerSummary();
+	void renderRunningTrade();
+
+	void addHeader();
+	void addFooter();
 
 	void update();
 };

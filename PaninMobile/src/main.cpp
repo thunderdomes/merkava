@@ -27,7 +27,6 @@ main ()
 
 	fprintf(stderr, "eka tampan.\n");
 	panin myPanin(myPlatform);
-	//panin myPanin(myPlatform);
 	myPanin.run();
 
 	return EXIT_SUCCESS;
