@@ -24,14 +24,18 @@
 								<option id="com.qnx.qcc.option.compiler.optlevel.1900867850" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compile.debug.1965781455" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.1688452267" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/openssl"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
 								<option id="com.qnx.qcc.option.compiler.security.1511579645" name="Enhanced Security (-fstack-protector-strong)" superClass="com.qnx.qcc.option.compiler.security" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.defines.1631543343" name="Defines (-D)" superClass="com.qnx.qcc.option.compiler.defines" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FORTIFY_SOURCE=2"/>
+								</option>
+								<option id="com.qnx.qcc.option.compiler.qccoptions.168878844" name="QCC Options" superClass="com.qnx.qcc.option.compiler.qccoptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-DUSING_GL11"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1764687300" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -51,13 +55,15 @@
 									<listOptionValue builtIn="false" value="curl"/>
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="png"/>
+									<listOptionValue builtIn="false" value="freetype"/>
 									<listOptionValue builtIn="false" value="EGL"/>
 									<listOptionValue builtIn="false" value="GLESv1_CM"/>
 									<listOptionValue builtIn="false" value="screen"/>
-									<listOptionValue builtIn="false" value="freetype2"/>
 									<listOptionValue builtIn="false" value="ssl"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="alut"/>
+									<listOptionValue builtIn="false" value="fonts"/>
+									<listOptionValue builtIn="false" value="bps"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.159683389" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -94,8 +100,9 @@
 							<tool id="com.qnx.qcc.tool.compiler.1399388502" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.1673070831" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.2" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.1580905188" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/openssl"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
@@ -131,6 +138,9 @@
 									<listOptionValue builtIn="false" value="ssl"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="alut"/>
+									<listOptionValue builtIn="false" value="fonts"/>
+									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="bb"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.608215237" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -169,8 +179,9 @@
 								<option id="com.qnx.qcc.option.compile.debug.399354286" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.1582071950" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.238734633" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/openssl"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
@@ -204,6 +215,9 @@
 									<listOptionValue builtIn="false" value="ssl"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="alut"/>
+									<listOptionValue builtIn="false" value="fonts"/>
+									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="bb"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.110620753" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -242,8 +256,9 @@
 								<option id="com.qnx.qcc.option.compile.debug.1304531035" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.964556526" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.1304097356" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/openssl"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
@@ -277,6 +292,9 @@
 									<listOptionValue builtIn="false" value="ssl"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="alut"/>
+									<listOptionValue builtIn="false" value="fonts"/>
+									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="bb"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.706043387" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -313,8 +331,9 @@
 								<option id="com.qnx.qcc.option.compiler.optlevel.1816347681" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compile.debug.2117592179" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.538646492" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/openssl"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
@@ -351,6 +370,8 @@
 									<listOptionValue builtIn="false" value="ssl"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="alut"/>
+									<listOptionValue builtIn="false" value="freetype"/>
+									<listOptionValue builtIn="false" value="fonts"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.1513634955" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -388,8 +409,9 @@
 								<option id="com.qnx.qcc.option.compile.debug.1034751547" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.2011722224" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.1864047281" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/openssl"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
@@ -423,6 +445,9 @@
 									<listOptionValue builtIn="false" value="ssl"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="alut"/>
+									<listOptionValue builtIn="false" value="fonts"/>
+									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="bb"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.392892141" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -460,8 +485,9 @@
 								<option id="com.qnx.qcc.option.compile.debug.1780459030" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.1297155244" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.2002237755" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/openssl"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
 								</option>
@@ -495,6 +521,9 @@
 									<listOptionValue builtIn="false" value="ssl"/>
 									<listOptionValue builtIn="false" value="OpenAL"/>
 									<listOptionValue builtIn="false" value="alut"/>
+									<listOptionValue builtIn="false" value="fonts"/>
+									<listOptionValue builtIn="false" value="bps"/>
+									<listOptionValue builtIn="false" value="bb"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.linker.709466202" superClass="com.qnx.qcc.inputType.linker">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

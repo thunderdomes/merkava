@@ -50,6 +50,10 @@ private:
 	state m_state;
 
 	font_t* m_font;
+	font_t* m_font_global;
+	font_t* m_font_ihsg_val;
+	font_t* m_font_ihsg_vol;
+	font_t* m_font_tanggal;
 
 	float m_screenWidth, m_screenHeight;
 	bool	m_bZ10;

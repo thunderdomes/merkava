@@ -36,6 +36,29 @@ panin::panin(platform &myPlatform)
 		fprintf(stderr, "Unable to load font\n");
 	}
 
+	m_font_global = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
+	if (!m_font) {
+		fprintf(stderr, "Unable to load font\n");
+	}
+
+	point_size = 20.0f;
+	m_font_ihsg_val = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
+	if (!m_font) {
+		fprintf(stderr, "Unable to load font\n");
+	}
+
+	point_size = 16.5f;
+	m_font_ihsg_vol = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
+	if (!m_font) {
+		fprintf(stderr, "Unable to load font\n");
+	}
+
+	point_size = 15.0f;
+	m_font_tanggal = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
+	if (!m_font) {
+		fprintf(stderr, "Unable to load font\n");
+	}
+
 	//Initialize message
 	float textSizeX, textSizeY;
 	m_message = "Loading...";
@@ -281,12 +304,14 @@ panin::panin(platform &myPlatform)
 	m_btn_home_setel.setPosition( m_screenWidth/2 + 20.0f, (100.0f - m_btn_home_setel.sizeY) );
 
 	//TRADE
+	fprintf(stderr, "Load running trade.\n");
 	m_rt_caption.load("app/native/assets/running_trade/rt_bar_title.png");
 	m_rt_caption.setPosition(27.0f, m_screenHeight - 200.0f);
 	m_rt_table_title.load("app/native/assets/running_trade/rt_table_title.png");
 	m_rt_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
 
 	//stock watch
+	fprintf(stderr, "Load stock watch.\n");
 	m_sw_caption.load("app/native/assets/stock_watch/sw_caption.png");
 	m_sw_caption.setPosition(27.0f, m_screenHeight - 200.0f);
 	m_sw_box_black.load("app/native/assets/stock_watch/sw_box_black.png");
@@ -309,6 +334,7 @@ panin::panin(platform &myPlatform)
 	m_sw_val_red.setPosition(240.0f, m_screenHeight - 413.0f);
 
 	// complete book
+	fprintf(stderr, "Load complete book.\n");
 	m_cb_caption.load("app/native/assets/complete_book/completebook_caption.png");
 	m_cb_caption.setPosition(27.0f, m_screenHeight - 200.0f);
 	m_cb_top_band.load("app/native/assets/complete_book/completebook_caption.png");
@@ -319,43 +345,34 @@ panin::panin(platform &myPlatform)
 	m_cb_table_title2.setPosition(27.0f, m_screenHeight - 738.0f);
 
 	// stock quote
+	fprintf(stderr, "Load stock quote.\n");
 	m_sq_caption.load("app/native/assets/stock_quote/sq_caption.png");
 	m_sq_caption.setPosition(27.0f, m_screenHeight - 200.0f);
 	m_sq_table_title.load("app/native/assets/stock_quote/sq_table_title.png");
 	m_sq_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
 
 	// broker quote
+	fprintf(stderr, "Load broker quote.\n");
 	m_bq_caption.load("app/native/assets/broker_quote/bq_caption.png");
 	m_bq_caption.setPosition(27.0f, m_screenHeight - 200.0f);
 	m_bq_table_title.load("app/native/assets/broker_quote/bq_table_title.png");
 	m_bq_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
 
 	// stock summary
+	fprintf(stderr, "Load stock summary.\n");
 	m_ss_caption.load("app/native/assets/stock_summary/ss_caption.png");
 	m_ss_caption.setPosition(27.0f, m_screenHeight - 200.0f);
 	m_ss_table_title.load("app/native/assets/stock_summary/ss_table_title.png");
 	m_ss_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
 
 	// broker summary
+	fprintf(stderr, "Load broker summary.\n");
 	m_bs_caption.load("app/native/assets/broker_summary/bs_caption.png");
 	m_bs_caption.setPosition(27.0f, m_screenHeight - 200.0f);
-	m_bs_table_title.load("app/native/assets/broker_summary/bs_table_title.png");
-	m_bs_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
+	//m_bs_table_title.load("app/native/assets/broker_summary/bs_table_title.png");
+	//m_bs_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
 
-
-//    m_playButton.sizeX = m_buttonRegular.Width();
-//    m_playButton.sizeY = m_buttonRegular.Height();
-//    m_playButton.isPressed = false;
-//    m_playButton.regular = &m_buttonRegular;
-//    m_playButton.pressed = &m_buttonPressed;
-//    m_playButton.font = m_font;
-//    m_playButton.text = "Play Again";
-//    bbutil_measure_text(m_font, m_playButton.text, &textSizeX, &textSizeY);
-//    m_playButton.textX = - textSizeX / 2;
-//    m_playButton.textY = - textSizeY / 2;
-//    m_playButton.setPosition(m_sceneWidth / 2, m_leaderBoard.PosY() - m_leaderBoard.Height() / 2);
-
-
+	fprintf(stderr, "Finish instantiate panin.\n");
 }
 
 //panin::~panin() {
@@ -471,8 +488,33 @@ void panin::renderHome()
     glDisable(GL_BLEND);
 
     //bbutil_render_text(m_font, m_message, m_messagePosX, m_messagePosY, 0.75f, 0.75f, 0.75f, 1.0f);
+    float text_width, text_height, pos_x, pos_y;
+    bbutil_measure_text(m_font_global, "Username", &text_width, &text_height);
+    pos_x = 390.0f;
+	pos_y = m_screenHeight -620.0f;
+	bbutil_render_text(m_font_global, "Username", pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
 
-    m_platform.finishRender();
+	bbutil_measure_text(m_font_global, "Password", &text_width, &text_height);
+	pos_x = 390;
+	pos_y = m_screenHeight -677;
+	bbutil_render_text(m_font_global, "Password", pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
+
+	bbutil_measure_text(m_font_ihsg_val, "5000.00", &text_width, &text_height);
+	pos_x = (m_screenHeight - text_width) /2;
+	pos_y = m_screenHeight -980;
+	bbutil_render_text(m_font_ihsg_val, "5000.00", pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
+
+	bbutil_measure_text(m_font_ihsg_vol, "3415.10 bn 17.77 (30%)", &text_width, &text_height);
+	pos_x = (m_screenWidth - text_width) /2;
+	pos_y = m_screenHeight -1050;
+	bbutil_render_text(m_font_ihsg_vol, "3415.10 bn 17.77 (30%)", pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
+
+	bbutil_measure_text(m_font_tanggal, "30 September 2013 23:59:59", &text_width, &text_height);
+	pos_x = (m_screenWidth - text_width) /2;
+	pos_y = m_screenHeight -1125;
+	bbutil_render_text(m_font_tanggal, "30 September 2013 23:59:59", pos_x, pos_y, 0.35f, 0.35f, 0.35f, 1.0f);
+
+	m_platform.finishRender();
 }
 
 void panin::renderRunningTrade()
@@ -656,7 +698,7 @@ void panin::renderBrokerSummary()
 	addHeader();
 
 	m_bs_caption.draw();
-	m_bs_table_title.draw();
+	//m_bs_table_title.draw();
 
 	addFooter();
 
