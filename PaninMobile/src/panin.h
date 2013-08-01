@@ -77,6 +77,7 @@ private:
 		void setPosition(float x, float y);
 
 		bool isWithin(float clickX, float clickY) const {
+			fprintf(stderr, "clicked at: %f, %f for box: %f, %f, %f, %f and sprite %f, %f.\n", clickX, clickY, posX, posY, posX+ sizeX, posY + sizeY, regular->PosX(), regular->PosY());
 			return ((clickX >= posX) && (clickX <= posX + sizeX) && (clickY >= posY) && (clickY <= posY  + sizeY));
 		}
 	};
@@ -220,13 +221,6 @@ private:
 	button m_ca_btn_rights;
 	button m_ca_btn_rups;
 
-	// research
-	Sprite m_rs_caption;
-
-	// portfolio
-	Sprite m_pf_caption;
-	Sprite m_pf_table_title;
-
 	// my account
 	Sprite m_ac_password;
 	Sprite m_ac_trading_pin;
@@ -243,6 +237,27 @@ private:
 
 
 	// charts
+	Sprite m_chart_bg;
+	Sprite m_chart_post_bar;
+	Sprite m_chart_caption_bottom;
+	Sprite m_chart_text_bg;
+	Sprite m_icon_search;
+	Sprite m_chart_1day_big;
+	Sprite m_chart_1week_big;
+	Sprite m_chart_1month_big;
+	Sprite m_chart_1year_big;
+	Sprite m_chart_3year_big;
+	Sprite m_chart_1day_small;
+	Sprite m_chart_1week_small;
+	Sprite m_chart_1month_small;
+	Sprite m_chart_1year_small;
+	Sprite m_chart_3year_small;
+	button m_chart_btn_search;
+	button m_chart_btn_1day;
+	button m_chart_btn_1week;
+	button m_chart_btn_1month;
+	button m_chart_btn_1year;
+	button m_chart_btn_3year;
 
 	// information
 
@@ -250,7 +265,66 @@ private:
 
 	// my account
 
+	// menu
+	Sprite m_menu_bg;
+	Sprite m_menu_tc_bg;
+	Sprite m_menu_acc_number;
+	Sprite m_menu_trade_central;
+	Sprite m_menu_charts;
+	Sprite m_menu_informations;
+	Sprite m_menu_portfolio;
+	Sprite m_menu_order_trade;
+	Sprite m_menu_my_account;
+	Sprite m_menu_logout;
+	Sprite m_menu_tc_running_trade;
+	Sprite m_menu_tc_stock_watch;
+	Sprite m_menu_tc_complete_book;
+	Sprite m_menu_tc_stock_quote;
+	Sprite m_menu_tc_broker_quote;
+	Sprite m_menu_tc_stock_summary;
+	Sprite m_menu_tc_broker_summary;
+	Sprite m_menu_tc_non_regular;
+	button m_menu_btn_trade_central;
+	button m_menu_btn_charts;
+	button m_menu_btn_informations;
+	button m_menu_btn_portfolio;
+	button m_menu_btn_order_trade;
+	button m_menu_btn_my_account;
+	button m_menu_btn_logout;
+	button m_menu_tc_btn_running_trade;
+	button m_menu_tc_btn_stock_watch;
+	button m_menu_tc_btn_complete_book;
+	button m_menu_tc_btn_stock_quote;
+	button m_menu_tc_btn_broker_quote;
+	button m_menu_tc_btn_stock_summary;
+	button m_menu_tc_btn_broker_summary;
+	button m_menu_tc_btn_non_regular;
 
+	// password
+	Sprite m_pw_caption;
+	Sprite m_pw_text_bg;
+	Sprite m_pw_save;
+	button m_pw_btn_save;
+
+	// portfolio
+	Sprite m_pf_caption;
+	Sprite m_pf_table_title;
+	Sprite m_pf_acc_number;
+
+	// research
+	Sprite m_research_caption;
+
+
+	bool	m_bShowMenu;
+	bool	m_bShowInfo;
+	bool	m_bShowBuy;
+	bool	m_bShowSell;
+
+	// home
+	bool	m_bShowHomeInfo;
+	bool	m_bShowHomeSetel;
+	bool	m_bUsernameFocus;
+	bool	m_bPasswordFocuse;
 
 
 	const char* m_message;

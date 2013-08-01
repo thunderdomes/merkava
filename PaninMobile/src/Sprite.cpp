@@ -69,8 +69,10 @@ bool Sprite::load(const char* filename){
     m_textureCoordinates[6] = texX;
     m_textureCoordinates[7] = texY;
 
-    m_posX = -m_width;
-    m_posY = -m_height;
+    //m_posX = -m_width;
+    //m_posY = -m_height;
+    m_posX = 0.0f;
+    m_posY = 0.0f;
 
     return true;
 }
@@ -84,14 +86,14 @@ void Sprite::setPosition(float x, float y){
     m_posX = x;
     m_posY = y;
 
-    m_vertices[0] = x + m_vertices[0];
-    m_vertices[1] = y + m_vertices[1];
-    m_vertices[2] = x + m_vertices[2];
-    m_vertices[3] = y + m_vertices[3];
-    m_vertices[4] = x + m_vertices[4];
-    m_vertices[5] = y + m_vertices[5];
-    m_vertices[6] = x + m_vertices[6];
-    m_vertices[7] = y + m_vertices[7];
+    m_vertices[0] = x;
+    m_vertices[1] = y;
+    m_vertices[2] = x + m_width;
+    m_vertices[3] = y;
+    m_vertices[4] = x;
+    m_vertices[5] = y + m_height;
+    m_vertices[6] = x + m_width;
+    m_vertices[7] = y + m_height;
 }
 
 void Sprite::draw() const {
