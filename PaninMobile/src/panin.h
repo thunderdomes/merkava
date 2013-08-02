@@ -56,8 +56,24 @@ private:
 	font_t* m_font_tanggal;
 
 	float m_screenWidth, m_screenHeight;
+	float m_ePosX, m_ePosY;
+	float m_fmenu_width, m_fmenu_animation;
 	bool	m_bZ10;
 
+	bool	m_bShowMenu;
+	bool	m_bMenuActive;
+	bool	m_bMenuShowAnimation;
+	bool	m_bMenuHideAnimation;
+	bool	m_bShowSubmenuRT;
+	bool	m_bShowInfo;
+	bool	m_bShowBuy;
+	bool	m_bShowSell;
+
+	// home
+	bool	m_bShowHomeInfo;
+	bool	m_bShowHomeSetel;
+	bool	m_bUsernameFocus;
+	bool	m_bPasswordFocus;
 
 	struct button {
 		float posX;
@@ -315,18 +331,6 @@ private:
 	Sprite m_research_caption;
 
 
-	bool	m_bShowMenu;
-	bool	m_bShowInfo;
-	bool	m_bShowBuy;
-	bool	m_bShowSell;
-
-	// home
-	bool	m_bShowHomeInfo;
-	bool	m_bShowHomeSetel;
-	bool	m_bUsernameFocus;
-	bool	m_bPasswordFocuse;
-
-
 	const char* m_message;
 	float m_messagePosX, m_messagePosY;
 
@@ -345,6 +349,7 @@ private:
 	void renderBrokerQuote();
 	void renderBrokerSummary();
 	void renderRunningTrade();
+	void renderMenu();
 
 	void addHeader();
 	void addFooter();

@@ -22,7 +22,16 @@ panin::panin(platform &myPlatform)
 	  m_platform(myPlatform),
 	  m_shutdown(false),
 	  m_state(HOME),
-	  m_bZ10(false)
+	  m_bZ10(false),
+	  m_bShowMenu(false),
+	  m_bShowSubmenuRT(false),
+	  m_bShowInfo(false),
+	  m_bShowBuy(false),
+	  m_bShowSell(false),
+	  m_bShowHomeInfo(false),
+	  m_bShowHomeSetel(false),
+	  m_bUsernameFocus(false),
+	  m_bPasswordFocus(false)
 {
 	// TODO Auto-generated constructor stub
 	m_platform.setEventHandler(this);
@@ -377,11 +386,12 @@ panin::panin(platform &myPlatform)
 	// menu
 	fprintf(stderr, "Load broker summary.\n");
 	m_menu_bg.load("app/native/assets/menu/menu_bg.png");
-	m_menu_bg.setPosition(0.0f, m_screenHeight - m_menu_bg.Height());
+	//m_menu_bg.setPosition(-m_menu_bg.Width(), m_screenHeight - m_menu_bg.Height());
+	m_menu_bg.setPosition(0.0f, m_screenHeight - m_menu_bg.Height() -140.0f);
 	m_menu_acc_number.load("app/native/assets/menu/acc_number.png");
-	m_menu_acc_number.setPosition(0.0f, m_screenHeight - m_menu_acc_number.Height());
+	m_menu_acc_number.setPosition(m_menu_bg.PosX(), m_screenHeight - m_menu_acc_number.Height() -50.0f);
 	m_menu_tc_bg.load("app/native/assets/menu/menu_tc_bg.png");
-	m_menu_tc_bg.setPosition(0.0f, m_menu_acc_number.PosY() - m_menu_tc_bg.Height());
+	m_menu_tc_bg.setPosition(m_menu_bg.PosX(), m_menu_acc_number.PosY() - m_menu_tc_bg.Height());
 	m_menu_trade_central.load("app/native/assets/menu/trade_central.png");
 	m_menu_charts.load("app/native/assets/menu/charts.png");
 	m_menu_informations.load("app/native/assets/menu/informations.png");
@@ -405,7 +415,7 @@ panin::panin(platform &myPlatform)
 	m_menu_btn_trade_central.font	= m_font;
 	m_menu_btn_trade_central.text	= "";
 	m_menu_btn_trade_central.isPressed	= false;
-	m_menu_btn_trade_central.setPosition( 0.0f, m_menu_acc_number.PosY() - m_menu_trade_central.Height() );
+	m_menu_btn_trade_central.setPosition( m_menu_bg.PosX(), m_menu_acc_number.PosY() - m_menu_trade_central.Height() );
 	// button menu charts
 	m_menu_btn_charts.regular = &m_menu_charts;
 	m_menu_btn_charts.pressed = &m_menu_charts;
@@ -414,7 +424,7 @@ panin::panin(platform &myPlatform)
 	m_menu_btn_charts.font	= m_font;
 	m_menu_btn_charts.text	= "";
 	m_menu_btn_charts.isPressed	= false;
-	m_menu_btn_charts.setPosition( 0.0f, m_menu_trade_central.PosY() - m_menu_charts.Height() );
+	m_menu_btn_charts.setPosition( m_menu_bg.PosX(), m_menu_trade_central.PosY() - m_menu_charts.Height() );
 	// button menu information
 	m_menu_btn_informations.regular = &m_menu_informations;
 	m_menu_btn_informations.pressed = &m_menu_informations;
@@ -423,7 +433,7 @@ panin::panin(platform &myPlatform)
 	m_menu_btn_informations.font	= m_font;
 	m_menu_btn_informations.text	= "";
 	m_menu_btn_informations.isPressed	= false;
-	m_menu_btn_informations.setPosition( 0.0f, m_menu_btn_charts.posY - m_menu_informations.Height() );
+	m_menu_btn_informations.setPosition( m_menu_bg.PosX(), m_menu_btn_charts.posY - m_menu_informations.Height() );
 	// button menu portfolio
 	m_menu_btn_portfolio.regular = &m_menu_portfolio;
 	m_menu_btn_portfolio.pressed = &m_menu_portfolio;
@@ -432,7 +442,7 @@ panin::panin(platform &myPlatform)
 	m_menu_btn_portfolio.font	= m_font;
 	m_menu_btn_portfolio.text	= "";
 	m_menu_btn_portfolio.isPressed	= false;
-	m_menu_btn_portfolio.setPosition( 0.0f, m_menu_btn_informations.posY - m_menu_portfolio.Height() );
+	m_menu_btn_portfolio.setPosition( m_menu_bg.PosX(), m_menu_btn_informations.posY - m_menu_portfolio.Height() );
 	// button menu charts
 	m_menu_btn_order_trade.regular = &m_menu_order_trade;
 	m_menu_btn_order_trade.pressed = &m_menu_order_trade;
@@ -441,7 +451,7 @@ panin::panin(platform &myPlatform)
 	m_menu_btn_order_trade.font	= m_font;
 	m_menu_btn_order_trade.text	= "";
 	m_menu_btn_order_trade.isPressed	= false;
-	m_menu_btn_order_trade.setPosition( 0.0f, m_menu_btn_portfolio.posY - m_menu_order_trade.Height() );
+	m_menu_btn_order_trade.setPosition( m_menu_bg.PosX(), m_menu_btn_portfolio.posY - m_menu_order_trade.Height() );
 	// button menu my account
 	m_menu_btn_my_account.regular = &m_menu_my_account;
 	m_menu_btn_my_account.pressed = &m_menu_my_account;
@@ -450,7 +460,7 @@ panin::panin(platform &myPlatform)
 	m_menu_btn_my_account.font	= m_font;
 	m_menu_btn_my_account.text	= "";
 	m_menu_btn_my_account.isPressed	= false;
-	m_menu_btn_my_account.setPosition( 0.0f, m_menu_btn_order_trade.posY - m_menu_my_account.Height() );
+	m_menu_btn_my_account.setPosition( m_menu_bg.PosX(), m_menu_btn_order_trade.posY - m_menu_my_account.Height() );
 	// button menu logout
 	m_menu_btn_logout.regular = &m_menu_logout;
 	m_menu_btn_logout.pressed = &m_menu_logout;
@@ -459,7 +469,7 @@ panin::panin(platform &myPlatform)
 	m_menu_btn_logout.font	= m_font;
 	m_menu_btn_logout.text	= "";
 	m_menu_btn_logout.isPressed	= false;
-	m_menu_btn_logout.setPosition( 0.0f, m_menu_btn_my_account.posY - m_menu_logout.Height() );
+	m_menu_btn_logout.setPosition( m_menu_bg.PosX(), m_menu_btn_my_account.posY - m_menu_logout.Height() );
 
 	m_menu_tc_btn_running_trade.regular = &m_menu_tc_running_trade;
 	m_menu_tc_btn_running_trade.pressed = &m_menu_tc_running_trade;
@@ -468,7 +478,7 @@ panin::panin(platform &myPlatform)
 	m_menu_tc_btn_running_trade.font	= m_font;
 	m_menu_tc_btn_running_trade.text	= "";
 	m_menu_tc_btn_running_trade.isPressed	= false;
-	m_menu_tc_btn_running_trade.setPosition( 0.0f, m_menu_btn_trade_central.posY - m_menu_tc_running_trade.Height() );
+	m_menu_tc_btn_running_trade.setPosition( m_menu_bg.PosX(), m_menu_btn_trade_central.posY - m_menu_tc_running_trade.Height() );
 
 	m_menu_tc_btn_stock_watch.regular = &m_menu_tc_stock_watch;
 	m_menu_tc_btn_stock_watch.pressed = &m_menu_tc_stock_watch;
@@ -477,7 +487,7 @@ panin::panin(platform &myPlatform)
 	m_menu_tc_btn_stock_watch.font	= m_font;
 	m_menu_tc_btn_stock_watch.text	= "";
 	m_menu_tc_btn_stock_watch.isPressed	= false;
-	m_menu_tc_btn_stock_watch.setPosition( 0.0f, m_menu_tc_btn_running_trade.posY - m_menu_tc_stock_watch.Height() );
+	m_menu_tc_btn_stock_watch.setPosition( m_menu_bg.PosX(), m_menu_tc_btn_running_trade.posY - m_menu_tc_stock_watch.Height() );
 
 	m_menu_tc_btn_complete_book.regular = &m_menu_tc_complete_book;
 	m_menu_tc_btn_complete_book.pressed = &m_menu_tc_complete_book;
@@ -486,7 +496,7 @@ panin::panin(platform &myPlatform)
 	m_menu_tc_btn_complete_book.font	= m_font;
 	m_menu_tc_btn_complete_book.text	= "";
 	m_menu_tc_btn_complete_book.isPressed	= false;
-	m_menu_tc_btn_complete_book.setPosition( 0.0f, m_menu_tc_btn_stock_watch.posY - m_menu_tc_complete_book.Height() );
+	m_menu_tc_btn_complete_book.setPosition( m_menu_bg.PosX(), m_menu_tc_btn_stock_watch.posY - m_menu_tc_complete_book.Height() );
 
 	m_menu_tc_btn_stock_quote.regular = &m_menu_tc_stock_quote;
 	m_menu_tc_btn_stock_quote.pressed = &m_menu_tc_stock_quote;
@@ -495,7 +505,7 @@ panin::panin(platform &myPlatform)
 	m_menu_tc_btn_stock_quote.font	= m_font;
 	m_menu_tc_btn_stock_quote.text	= "";
 	m_menu_tc_btn_stock_quote.isPressed	= false;
-	m_menu_tc_btn_stock_quote.setPosition( 0.0f, m_menu_tc_btn_complete_book.posY - m_menu_tc_stock_quote.Height() );
+	m_menu_tc_btn_stock_quote.setPosition( m_menu_bg.PosX(), m_menu_tc_btn_complete_book.posY - m_menu_tc_stock_quote.Height() );
 
 	m_menu_tc_btn_broker_quote.regular = &m_menu_tc_broker_quote;
 	m_menu_tc_btn_broker_quote.pressed = &m_menu_tc_broker_quote;
@@ -504,7 +514,7 @@ panin::panin(platform &myPlatform)
 	m_menu_tc_btn_broker_quote.font	= m_font;
 	m_menu_tc_btn_broker_quote.text	= "";
 	m_menu_tc_btn_broker_quote.isPressed	= false;
-	m_menu_tc_btn_broker_quote.setPosition( 0.0f, m_menu_tc_btn_stock_quote.posY - m_menu_tc_broker_quote.Height() );
+	m_menu_tc_btn_broker_quote.setPosition( m_menu_bg.PosX(), m_menu_tc_btn_stock_quote.posY - m_menu_tc_broker_quote.Height() );
 
 	m_menu_tc_btn_stock_summary.regular = &m_menu_tc_stock_summary;
 	m_menu_tc_btn_stock_summary.pressed = &m_menu_tc_stock_summary;
@@ -513,7 +523,7 @@ panin::panin(platform &myPlatform)
 	m_menu_tc_btn_stock_summary.font	= m_font;
 	m_menu_tc_btn_stock_summary.text	= "";
 	m_menu_tc_btn_stock_summary.isPressed	= false;
-	m_menu_tc_btn_stock_summary.setPosition( 0.0f, m_menu_tc_btn_broker_quote.posY - m_menu_tc_stock_summary.Height() );
+	m_menu_tc_btn_stock_summary.setPosition( m_menu_bg.PosX(), m_menu_tc_btn_broker_quote.posY - m_menu_tc_stock_summary.Height() );
 
 	m_menu_tc_btn_broker_summary.regular = &m_menu_tc_broker_summary;
 	m_menu_tc_btn_broker_summary.pressed = &m_menu_tc_broker_summary;
@@ -522,7 +532,7 @@ panin::panin(platform &myPlatform)
 	m_menu_tc_btn_broker_summary.font	= m_font;
 	m_menu_tc_btn_broker_summary.text	= "";
 	m_menu_tc_btn_broker_summary.isPressed	= false;
-	m_menu_tc_btn_broker_summary.setPosition( 0.0f, m_menu_tc_btn_stock_summary.posY - m_menu_tc_broker_summary.Height() );
+	m_menu_tc_btn_broker_summary.setPosition( m_menu_bg.PosX(), m_menu_tc_btn_stock_summary.posY - m_menu_tc_broker_summary.Height() );
 
 	m_menu_tc_btn_non_regular.regular = &m_menu_tc_non_regular;
 	m_menu_tc_btn_non_regular.pressed = &m_menu_tc_non_regular;
@@ -531,7 +541,7 @@ panin::panin(platform &myPlatform)
 	m_menu_tc_btn_non_regular.font	= m_font;
 	m_menu_tc_btn_non_regular.text	= "";
 	m_menu_tc_btn_non_regular.isPressed	= false;
-	m_menu_tc_btn_non_regular.setPosition( 0.0f, m_menu_tc_btn_broker_summary.posY - m_menu_tc_non_regular.Height() );
+	m_menu_tc_btn_non_regular.setPosition( m_menu_bg.PosX(), m_menu_tc_btn_broker_summary.posY - m_menu_tc_non_regular.Height() );
 
 	// password
 	m_pw_caption.load("app/native/assets/password/pw_caption.png");
@@ -559,6 +569,13 @@ panin::panin(platform &myPlatform)
 	m_research_caption.load("app/native/assets/research/research_caption.png");
 	m_research_caption.setPosition(27.0f, m_screenHeight - 200.0f);
 
+	m_state = HOME;
+	m_ePosX = 0.0f;
+	m_ePosY = 0.0f;
+	m_bMenuShowAnimation = false;
+	m_bMenuHideAnimation = false;
+	m_fmenu_width = m_menu_bg.Width();
+	m_fmenu_animation = -m_fmenu_width;
 
 	fprintf(stderr, "Finish instantiate panin.\n");
 }
@@ -608,6 +625,7 @@ void panin::run() {
             break;
 
         case RUNNING_TRADE:
+        	update();
         	renderRunningTrade();
         	break;
 
@@ -644,6 +662,23 @@ void panin::run() {
 
 void panin::update()
 {
+	if (m_bMenuShowAnimation) {
+		if (m_fmenu_animation < 0.0f) {
+			m_fmenu_animation += 20.0f;
+		} else {
+			m_bMenuShowAnimation = false;
+			m_bMenuActive = true;
+			m_fmenu_animation = 0.0f;
+		}
+	} else if (m_bMenuHideAnimation) {
+		if (m_fmenu_animation > -m_fmenu_width) {
+			m_fmenu_animation -= 20.0f;
+		} else {
+			m_bMenuHideAnimation = false;
+		}
+	}
+
+	m_ePosX = m_fmenu_animation;
 
 }
 
@@ -657,6 +692,9 @@ void panin::renderHome()
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	if (m_bShowMenu)
+		m_bShowMenu = false;
 
 	m_latar.draw();
 	m_logo.draw();
@@ -707,6 +745,34 @@ void panin::renderHome()
 	m_platform.finishRender();
 }
 
+void panin::renderMenu()
+{
+	m_menu_bg.draw();
+	m_menu_btn_trade_central.draw();
+	m_menu_tc_btn_running_trade.draw();
+	m_menu_tc_btn_stock_watch.draw();
+	m_menu_tc_btn_complete_book.draw();
+	m_menu_tc_btn_stock_quote.draw();
+	m_menu_tc_btn_broker_quote.draw();
+	m_menu_tc_btn_stock_summary.draw();
+	m_menu_tc_btn_broker_summary.draw();
+	m_menu_tc_btn_non_regular.draw();
+
+	m_menu_btn_charts.setPosition(m_menu_btn_charts.posX, m_menu_tc_btn_non_regular.posY - m_menu_btn_charts.sizeY);
+	m_menu_btn_charts.draw();
+	m_menu_btn_informations.setPosition(m_menu_btn_informations.posX, m_menu_btn_charts.posY - m_menu_btn_informations.sizeY);
+	m_menu_btn_informations.draw();
+	m_menu_btn_portfolio.setPosition(m_menu_btn_portfolio.posX, m_menu_btn_informations.posY - m_menu_btn_portfolio.sizeY);
+	m_menu_btn_portfolio.draw();
+	m_menu_btn_order_trade.setPosition(m_menu_btn_order_trade.posX, m_menu_btn_portfolio.posY - m_menu_btn_order_trade.sizeY);
+	m_menu_btn_order_trade.draw();
+	m_menu_btn_my_account.setPosition(m_menu_btn_my_account.posX, m_menu_btn_order_trade.posY - m_menu_btn_my_account.sizeY);
+	m_menu_btn_my_account.draw();
+	m_menu_btn_logout.setPosition(m_menu_btn_logout.posX, m_menu_btn_my_account.posY - m_menu_btn_logout.sizeY);
+	m_menu_btn_logout.draw();
+
+}
+
 void panin::renderRunningTrade()
 {
 	m_platform.beginRender();
@@ -717,6 +783,14 @@ void panin::renderRunningTrade()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+//	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation)
+//	{
+//		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
+//		//renderMenu();
+//		m_menu_bg.draw();
+//	}
 	m_latar.draw();
 
 	addHeader();
@@ -725,6 +799,12 @@ void panin::renderRunningTrade()
 	m_rt_table_title.draw();
 
 	addFooter();
+
+	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation)
+	{
+		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
+		renderMenu();
+	}
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -931,7 +1011,7 @@ void panin::onLeftRelease(float x, float y)
 		{
 			fprintf(stderr, "button login is released.\n");
 			m_btn_login.isPressed = false;
-			m_state = STOCK_SUMMARY;
+			m_state = RUNNING_TRADE;
 		}
 
 		else if (m_btn_home_info.isWithin(pX, pY))
@@ -955,6 +1035,17 @@ void panin::onLeftRelease(float x, float y)
 		{
 			fprintf(stderr, "button menu is released.\n");
 			m_bShowMenu = !m_bShowMenu;
+			if (m_bShowMenu)
+			{
+				fprintf(stderr, "Show Menu.\n");
+				m_bMenuShowAnimation = true;
+			}
+			else
+			{
+				fprintf(stderr, "Hide Menu.\n");
+				m_bMenuHideAnimation = true;
+				m_bMenuActive = false;
+			}
 
 			// update semua posisi.
 			return;
