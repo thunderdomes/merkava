@@ -69,6 +69,14 @@ public:
 
 	void displayPrompt(const std::string& prompt);
 
+	char* getDate();
+
+	char* getTime();
+
+	char* ambilBulan(int bulanke);
+
+	char* getDateTime();
+
 private:
 	PlatformEventHandler* m_handler;
 	screen_context_t m_screenContext;

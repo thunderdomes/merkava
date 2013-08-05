@@ -12,8 +12,12 @@
 #include "Sound.h"
 #include "bbutil.h"
 #include "Sprite.h"
+//#include "Label.h"
+//#include "Button.h"
 
 #include <GLES/gl.h>
+
+#include "umum.h"
 
 #ifndef NDEBUG
 #include <assert.h>
@@ -31,6 +35,7 @@ public:
 	virtual ~panin() {};
 	void run();
 
+
 private:
 	platform& m_platform;
 	bool m_shutdown;
@@ -40,11 +45,17 @@ private:
 		HOME,
 		RUNNING_TRADE,
 		STOCK_WATCH,
+		COMPLETE_BOOK,
 		STOCK_QUOTE,
+		BROKER_QUOTE,
 		STOCK_SUMMARY,
 		BROKER_SUMMARY,
-		BROKER_QUOTE,
-		COMPLETE_BOOK
+		NON_REGULAR,
+		CHARTS,
+		INFORMATIONS,
+		PORTFOLIO,
+		ORDER_TRADE,
+		LAST_STATE
 	};
 
 	state m_state;
@@ -54,17 +65,27 @@ private:
 	font_t* m_font_ihsg_val;
 	font_t* m_font_ihsg_vol;
 	font_t* m_font_tanggal;
+	font_t* m_font8;
+	font_t* m_font9;
+	font_t* m_font10;
+	font_t* m_font11;
+	font_t* m_font12;
+	font_t* m_font14;
+
+	time_t m_time;
 
 	float m_screenWidth, m_screenHeight;
 	float m_ePosX, m_ePosY;
 	float m_fmenu_width, m_fmenu_animation;
 	bool	m_bZ10;
 
+	// menu
 	bool	m_bShowMenu;
 	bool	m_bMenuActive;
 	bool	m_bMenuShowAnimation;
 	bool	m_bMenuHideAnimation;
-	bool	m_bShowSubmenuRT;
+	bool	m_bShowSubmenuTC;
+
 	bool	m_bShowInfo;
 	bool	m_bShowBuy;
 	bool	m_bShowSell;
@@ -81,6 +102,7 @@ private:
 		float sizeX;
 		float sizeY;
 		bool isPressed;
+		bool isEnabled;
 		Sprite* regular;
 		Sprite* pressed;
 		float textX;
@@ -93,7 +115,7 @@ private:
 		void setPosition(float x, float y);
 
 		bool isWithin(float clickX, float clickY) const {
-			fprintf(stderr, "clicked at: %f, %f for box: %f, %f, %f, %f and sprite %f, %f.\n", clickX, clickY, posX, posY, posX+ sizeX, posY + sizeY, regular->PosX(), regular->PosY());
+			//fprintf(stderr, "clicked at: %f, %f for box: %f, %f, %f, %f and sprite %f, %f.\n", clickX, clickY, posX, posY, posX+ sizeX, posY + sizeY, regular->PosX(), regular->PosY());
 			return ((clickX >= posX) && (clickX <= posX + sizeX) && (clickY >= posY) && (clickY <= posY  + sizeY));
 		}
 	};
@@ -132,6 +154,7 @@ private:
 	button m_btn_sell_execute;
 	button m_btn_sell_x;
 
+	Sprite m_textfield_bg;
 	//Sprite m_white_band;
 	Sprite m_dialog_bg;
 	Sprite m_blue_rect;
@@ -139,10 +162,16 @@ private:
 	button m_btn_conf_cancel;
 	// home setelan
 	Sprite m_setel_bg;
+	Sprite m_setel_default;
+	Sprite m_setel_set202;
+	Sprite m_setel_set107;
+	Sprite m_setel_save;
+	Sprite m_setel_x;
 	button m_btn_setel_default;
 	button m_btn_setel_set202;
 	button m_btn_setel_set107;
 	button m_btn_setel_save;
+	button m_btn_setel_x;
 
 	// untuk home
 	Sprite m_logo;
@@ -330,7 +359,6 @@ private:
 	// research
 	Sprite m_research_caption;
 
-
 	const char* m_message;
 	float m_messagePosX, m_messagePosY;
 
@@ -342,13 +370,21 @@ private:
 	// void renderLoading();
 	void enable2D();
 	void renderHome();
+	void renderHomeSetel();
+	void renderHomeInfo();
+	void renderRunningTrade();
+	void renderStockWatch();
 	void renderCompleteBook();
 	void renderStockQuote();
-	void renderStockWatch();
-	void renderStockSummary();
 	void renderBrokerQuote();
+	void renderStockSummary();
 	void renderBrokerSummary();
-	void renderRunningTrade();
+	void renderNonRegular();
+	void renderCharts();
+	void renderInformations();
+	void renderPortfolio();
+	void renderOrderTrade();
+
 	void renderMenu();
 
 	void addHeader();
