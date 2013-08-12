@@ -40,6 +40,9 @@ private:
 	platform& m_platform;
 	bool m_shutdown;
 
+	std::ostringstream oss;
+
+
 	enum state {
 		LOADING = 0,
 		HOME,
@@ -59,6 +62,14 @@ private:
 	};
 
 	state m_state;
+
+	enum eConfiguration {
+		CONF_DEFAULT = 0,
+		CONF_SET202,
+		CONF_SET107,
+		CONF_SAVE
+	};
+	eConfiguration m_eConfiguration;
 
 	font_t* m_font;
 	font_t* m_font_global;
@@ -364,6 +375,7 @@ private:
 
 	virtual void onLeftPress(float x, float y);
 	virtual void onLeftRelease(float x, float y);
+	virtual void onKeyPressed(char c);
 	virtual void onExit();
 	virtual void onPromptOk(const std::string& input);
 
@@ -390,7 +402,14 @@ private:
 	void addHeader();
 	void addFooter();
 
+	void renderBuyDialog();
+	void renderSellDialog();
+
 	void update();
+
+	void setConfiguration(eConfiguration conf);
+
+	void periksaLogin();
 };
 
 }		/* namespace paninMobile*/

@@ -15,7 +15,9 @@
 #include <bps/event.h>
 #include <bps/navigator.h>
 #include <bps/screen.h>
+#include <bps/virtualkeyboard.h>
 
+#include <sys/keycodes.h>
 #include <sys/stat.h>
 
 #include <errno.h>
@@ -51,11 +53,22 @@ platform::platform()
 	// Lock in landscape mode.
 	navigator_rotation_lock(true);
 	bbutil_init_egl(m_screenContext);
+	m_DateTime = new DateTime();
+	m_serverConnection = new ServerConnection();
+
+	user_name = "";
+	user_pw = "";
+
+	// nouvelle: https://202.53.249.2:8443/
+	server1 = "https://202.53.249.2:8443";
+	server2 = "172.31.2.78:8443";
 }
 
 platform::~platform() {
 	// TODO Auto-generated destructor stub
 	bbutil_terminate();
+	delete m_DateTime;
+	delete m_serverConnection;
 	screen_stop_events(m_screenContext);
 	screen_destroy_context(m_screenContext);
 	bps_shutdown();
@@ -134,11 +147,37 @@ void platform::processEvents() {
                     m_buttonPressed = false;
                 }
             }
+            else if (screenEventType == SCREEN_EVENT_KEYBOARD)
+            {
+                screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_FLAGS, &screenEventType);
+
+                if (screenEventType & KEY_DOWN) {
+                    screen_get_event_property_iv(screenEvent, SCREEN_PROPERTY_KEY_SYM,&screenEventType);
+
+                    fprintf(stderr, "The '%c' key was pressed\n", (char)screenEventType);
+
+                    m_handler->onKeyPressed(static_cast<char>(screenEventType));
+                    /*switch (screenEventType) {
+                    default:
+                        break;
+                    }*/
+                }
+            }
         } else if (dialog_get_domain() == domain) {
             if (DIALOG_RESPONSE == code) {
                 ASSERT(m_promptInProgress);
                 m_promptInProgress = false;
                 m_handler->onPromptOk(dialog_event_get_prompt_input_field(event));
+            }
+        }
+        if (virtualkeyboard_get_domain() == domain) {
+            switch (code) {
+            case VIRTUALKEYBOARD_EVENT_VISIBLE:
+                m_keyboard_visible = true;
+                break;
+            case VIRTUALKEYBOARD_EVENT_HIDDEN:
+                m_keyboard_visible = false;
+                break;
             }
         } else {
             fprintf(stderr, "Unrecognized and unrequested event! domain: %d, code: %d\n", domain, code);
@@ -181,117 +220,17 @@ time_t platform::getCurrentTime() const {
 
 char* platform::getDate()
 {
-	//char * mytanggal = new char [20];
-	char * hari = new char[3];
-	const char* bulan;
-	char * tahun = new char[5];
-
-	char * tanggal = new char[20];
-	char * hasil ;
-
-	tm *lokal;
-	const time_t k_time = time(NULL);
-	lokal = localtime(&k_time);
-
-	itoa(lokal->tm_mday, hari, 10);
-	bulan = ambilBulan(lokal->tm_mon);
-	itoa(lokal->tm_year + 1900, tahun, 10);
-
-	strcpy(tanggal, hari);
-	strcat(tanggal, " ");
-	strcat(tanggal, bulan);
-	strcat(tanggal, " ");
-	strcat(tanggal, tahun);
-
-	hasil = tanggal;
-
-	delete(hari);
-	delete(tahun);
-	delete(tanggal);
-
-	return hasil;
-
+	return m_DateTime->getDate();
 }
 
 char* platform::getTime()
 {
-	char * detik = new char[3];
-	char * menit = new char[3];
-	char * jam = new char[3];
-	char * wkt = new char[10];
-	char * waktu;
-
-	tm *lokal;
-	const time_t k_time = time(NULL);
-	lokal = localtime(&k_time);
-
-	itoa(lokal->tm_sec, detik, 10);
-	itoa(lokal->tm_min, menit, 10);
-	itoa(lokal->tm_hour, jam, 10);
-
-	strcpy(wkt, jam);
-	strcat(wkt, ":");
-	if (strlen(menit) == 1)
-	{
-		strcat(wkt, "0");
-	}
-	strcat(wkt, menit);
-	strcat(wkt, ":");
-	if (strlen(detik) == 1)
-	{
-		strcat(wkt, "0");
-	}
-	strcat(wkt, detik);
-
-	waktu = wkt;
-
-	delete(detik);
-	delete(menit);
-	delete(jam);
-	delete(wkt);
-
-	return waktu;
-}
-
-char* platform::ambilBulan(int bulanke)
-{
-	char* namaBulan;
-	switch(bulanke)
-	{
-		case 0: namaBulan = "January"; break;
-		case 1: namaBulan = "February"; break;
-		case 2: namaBulan = "March"; break;
-		case 3: namaBulan = "April"; break;
-		case 4: namaBulan = "May"; break;
-		case 5: namaBulan = "June"; break;
-		case 6: namaBulan = "July"; break;
-		case 7: namaBulan = "August"; break;
-		case 8: namaBulan = "September"; break;
-		case 9: namaBulan = "October"; break;
-		case 10: namaBulan = "November"; break;
-		case 11: namaBulan = "December"; break;
-	}
-	return namaBulan;
+	return m_DateTime->getTime();
 }
 
 char* platform::getDateTime()
 {
-	char* tgl = getDate();
-	char* wkt = getTime();
-
-	char* hsl = new char[30];
-
-	char * hasil;
-
-	strcpy(hsl, tgl);
-	strcat(hsl, " ");
-	strcat(hsl, wkt);
-
-	hasil = hsl;
-
-	delete (hsl);
-
-	return hasil;
+	return m_DateTime->getDateTime();
 }
 
 void platform::displayPrompt(const std::string& prompt) {

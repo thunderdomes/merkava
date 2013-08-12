@@ -20,6 +20,9 @@
 
 #include <time.h>
 
+#include "DateTime.h"
+#include "ServerConnection.h"
+
 namespace paninMobile {
 
 
@@ -31,6 +34,8 @@ public:
     virtual void onLeftRelease(float x, float y) = 0;
 
     virtual void onExit() = 0;
+
+    virtual void onKeyPressed(char c) = 0;
 
     //virtual void onPause() = 0;
 
@@ -77,13 +82,26 @@ public:
 
 	char* getDateTime();
 
+	ServerConnection * m_serverConnection;
+
+	std::string user_name;
+	std::string user_pw;
+
+	std::string server1;
+	std::string server2;
+
 private:
+
+	SC_InitData_t m_scoreloopInitData;
 	PlatformEventHandler* m_handler;
 	screen_context_t m_screenContext;
 	const char* m_username;
 	const char* m_password;
 	bool m_promptInProgress;
 	bool m_buttonPressed;
+	bool m_keyboard_visible;
+
+	DateTime * m_DateTime;
 
 };
 

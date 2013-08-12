@@ -14,6 +14,8 @@
 #include <string>
 #include <unistd.h>
 
+
+
 namespace paninMobile
 {
 
@@ -865,7 +867,7 @@ void panin::renderHome()
 
 	if (m_bShowHomeSetel)
 	{
-		fprintf(stderr, "render HomeSetel.\n");
+		//fprintf(stderr, "render HomeSetel.\n");
 		renderHomeSetel();
 
 	}
@@ -900,8 +902,10 @@ void panin::renderHomeSetel()
 
     bbutil_render_text(m_font, "SERVER A", 80.0f, m_screenHeight - 644.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     bbutil_render_text(m_font, "SERVER B", 80.0f, m_screenHeight - 744.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-    bbutil_render_text(m_font, "172.31.2.78:8080", 120.0f, m_screenHeight - 682.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-    bbutil_render_text(m_font, "172.31.2.78:8443", 120.0f, m_screenHeight - 780.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+    //bbutil_render_text(m_font, "172.31.2.78:8080", 120.0f, m_screenHeight - 682.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+    //bbutil_render_text(m_font, "172.31.2.78:8443", 120.0f, m_screenHeight - 780.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+    bbutil_render_text(m_font, m_platform.server1.c_str(), 120.0f, m_screenHeight - 682.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+    bbutil_render_text(m_font, m_platform.server2.c_str(), 120.0f, m_screenHeight - 780.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 }
 
@@ -1002,6 +1006,15 @@ void panin::renderRunningTrade()
 		renderMenu();
 	}
 
+	if (m_bShowBuy)
+	{
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell)
+	{
+		renderSellDialog();
+	}
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisable(GL_TEXTURE_2D);
@@ -1026,7 +1039,23 @@ void panin::renderStockWatch()
 	addHeader();
 
 	m_sw_caption.draw();
-	m_sw_box_black.draw();
+
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			float mX = j * m_sw_box_black.Width() + 10.0f;
+			float mY = m_sw_port1.PosY() - i * m_sw_box_black.Height() - 200.0f;
+			m_sw_box_black.setPosition(mX, mY);
+			m_sw_box_black.draw();
+			mX = m_sw_box_black.PosX() + 10.0f;
+			mY = m_sw_box_black.PosY() + 10.0f;
+			m_sw_val_green.setPosition(mX, mY);
+			m_sw_val_green.draw();
+		}
+	}
+
+
 	m_sw_port1.draw();
 	m_sw_banking.draw();
 	m_sw_mining.draw();
@@ -1255,6 +1284,25 @@ void panin::addFooter()
 	m_btn_buy.draw();
 }
 
+void panin::renderBuyDialog()
+{
+	m_buy_bg.draw();
+	m_buy_caption.draw();
+	m_buy_band.draw();
+	m_btn_buy_refresh.draw();
+	m_btn_buy_execute.draw();
+	m_btn_buy_x.draw();
+}
+
+void panin::renderSellDialog()
+{
+	m_sell_bg.draw();
+	m_sell_caption.draw();
+	m_sell_band.draw();
+	m_btn_sell_refresh.draw();
+	m_btn_sell_execute.draw();
+	m_btn_sell_x.draw();
+}
 
 
 void panin::onLeftRelease(float x, float y)
@@ -1282,7 +1330,15 @@ void panin::onLeftRelease(float x, float y)
 				m_btn_setel_save.isEnabled = false;
 				m_btn_setel_x.isEnabled = false;
 
-				m_state = RUNNING_TRADE;
+//				const char * url = "http://www.google.com";
+//				if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
+//				{
+//					std::string hasil = oss.str();
+//					fprintf(stderr, "hasil : %s", hasil.c_str());
+//				}
+
+				periksaLogin();
+				//m_state = RUNNING_TRADE;
 				return;
 			}
 		}
@@ -1334,15 +1390,17 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button home setel default is released.\n");
 				m_btn_setel_default.isPressed = false;
 
-				m_bShowHomeSetel = false;
-				m_btn_login.isEnabled = true;
-				m_btn_home_info.isEnabled = true;
-				m_btn_home_setel.isEnabled = true;
-				m_btn_setel_default.isEnabled = false;
-				m_btn_setel_set202.isEnabled = false;
-				m_btn_setel_set107.isEnabled = false;
-				m_btn_setel_save.isEnabled = false;
-				m_btn_setel_x.isEnabled = false;
+//				m_bShowHomeSetel = false;
+//				m_btn_login.isEnabled = true;
+//				m_btn_home_info.isEnabled = true;
+//				m_btn_home_setel.isEnabled = true;
+//				m_btn_setel_default.isEnabled = false;
+//				m_btn_setel_set202.isEnabled = false;
+//				m_btn_setel_set107.isEnabled = false;
+//				m_btn_setel_save.isEnabled = false;
+//				m_btn_setel_x.isEnabled = false;
+
+				setConfiguration(CONF_DEFAULT);
 				return;
 			}
 		}
@@ -1353,15 +1411,16 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button home setel set202 is released.\n");
 				m_btn_setel_set202.isPressed = false;
 
-				m_bShowHomeSetel = false;
-				m_btn_login.isEnabled = true;
-				m_btn_home_info.isEnabled = true;
-				m_btn_home_setel.isEnabled = true;
-				m_btn_setel_default.isEnabled = false;
-				m_btn_setel_set202.isEnabled = false;
-				m_btn_setel_set107.isEnabled = false;
-				m_btn_setel_save.isEnabled = false;
-				m_btn_setel_x.isEnabled = false;
+//				m_bShowHomeSetel = false;
+//				m_btn_login.isEnabled = true;
+//				m_btn_home_info.isEnabled = true;
+//				m_btn_home_setel.isEnabled = true;
+//				m_btn_setel_default.isEnabled = false;
+//				m_btn_setel_set202.isEnabled = false;
+//				m_btn_setel_set107.isEnabled = false;
+//				m_btn_setel_save.isEnabled = false;
+//				m_btn_setel_x.isEnabled = false;
+				setConfiguration(CONF_SET202);
 				return;
 			}
 		}
@@ -1372,15 +1431,16 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button home setel set107 is released.\n");
 				m_btn_setel_set107.isPressed = false;
 
-				m_bShowHomeSetel = false;
-				m_btn_login.isEnabled = true;
-				m_btn_home_info.isEnabled = true;
-				m_btn_home_setel.isEnabled = true;
-				m_btn_setel_default.isEnabled = false;
-				m_btn_setel_set202.isEnabled = false;
-				m_btn_setel_set107.isEnabled = false;
-				m_btn_setel_save.isEnabled = false;
-				m_btn_setel_x.isEnabled = false;
+//				m_bShowHomeSetel = false;
+//				m_btn_login.isEnabled = true;
+//				m_btn_home_info.isEnabled = true;
+//				m_btn_home_setel.isEnabled = true;
+//				m_btn_setel_default.isEnabled = false;
+//				m_btn_setel_set202.isEnabled = false;
+//				m_btn_setel_set107.isEnabled = false;
+//				m_btn_setel_save.isEnabled = false;
+//				m_btn_setel_x.isEnabled = false;
+				setConfiguration(CONF_SET107);
 				return;
 			}
 		}
@@ -1400,6 +1460,7 @@ void panin::onLeftRelease(float x, float y)
 				m_btn_setel_set107.isEnabled = false;
 				m_btn_setel_save.isEnabled = false;
 				m_btn_setel_x.isEnabled = false;
+				setConfiguration(CONF_SAVE);
 				return;
 			}
 		}
@@ -1454,6 +1515,7 @@ void panin::onLeftRelease(float x, float y)
 			{
 				fprintf(stderr, "button buy is released.\n");
 				m_bShowBuy = true;
+				m_btn_buy.isEnabled = false;
 				return;
 			}
 		}
@@ -1464,6 +1526,7 @@ void panin::onLeftRelease(float x, float y)
 			{
 				fprintf(stderr, "button sell is released.\n");
 				m_bShowSell = true;
+				m_btn_sell.isEnabled = false;
 				return;
 			}
 		}
@@ -1623,6 +1686,11 @@ void panin::onLeftPress(float x, float y)
 	}
 }
 
+void panin::onKeyPressed(char c)
+{
+	fprintf(stderr, "The '%c' key was pressed\n", c);
+}
+
 void panin::button::setPosition(float x, float y) {
     posX = x;
     posY = y;
@@ -1660,6 +1728,52 @@ void panin::onExit() {
 
 void panin::onPromptOk(const std::string& input) {
     //m_platform.submitUserName(input);
+}
+
+void panin::setConfiguration(eConfiguration conf)
+{
+	switch (conf)
+	{
+		case CONF_DEFAULT:
+		default:
+			m_platform.server1 = "172.31.2.78:8080";
+			m_platform.server2 = "172.31.2.78:8443";
+			break;
+
+		case CONF_SET107:
+			m_platform.server1 = "172.31.2.78:8080";
+			m_platform.server2 = "172.31.2.78:8443";
+			break;
+
+		case CONF_SET202:
+			m_platform.server1 = "172.31.2.78:8080";
+			m_platform.server2 = "172.31.2.78:8443";
+			break;
+
+		case CONF_SAVE:
+			m_platform.server1 = "172.31.2.78:8080";
+			m_platform.server2 = "172.31.2.78:8443";
+			break;
+	}
+}
+
+void panin::periksaLogin()
+{
+	std::string hasil;
+
+	fprintf(stderr, "sebelum curl.\n");
+	const char * url = "https://202.53.249.2:8443/mi2/marketInfoData?request=login&user=parto&password=123456";
+	if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
+	{
+		std::string hasil = oss.str();
+		fprintf(stderr, "hasil : %s", hasil.c_str());
+	}
+	else
+	{
+		fprintf(stderr, "curl tidak ok.\n");
+	}
+
+	m_state = RUNNING_TRADE;
 }
 
 } /* namespace paninMobile */
