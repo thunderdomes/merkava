@@ -180,7 +180,7 @@ void platform::processEvents() {
                 break;
             }
         } else {
-            fprintf(stderr, "Unrecognized and unrequested event! domain: %d, code: %d\n", domain, code);
+            //fprintf(stderr, "Unrecognized and unrequested event! domain: %d, code: %d\n", domain, code);
         }
     }
 }

@@ -82,6 +82,10 @@ private:
 	font_t* m_font11;
 	font_t* m_font12;
 	font_t* m_font14;
+	font_t* m_font20;
+	font_t* m_font24;
+	font_t* m_font28;
+	font_t* m_font36;
 
 	time_t m_time;
 
@@ -164,6 +168,8 @@ private:
 	button m_btn_sell_refresh;
 	button m_btn_sell_execute;
 	button m_btn_sell_x;
+
+	Sprite m_buysell_textfield_bg;
 
 	Sprite m_textfield_bg;
 	//Sprite m_white_band;
@@ -373,6 +379,22 @@ private:
 	const char* m_message;
 	float m_messagePosX, m_messagePosY;
 
+	std::string m_u_name;
+	std::string m_u_pass;
+	std::string m_sIhsg_val;
+	std::string m_sIhsg_volume;
+	std::string m_sIhsg_percent;
+
+	// buy sell dialog var
+	std::string m_sAccID;
+	std::string m_sStockCode;
+	std::string m_sPrice;
+	std::string m_sLot;
+	std::string m_sMaxBuy;
+	std::string m_sStockValue;
+	std::string m_sTransFee;
+	std::string m_sPayable;
+
 	virtual void onLeftPress(float x, float y);
 	virtual void onLeftRelease(float x, float y);
 	virtual void onKeyPressed(char c);
@@ -406,6 +428,7 @@ private:
 	void renderSellDialog();
 
 	void update();
+	void updateHome();
 
 	void setConfiguration(eConfiguration conf);
 

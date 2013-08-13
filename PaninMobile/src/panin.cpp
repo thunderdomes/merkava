@@ -53,7 +53,7 @@ panin::panin(platform &myPlatform)
 		fprintf(stderr, "Unable to load font\n");
 	}
 
-	point_size = (int)(20.0f / ((float)dpi / 170.0f ));
+	point_size = (int)(36.0f / ((float)dpi / 170.0f ));
 	m_font_ihsg_val = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
 	if (!m_font) {
 		fprintf(stderr, "Unable to load font\n");
@@ -103,6 +103,30 @@ panin::panin(platform &myPlatform)
 
 	point_size = (int)(14.0f / ((float)dpi / 170.0f ));
 	m_font14 = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
+	if (!m_font) {
+		fprintf(stderr, "Unable to load font\n");
+	}
+
+	point_size = (int)(20.0f / ((float)dpi / 170.0f ));
+	m_font20 = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
+	if (!m_font) {
+		fprintf(stderr, "Unable to load font\n");
+	}
+
+	point_size = (int)(24.0f / ((float)dpi / 170.0f ));
+	m_font24 = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
+	if (!m_font) {
+		fprintf(stderr, "Unable to load font\n");
+	}
+
+	point_size = (int)(28.0f / ((float)dpi / 170.0f ));
+	m_font28 = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
+	if (!m_font) {
+		fprintf(stderr, "Unable to load font\n");
+	}
+
+	point_size = (int)(36.0f / ((float)dpi / 170.0f ));
+	m_font36 = bbutil_load_font("/usr/fonts/font_repository/monotype/arial.ttf", point_size, dpi);
 	if (!m_font) {
 		fprintf(stderr, "Unable to load font\n");
 	}
@@ -190,7 +214,7 @@ panin::panin(platform &myPlatform)
 	m_buy_refresh.load("app/native/assets/umum/buy_refresh.png");
 	m_buy_execute.load("app/native/assets/umum/buy_execute.png");
 	m_buy_band.load("app/native/assets/umum/white_bar.png");
-	m_buy_band.setPosition(57.0f, m_screenHeight - 922.0f);
+	m_buy_band.setPosition(74.0f, m_screenHeight - 922.0f);
 	m_buy_x.load("app/native/assets/umum/buy_x.png");
 	m_btn_buy_refresh.regular = &m_buy_refresh;
 	m_btn_buy_refresh.pressed = &m_buy_refresh;
@@ -199,7 +223,7 @@ panin::panin(platform &myPlatform)
 	m_btn_buy_refresh.font	= m_font;
 	m_btn_buy_refresh.text	= "";
 	m_btn_buy_refresh.isPressed	= false;
-	m_btn_buy_refresh.setPosition( 173.0f, m_screenHeight - 908.0 );
+	m_btn_buy_refresh.setPosition( 173.0f, m_screenHeight - 918.0 );
 	m_btn_buy_execute.regular = &m_buy_execute;
 	m_btn_buy_execute.pressed = &m_buy_execute;
 	m_btn_buy_execute.sizeX	= m_buy_execute.Width();
@@ -207,7 +231,7 @@ panin::panin(platform &myPlatform)
 	m_btn_buy_execute.font	= m_font;
 	m_btn_buy_execute.text	= "";
 	m_btn_buy_execute.isPressed	= false;
-	m_btn_buy_execute.setPosition( 450.0f, m_screenHeight - 908.0 );
+	m_btn_buy_execute.setPosition( 450.0f, m_screenHeight - 918.0 );
 	m_btn_buy_x.regular = &m_buy_x;
 	m_btn_buy_x.pressed = &m_buy_x;
 	m_btn_buy_x.sizeX	= m_buy_x.Width();
@@ -215,7 +239,7 @@ panin::panin(platform &myPlatform)
 	m_btn_buy_x.font	= m_font;
 	m_btn_buy_x.text	= "";
 	m_btn_buy_x.isPressed	= false;
-	m_btn_buy_x.setPosition( 662.0f, m_screenHeight - 416.0 );
+	m_btn_buy_x.setPosition( 662.0f, m_screenHeight - 412.0 );
 	//sell
 	m_sell_bg.load("app/native/assets/umum/sell_bg.png");
 	m_sell_bg.setPosition(57.0f, m_screenHeight - 1020.0f);
@@ -224,7 +248,7 @@ panin::panin(platform &myPlatform)
 	m_sell_refresh.load("app/native/assets/umum/sell_refresh.png");
 	m_sell_execute.load("app/native/assets/umum/sell_execute.png");
 	m_sell_band.load("app/native/assets/umum/white_bar.png");
-	m_sell_band.setPosition(57.0f, m_screenHeight - 922.0f);
+	m_sell_band.setPosition(74.0f, m_screenHeight - 922.0f);
 	m_sell_x.load("app/native/assets/umum/sell_x.png");
 	m_btn_sell_refresh.regular = &m_sell_refresh;
 	m_btn_sell_refresh.pressed = &m_sell_refresh;
@@ -234,7 +258,7 @@ panin::panin(platform &myPlatform)
 	m_btn_sell_refresh.text	= "";
 	m_btn_sell_refresh.isPressed	= false;
 	m_btn_sell_refresh.isEnabled = true;
-	m_btn_sell_refresh.setPosition( 173.0f, m_screenHeight - 908.0 );
+	m_btn_sell_refresh.setPosition( 173.0f, m_screenHeight - 918.0 );
 	m_btn_sell_execute.regular = &m_sell_execute;
 	m_btn_sell_execute.pressed = &m_sell_execute;
 	m_btn_sell_execute.sizeX	= m_sell_execute.Width();
@@ -243,7 +267,7 @@ panin::panin(platform &myPlatform)
 	m_btn_sell_execute.text	= "";
 	m_btn_sell_execute.isPressed	= false;
 	m_btn_sell_execute.isEnabled = true;
-	m_btn_sell_execute.setPosition( 450.0f, m_screenHeight - 908.0 );
+	m_btn_sell_execute.setPosition( 450.0f, m_screenHeight - 918.0 );
 	m_btn_sell_x.regular = &m_sell_x;
 	m_btn_sell_x.pressed = &m_sell_x;
 	m_btn_sell_x.sizeX	= m_sell_x.Width();
@@ -252,7 +276,9 @@ panin::panin(platform &myPlatform)
 	m_btn_sell_x.text	= "";
 	m_btn_sell_x.isPressed	= false;
 	m_btn_sell_x.isEnabled = true;
-	m_btn_sell_x.setPosition( 662.0f, m_screenHeight - 416.0 );
+	m_btn_sell_x.setPosition( 662.0f, m_screenHeight - 412.0 );
+
+	m_buysell_textfield_bg.load("app/native/assets/umum/table_bg.png");
 
 	m_textfield_bg.load("app/native/assets/umum/textfield_bg.png");
 	m_dialog_bg.load("app/native/assets/umum/dialog_bg.png");
@@ -663,6 +689,23 @@ panin::panin(platform &myPlatform)
 	m_fmenu_width = m_menu_bg.Width();
 	m_fmenu_animation = -m_fmenu_width;
 
+	m_u_name = "";
+	m_u_pass = "";
+	m_sIhsg_val = "";
+	m_sIhsg_volume = "";
+	m_sIhsg_percent = "";
+	m_bUsernameFocus = false;
+	m_bPasswordFocus = false;
+
+	m_sAccID = "";
+	m_sStockCode = "";
+	m_sPrice = "";
+	m_sLot = "";
+	m_sMaxBuy = "";
+	m_sStockValue = "";
+	m_sTransFee = "";
+	m_sPayable = "";
+
 	fprintf(stderr, "Finish instantiate panin.\n");
 }
 
@@ -701,6 +744,7 @@ void panin::run() {
 
         switch (m_state) {
         case HOME:
+        	updateHome();
             renderHome();
             break;
 
@@ -802,6 +846,18 @@ void panin::update()
 
 }
 
+void panin::updateHome()
+{
+	//get suitable value.
+	if (m_u_name.length() == 0)	m_u_name = "username";
+	if (m_u_pass.length() == 0) m_u_pass = "password";
+
+	m_sIhsg_val = "7000";
+	m_sIhsg_volume = "3415.10 bn";
+	m_sIhsg_percent = "17.77 (30%)";
+
+}
+
 void panin::renderHome()
 {
 	m_platform.beginRender();
@@ -835,25 +891,27 @@ void panin::renderHome()
 
     //bbutil_render_text(m_font, m_message, m_messagePosX, m_messagePosY, 0.75f, 0.75f, 0.75f, 1.0f);
     float text_width, text_height, pos_x, pos_y;
-    bbutil_measure_text(m_font_global, "Username", &text_width, &text_height);
+    bbutil_measure_text(m_font_global, m_u_name.c_str(), &text_width, &text_height);
     pos_x = 390.0f;
 	pos_y = m_screenHeight -620.0f;
-	bbutil_render_text(m_font_global, "Username", pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
+	bbutil_render_text(m_font_global, m_u_name.c_str(), pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
 
-	bbutil_measure_text(m_font_global, "Password", &text_width, &text_height);
+	bbutil_measure_text(m_font_global, m_u_pass.c_str(), &text_width, &text_height);
 	pos_x = 390;
 	pos_y = m_screenHeight -677;
-	bbutil_render_text(m_font_global, "Password", pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
+	bbutil_render_text(m_font_global, m_u_pass.c_str(), pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
 
-	bbutil_measure_text(m_font_ihsg_val, "5000.00", &text_width, &text_height);
+	bbutil_measure_text(m_font_ihsg_val, m_sIhsg_val.c_str(), &text_width, &text_height);
 	pos_x = (m_screenWidth - text_width) /2;
-	pos_y = m_screenHeight -980;
-	bbutil_render_text(m_font_ihsg_val, "5000.00", pos_x, pos_y, 0.05f, 1.0f, 0.05f, 1.0f);
+	pos_y = m_screenHeight -990;
+	bbutil_render_text(m_font_ihsg_val, m_sIhsg_val.c_str(), pos_x, pos_y, 0.05f, 1.0f, 0.05f, 1.0f);
 
-	bbutil_measure_text(m_font_ihsg_vol, "3415.10 bn 17.77 (30%)", &text_width, &text_height);
+	float p1;
+	bbutil_measure_text(m_font_ihsg_vol, m_sIhsg_volume.c_str(), &text_width, &text_height);
+	p1 = text_width;
 	pos_x = (m_screenWidth - text_width) /2;
 	pos_y = m_screenHeight -1050;
-	bbutil_render_text(m_font_ihsg_vol, "3415.10 bn 17.77 (30%)", pos_x, pos_y, 0.95f, 0.95f, 0.95f, 1.0f);
+	bbutil_render_text(m_font_ihsg_vol, m_sIhsg_volume.c_str(), pos_x, pos_y, 0.95f, 0.95f, 0.95f, 1.0f);
 
 	const char*  waktu = m_platform.getDateTime();
 	bbutil_measure_text(m_font_tanggal, waktu, &text_width, &text_height);
@@ -1049,9 +1107,57 @@ void panin::renderStockWatch()
 			m_sw_box_black.setPosition(mX, mY);
 			m_sw_box_black.draw();
 			mX = m_sw_box_black.PosX() + 10.0f;
-			mY = m_sw_box_black.PosY() + 10.0f;
-			m_sw_val_green.setPosition(mX, mY);
-			m_sw_val_green.draw();
+			mY = m_sw_box_black.PosY() + 36.0f;
+			if (j == 0)
+			{
+				m_sw_val_green.setPosition(mX, mY);
+				m_sw_val_green.draw();
+			}
+			else if (j == 1)
+			{
+				m_sw_val_yellow.setPosition(mX, mY);
+				m_sw_val_yellow.draw();
+			}
+			else if (j == 2)
+			{
+				m_sw_val_red.setPosition(mX, mY);
+				m_sw_val_red.draw();
+			}
+
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisable(GL_TEXTURE_2D);
+			glDisable(GL_BLEND);
+
+			float text_width, text_height, pos_x, pos_y;
+
+			bbutil_measure_text(m_font20, "PANS", &text_width, &text_height);
+			pos_x = m_sw_box_black.PosX() + (m_sw_box_black.Width() - text_width)/2;
+			pos_y = m_sw_box_black.PosY() + m_sw_box_black.Height() - text_height - 4.0f;
+			bbutil_render_text(m_font20, "PANS", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+			bbutil_measure_text(m_font10, "Panin Securitas Tbk", &text_width, &text_height);
+			pos_x = m_sw_box_black.PosX() + (m_sw_box_black.Width() - text_width)/2;
+			pos_y = m_sw_box_black.PosY() + m_sw_box_black.Height() - text_height - 44.0f;
+			bbutil_render_text(m_font10, "Panin Securitas Tbk", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+			bbutil_measure_text(m_font11, "9.0 %", &text_width, &text_height);
+			pos_x = m_sw_box_black.PosX() + 10.0f;
+			pos_y = m_sw_box_black.PosY() + m_sw_box_black.Height() - text_height - 130.0f;
+			bbutil_render_text(m_font11, "9.0 %", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+			bbutil_measure_text(m_font11, "-100", &text_width, &text_height);
+			pos_x = m_sw_box_black.PosX() + (m_sw_box_black.Width() - text_width - 20.0f);
+			pos_y = m_sw_box_black.PosY() + m_sw_box_black.Height() - text_height - 130.0f;
+			bbutil_render_text(m_font11, "-100", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+			bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+			glEnable(GL_TEXTURE_2D);
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
 	}
 
@@ -1282,6 +1388,35 @@ void panin::addFooter()
 	m_ihsg2.draw();
 	m_btn_sell.draw();
 	m_btn_buy.draw();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	float text_width, text_height, pos_x, pos_y;
+	bbutil_measure_text(m_font_ihsg_val, m_sIhsg_val.c_str(), &text_width, &text_height);
+	pos_x = (m_ihsg2.PosX() + 20.0f);
+	pos_y = m_ihsg2.PosY() + text_height/2 - 10.0f;
+	bbutil_render_text(m_font28, m_sIhsg_val.c_str(), pos_x, pos_y, 0.05f, 1.0f, 0.05f, 1.0f);
+
+	bbutil_measure_text(m_font14, m_sIhsg_volume.c_str(), &text_width, &text_height);
+	pos_x = (m_ihsg2.PosX() + m_ihsg2.Width() - text_width - 30.0f);
+	pos_y = m_ihsg2.PosY() + 2*text_height + 0.0f;
+	bbutil_render_text(m_font14, m_sIhsg_volume.c_str(), pos_x, pos_y, 0.05f, 1.0f, 0.05f, 1.0f);
+
+	//bbutil_measure_text(m_font14, m_sIhsg_percent.c_str(), &text_width, &text_height);
+	//pos_x = (m_ihsg2.PosX() + m_ihsg2.Width() - text_width - 20.0f);
+	pos_y = m_ihsg2.PosY() + 14.0f;
+	bbutil_render_text(m_font14, m_sIhsg_percent.c_str(), pos_x, pos_y, 0.05f, 1.0f, 0.05f, 1.0f);
+
+	bbutil_render_text(m_font14, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void panin::renderBuyDialog()
@@ -1292,6 +1427,43 @@ void panin::renderBuyDialog()
 	m_btn_buy_refresh.draw();
 	m_btn_buy_execute.draw();
 	m_btn_buy_x.draw();
+
+	m_buysell_textfield_bg.setPosition(440.0f, m_screenHeight - 464.0f);
+	m_buysell_textfield_bg.draw();
+	m_buysell_textfield_bg.setPosition(440.0f, m_screenHeight - 512.0f);
+	m_buysell_textfield_bg.draw();
+	m_buysell_textfield_bg.setPosition(440.0f, m_screenHeight - 560.0f);
+	m_buysell_textfield_bg.draw();
+	m_buysell_textfield_bg.setPosition(440.0f, m_screenHeight - 608.0f);
+	m_buysell_textfield_bg.draw();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	bbutil_render_text(m_font14, "ACCOUNT ID", 183.0f, m_screenHeight -465.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "STOCK TRADE", 183.0f, m_screenHeight -512.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "PRICE", 183.0f, m_screenHeight -560.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "VOLUME", 183.0f, m_screenHeight -609.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, "Max Buy", 183.0f, m_screenHeight -675.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "Stock Value", 183.0f, m_screenHeight -718.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "Trans Fee", 183.0f, m_screenHeight -760.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "Payable", 183.0f, m_screenHeight -800.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, m_sMaxBuy.c_str(), 400.0f, m_screenHeight -675.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sStockValue.c_str(), 400.0f, m_screenHeight -718.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sTransFee.c_str(), 400.0f, m_screenHeight -760.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sPayable.c_str(), 400.0f, m_screenHeight -800.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void panin::renderSellDialog()
@@ -1302,6 +1474,43 @@ void panin::renderSellDialog()
 	m_btn_sell_refresh.draw();
 	m_btn_sell_execute.draw();
 	m_btn_sell_x.draw();
+
+	m_buysell_textfield_bg.setPosition(440.0f, m_screenHeight - 464.0f);
+	m_buysell_textfield_bg.draw();
+	m_buysell_textfield_bg.setPosition(440.0f, m_screenHeight - 512.0f);
+	m_buysell_textfield_bg.draw();
+	m_buysell_textfield_bg.setPosition(440.0f, m_screenHeight - 560.0f);
+	m_buysell_textfield_bg.draw();
+	m_buysell_textfield_bg.setPosition(440.0f, m_screenHeight - 608.0f);
+	m_buysell_textfield_bg.draw();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	bbutil_render_text(m_font14, "ACCOUNT ID", 183.0f, m_screenHeight -465.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "STOCK TRADE", 183.0f, m_screenHeight -512.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "PRICE", 183.0f, m_screenHeight -560.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "VOLUME", 183.0f, m_screenHeight -609.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, "Max Buy", 183.0f, m_screenHeight -675.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "Stock Value", 183.0f, m_screenHeight -718.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "Trans Fee", 183.0f, m_screenHeight -760.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, "Payable", 183.0f, m_screenHeight -800.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, m_sMaxBuy.c_str(), 400.0f, m_screenHeight -675.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sStockValue.c_str(), 400.0f, m_screenHeight -718.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sTransFee.c_str(), 400.0f, m_screenHeight -760.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sPayable.c_str(), 400.0f, m_screenHeight -800.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 
@@ -1320,15 +1529,6 @@ void panin::onLeftRelease(float x, float y)
 			{
 				fprintf(stderr, "button login is released.\n");
 				m_btn_login.isPressed = false;
-
-				m_btn_login.isEnabled = false;
-				m_btn_home_info.isEnabled = false;
-				m_btn_home_setel.isEnabled = false;
-				m_btn_setel_default.isEnabled = false;
-				m_btn_setel_set202.isEnabled = false;
-				m_btn_setel_set107.isEnabled = false;
-				m_btn_setel_save.isEnabled = false;
-				m_btn_setel_x.isEnabled = false;
 
 //				const char * url = "http://www.google.com";
 //				if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
@@ -1516,6 +1716,7 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button buy is released.\n");
 				m_bShowBuy = true;
 				m_btn_buy.isEnabled = false;
+				m_btn_sell.isEnabled = false;
 				return;
 			}
 		}
@@ -1526,7 +1727,52 @@ void panin::onLeftRelease(float x, float y)
 			{
 				fprintf(stderr, "button sell is released.\n");
 				m_bShowSell = true;
+				m_btn_buy.isEnabled = false;
 				m_btn_sell.isEnabled = false;
+				return;
+			}
+		}
+
+		if (m_bShowSell)
+		{
+			if (m_btn_sell_execute.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button sell execute is released.\n");
+				return;
+			}
+			if (m_btn_sell_refresh.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button sell refresh is released.\n");
+				return;
+			}
+			if (m_btn_sell_x.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button sell x is released.\n");
+				m_bShowSell = false;
+				m_btn_sell.isEnabled = true;
+				m_btn_buy.isEnabled = true;
+				return;
+			}
+		}
+
+		if (m_bShowBuy)
+		{
+			if (m_btn_buy_execute.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button buy execute is released.\n");
+				return;
+			}
+			if (m_btn_buy_refresh.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button buy refresh is released.\n");
+				return;
+			}
+			if (m_btn_buy_x.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button buy x is released.\n");
+				m_bShowBuy = false;
+				m_btn_sell.isEnabled = true;
+				m_btn_buy.isEnabled = true;
 				return;
 			}
 		}
@@ -1762,18 +2008,53 @@ void panin::periksaLogin()
 	std::string hasil;
 
 	fprintf(stderr, "sebelum curl.\n");
-	const char * url = "https://202.53.249.2:8443/mi2/marketInfoData?request=login&user=parto&password=123456";
+	//const char * url = "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=parto&password=123456";
+	char * url = new char[1024];
+	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=");
+	std::strcat(url, m_u_name.c_str());
+	std::strcat(url, "&password=");
+	std::strcat(url, m_u_pass.c_str());
+	//url << "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=" << m_u_name.c_str() << "&password=" << m_u_pass.c_str();
 	if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
 	{
 		std::string hasil = oss.str();
 		fprintf(stderr, "hasil : %s", hasil.c_str());
+		if (hasil == "true")
+		{
+			m_btn_login.isEnabled = false;
+			m_btn_home_info.isEnabled = false;
+			m_btn_home_setel.isEnabled = false;
+			m_btn_setel_default.isEnabled = false;
+			m_btn_setel_set202.isEnabled = false;
+			m_btn_setel_set107.isEnabled = false;
+			m_btn_setel_save.isEnabled = false;
+			m_btn_setel_x.isEnabled = false;
+
+			m_state = RUNNING_TRADE;
+		}
+		else
+		{
+			m_u_name = "username salah";
+
+			// by pass
+			m_btn_login.isEnabled = false;
+			m_btn_home_info.isEnabled = false;
+			m_btn_home_setel.isEnabled = false;
+			m_btn_setel_default.isEnabled = false;
+			m_btn_setel_set202.isEnabled = false;
+			m_btn_setel_set107.isEnabled = false;
+			m_btn_setel_save.isEnabled = false;
+			m_btn_setel_x.isEnabled = false;
+
+			m_state = RUNNING_TRADE;
+		}
 	}
 	else
 	{
 		fprintf(stderr, "curl tidak ok.\n");
 	}
 
-	m_state = RUNNING_TRADE;
+	delete url;
 }
 
 } /* namespace paninMobile */
