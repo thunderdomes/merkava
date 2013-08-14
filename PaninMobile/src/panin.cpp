@@ -444,12 +444,12 @@ panin::panin(platform &myPlatform)
 	fprintf(stderr, "Load complete book.\n");
 	m_cb_caption.load("app/native/assets/complete_book/completebook_caption.png");
 	m_cb_caption.setPosition(27.0f, m_screenHeight - 200.0f);
-	m_cb_top_band.load("app/native/assets/complete_book/completebook_caption.png");
-	m_cb_top_band.setPosition(0.0f, m_screenHeight - 263.0f);
-	m_cb_table_title1.load("app/native/assets/complete_book/completebook_caption.png");
-	m_cb_table_title1.setPosition(27.0f, m_screenHeight - 452.0f);
-	m_cb_table_title2.load("app/native/assets/complete_book/completebook_caption.png");
-	m_cb_table_title2.setPosition(27.0f, m_screenHeight - 738.0f);
+	m_cb_top_band.load("app/native/assets/complete_book/m_cb_top_band.png");
+	m_cb_top_band.setPosition(0.0f, m_screenHeight - 260.0f);
+	m_cb_table_title1.load("app/native/assets/complete_book/m_cb_table_title1.png");
+	m_cb_table_title1.setPosition(0.0f, m_screenHeight - 450.0f);
+	m_cb_table_title2.load("app/native/assets/complete_book/m_cb_table_title2.png");
+	m_cb_table_title2.setPosition(0.0f, m_screenHeight - 730.0f);
 
 	// stock quote
 	fprintf(stderr, "Load stock quote.\n");
@@ -976,16 +976,22 @@ void panin::renderMenu()
 {
 	m_menu_bg.draw();
 	m_menu_btn_trade_central.draw();
-	m_menu_tc_btn_running_trade.draw();
-	m_menu_tc_btn_stock_watch.draw();
-	m_menu_tc_btn_complete_book.draw();
-	m_menu_tc_btn_stock_quote.draw();
-	m_menu_tc_btn_broker_quote.draw();
-	m_menu_tc_btn_stock_summary.draw();
-	m_menu_tc_btn_broker_summary.draw();
-	m_menu_tc_btn_non_regular.draw();
+	float p1 = m_menu_btn_trade_central.posY;
+	if (m_bShowSubmenuTC)
+	{
+		m_menu_tc_btn_running_trade.draw();
+		m_menu_tc_btn_stock_watch.draw();
+		m_menu_tc_btn_complete_book.draw();
+		m_menu_tc_btn_stock_quote.draw();
+		m_menu_tc_btn_broker_quote.draw();
+		m_menu_tc_btn_stock_summary.draw();
+		m_menu_tc_btn_broker_summary.draw();
+		m_menu_tc_btn_non_regular.draw();
+		p1 = m_menu_tc_btn_non_regular.posY;
+	}
 
-	m_menu_btn_charts.setPosition(m_menu_btn_charts.posX, m_menu_tc_btn_non_regular.posY - m_menu_btn_charts.sizeY);
+
+	m_menu_btn_charts.setPosition(m_menu_btn_charts.posX, p1 - m_menu_btn_charts.sizeY);
 	m_menu_btn_charts.draw();
 	m_menu_btn_informations.setPosition(m_menu_btn_informations.posX, m_menu_btn_charts.posY - m_menu_btn_informations.sizeY);
 	m_menu_btn_informations.draw();
@@ -1204,6 +1210,21 @@ void panin::renderCompleteBook()
 	m_cb_top_band.draw();
 	m_cb_table_title1.draw();
 	m_cb_table_title2.draw();
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 
 	addFooter();
 
@@ -1530,13 +1551,6 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button login is released.\n");
 				m_btn_login.isPressed = false;
 
-//				const char * url = "http://www.google.com";
-//				if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
-//				{
-//					std::string hasil = oss.str();
-//					fprintf(stderr, "hasil : %s", hasil.c_str());
-//				}
-
 				periksaLogin();
 				//m_state = RUNNING_TRADE;
 				return;
@@ -1590,16 +1604,6 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button home setel default is released.\n");
 				m_btn_setel_default.isPressed = false;
 
-//				m_bShowHomeSetel = false;
-//				m_btn_login.isEnabled = true;
-//				m_btn_home_info.isEnabled = true;
-//				m_btn_home_setel.isEnabled = true;
-//				m_btn_setel_default.isEnabled = false;
-//				m_btn_setel_set202.isEnabled = false;
-//				m_btn_setel_set107.isEnabled = false;
-//				m_btn_setel_save.isEnabled = false;
-//				m_btn_setel_x.isEnabled = false;
-
 				setConfiguration(CONF_DEFAULT);
 				return;
 			}
@@ -1611,15 +1615,6 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button home setel set202 is released.\n");
 				m_btn_setel_set202.isPressed = false;
 
-//				m_bShowHomeSetel = false;
-//				m_btn_login.isEnabled = true;
-//				m_btn_home_info.isEnabled = true;
-//				m_btn_home_setel.isEnabled = true;
-//				m_btn_setel_default.isEnabled = false;
-//				m_btn_setel_set202.isEnabled = false;
-//				m_btn_setel_set107.isEnabled = false;
-//				m_btn_setel_save.isEnabled = false;
-//				m_btn_setel_x.isEnabled = false;
 				setConfiguration(CONF_SET202);
 				return;
 			}
@@ -1631,15 +1626,6 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button home setel set107 is released.\n");
 				m_btn_setel_set107.isPressed = false;
 
-//				m_bShowHomeSetel = false;
-//				m_btn_login.isEnabled = true;
-//				m_btn_home_info.isEnabled = true;
-//				m_btn_home_setel.isEnabled = true;
-//				m_btn_setel_default.isEnabled = false;
-//				m_btn_setel_set202.isEnabled = false;
-//				m_btn_setel_set107.isEnabled = false;
-//				m_btn_setel_save.isEnabled = false;
-//				m_btn_setel_x.isEnabled = false;
 				setConfiguration(CONF_SET107);
 				return;
 			}
@@ -1695,12 +1681,13 @@ void panin::onLeftRelease(float x, float y)
 				if (m_bShowMenu)
 				{
 					fprintf(stderr, "Show Menu.\n");
-					m_bMenuShowAnimation = true;
+					//m_bMenuShowAnimation = true;
+					m_bMenuActive = true;
 				}
 				else
 				{
 					fprintf(stderr, "Hide Menu.\n");
-					m_bMenuHideAnimation = true;
+					//m_bMenuHideAnimation = true;
 					m_bMenuActive = false;
 				}
 
@@ -1783,9 +1770,9 @@ void panin::onLeftRelease(float x, float y)
 			if (m_menu_btn_trade_central.isWithin(pX, pY))
 			{
 				m_bShowSubmenuTC = !m_bShowSubmenuTC;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				m_bMenuHideAnimation = true;
+				//m_bShowMenu = false;
+				//m_bMenuActive = false;
+				//m_bMenuHideAnimation = true;
 				return;
 			}
 			if (m_menu_btn_charts.isWithin(pX, pY))

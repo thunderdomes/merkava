@@ -93,21 +93,21 @@ char* DateTime::getTime()
 
 char* DateTime::ambilBulan(int bulanke)
 {
-	char* namaBulan;
+	char * namaBulan;
 	switch(bulanke)
 	{
-		case 0: namaBulan = "January"; break;
-		case 1: namaBulan = "February"; break;
-		case 2: namaBulan = "March"; break;
-		case 3: namaBulan = "April"; break;
-		case 4: namaBulan = "May"; break;
-		case 5: namaBulan = "June"; break;
-		case 6: namaBulan = "July"; break;
-		case 7: namaBulan = "August"; break;
-		case 8: namaBulan = "September"; break;
-		case 9: namaBulan = "October"; break;
-		case 10: namaBulan = "November"; break;
-		case 11: namaBulan = "December"; break;
+		case 0: namaBulan = (char*)"January"; break;
+		case 1: namaBulan = (char*)"February"; break;
+		case 2: namaBulan = (char*)"March"; break;
+		case 3: namaBulan = (char*)"April"; break;
+		case 4: namaBulan = (char*)"May"; break;
+		case 5: namaBulan = (char*)"June"; break;
+		case 6: namaBulan = (char*)"July"; break;
+		case 7: namaBulan = (char*)"August"; break;
+		case 8: namaBulan = (char*)"September"; break;
+		case 9: namaBulan = (char*)"October"; break;
+		case 10: namaBulan = (char*)"November"; break;
+		case 11: namaBulan = (char*)"December"; break;
 	}
 	return namaBulan;
 }
