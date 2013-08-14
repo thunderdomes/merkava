@@ -449,7 +449,7 @@ panin::panin(platform &myPlatform)
 	m_cb_table_title1.load("app/native/assets/complete_book/m_cb_table_title1.png");
 	m_cb_table_title1.setPosition(0.0f, m_screenHeight - 450.0f);
 	m_cb_table_title2.load("app/native/assets/complete_book/m_cb_table_title2.png");
-	m_cb_table_title2.setPosition(0.0f, m_screenHeight - 730.0f);
+	m_cb_table_title2.setPosition(0.0f, m_screenHeight - 750.0f);
 
 	// stock quote
 	fprintf(stderr, "Load stock quote.\n");
@@ -705,6 +705,9 @@ panin::panin(platform &myPlatform)
 	m_sStockValue = "";
 	m_sTransFee = "";
 	m_sPayable = "";
+
+	m_footerHeight = 100.0f;
+	m_headerHeight = m_screenHeight - 210.0f;
 
 	fprintf(stderr, "Finish instantiate panin.\n");
 }
@@ -1052,7 +1055,7 @@ void panin::renderRunningTrade()
 		bbutil_render_text(m_font9, "RG", 705.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
 		myY -= 30.0f;
 	}
-	while (myY > 100.0f);
+	while (myY > m_footerHeight);
 
 
 	glEnable(GL_TEXTURE_2D);
@@ -1179,6 +1182,16 @@ void panin::renderStockWatch()
 
 	addFooter();
 
+	if (m_bShowBuy)
+	{
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell)
+	{
+		renderSellDialog();
+	}
+
 	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation)
 	{
 		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
@@ -1211,22 +1224,151 @@ void panin::renderCompleteBook()
 	m_cb_table_title1.draw();
 	m_cb_table_title2.draw();
 
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	float text_width, text_height, pos_x, pos_y;
+
+	bbutil_measure_text(m_font12, "Last", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 40.0f;
+	pos_y = m_cb_top_band.PosY() - 36.0f;
+	bbutil_render_text(m_font12, "Last", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Open", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 40.0f;
+	pos_y = m_cb_top_band.PosY() - 72.0f;
+	bbutil_render_text(m_font12, "Open", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Vol", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 40.0f;
+	pos_y = m_cb_top_band.PosY() - 108.0f;
+	bbutil_render_text(m_font12, "Vol", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Last", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 116.0f;
+	pos_y = m_cb_top_band.PosY() - 36.0f;
+	bbutil_render_text(m_font12, "Last", pos_x, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Open", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 116.0f;
+	pos_y = m_cb_top_band.PosY() - 72.0f;
+	bbutil_render_text(m_font12, "Open", pos_x, pos_y, 0.0f, 1.0f, 0.0f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Vol", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 116.0f;
+	pos_y = m_cb_top_band.PosY() - 108.0f;
+	bbutil_render_text(m_font12, "Vol", pos_x, pos_y, 1.0f, 0.0f, 1.0f, 1.0f);
+
+	//--------------------
+
+	bbutil_measure_text(m_font12, "Prev", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 267.0f;
+	pos_y = m_cb_top_band.PosY() - 36.0f;
+	bbutil_render_text(m_font12, "Prev", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Chg", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 267.0f;
+	pos_y = m_cb_top_band.PosY() - 72.0f;
+	bbutil_render_text(m_font12, "Chg", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Val", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 267.0f;
+	pos_y = m_cb_top_band.PosY() - 108.0f;
+	bbutil_render_text(m_font12, "Val", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Prev", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 340.0f;
+	pos_y = m_cb_top_band.PosY() - 36.0f;
+	bbutil_render_text(m_font12, "Prev", pos_x, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Chg", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 340.0f;
+	pos_y = m_cb_top_band.PosY() - 72.0f;
+	bbutil_render_text(m_font12, "Chg", pos_x, pos_y, 0.0f, 1.0f, 0.0f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Val", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 340.0f;
+	pos_y = m_cb_top_band.PosY() - 108.0f;
+	bbutil_render_text(m_font12, "Val", pos_x, pos_y, 1.0f, 0.0f, 1.0f, 1.0f);
+
+	//--------------------
+
+	bbutil_measure_text(m_font12, "Hi", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 560.0f;
+	pos_y = m_cb_top_band.PosY() - 36.0f;
+	bbutil_render_text(m_font12, "Hi", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Low", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 560.0f;
+	pos_y = m_cb_top_band.PosY() - 72.0f;
+	bbutil_render_text(m_font12, "Low", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "M.Cp", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 560.0f;
+	pos_y = m_cb_top_band.PosY() - 108.0f;
+	bbutil_render_text(m_font12, "M.Cp", pos_x, pos_y, 0.3828f, 0.7969f, 0.9180f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Hi", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 636.0f;
+	pos_y = m_cb_top_band.PosY() - 36.0f;
+	bbutil_render_text(m_font12, "Hi", pos_x, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+
+	bbutil_measure_text(m_font12, "Low", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 636.0f;
+	pos_y = m_cb_top_band.PosY() - 72.0f;
+	bbutil_render_text(m_font12, "Low", pos_x, pos_y, 0.0f, 1.0f, 0.0f, 1.0f);
+
+	bbutil_measure_text(m_font12, "M.Cp", &text_width, &text_height);
+	pos_x = m_cb_top_band.PosX() + 636.0f;
+	pos_y = m_cb_top_band.PosY() - 108.0f;
+	bbutil_render_text(m_font12, "M.Cp", pos_x, pos_y, 1.0f, 0.0f, 1.0f, 1.0f);
+
+	//--------------------
+
+	for (int i = 0; i < 7; ++i)
+	{
+		//bbutil_measure_text(m_font12, "M.Cp", &text_width, &text_height);
+		//pos_x = m_cb_top_band.PosX() + 636.0f;
+		//pos_y = m_cb_top_band.PosY() - 108.0f;
+		pos_y = m_cb_table_title1.PosY() - 4 - (i+1)*33.0f;
+		bbutil_render_text(m_font12, "20", 40.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font12, "20", 160.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font12, "20", 255.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font12, "20", 390.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font12, "20", 540.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font12, "20", 670.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	for (int i = 0; i < 7; ++i)
+	{
+		pos_y = m_cb_table_title2.PosY() - 4 - (i+1)*33.0f;
+		bbutil_render_text(m_font12, "20", 30.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font12, "20", 160.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font12, "20", 300.0f, pos_y, 1.0f, 0.0f, 0.0f, 1.0f);
+
+	}
+
+	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
 	glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-
-	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
-
 	addFooter();
+
+	if (m_bShowBuy)
+	{
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell)
+	{
+		renderSellDialog();
+	}
 
 	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation)
 	{
@@ -1258,7 +1400,42 @@ void panin::renderStockQuote()
 	m_sq_caption.draw();
 	m_sq_table_title.draw();
 
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	float myY = m_sq_table_title.PosY() - 30;
+	do
+	{
+		bbutil_render_text(m_font11, "RX", 40.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 170.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 320.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 480.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 640.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+		myY -= 30.0f;
+	}
+	while (myY > m_footerHeight);
+
+	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	addFooter();
+
+	if (m_bShowBuy)
+	{
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell)
+	{
+		renderSellDialog();
+	}
 
 	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation)
 	{
@@ -1290,7 +1467,42 @@ void panin::renderBrokerQuote()
 	m_bq_caption.draw();
 	m_bq_table_title.draw();
 
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	float myY = m_bq_table_title.PosY() - 30;
+	do
+	{
+		bbutil_render_text(m_font11, "RX", 30.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "Nama", 140.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 425.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 555.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 685.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+		myY -= 30.0f;
+	}
+	while (myY > m_footerHeight);
+
+	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	addFooter();
+
+	if (m_bShowBuy)
+	{
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell)
+	{
+		renderSellDialog();
+	}
 
 	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation)
 	{
@@ -1316,17 +1528,51 @@ void panin::renderStockSummary()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_latar.draw();
-
 	addHeader();
+
+	m_ss_caption.draw();
+	m_ss_table_title.draw();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	float myY = m_ss_table_title.PosY() - 30;
+	do
+	{
+		bbutil_render_text(m_font11, "RX", 30.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "Nama", 160.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 330.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 500.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 640.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+		myY -= 30.0f;
+	}
+	while (myY > m_footerHeight);
+
+	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	if (m_bShowBuy)
+	{
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell)
+	{
+		renderSellDialog();
+	}
 
 	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation)
 	{
 		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
 		renderMenu();
 	}
-
-	m_ss_caption.draw();
-	m_ss_table_title.draw();
 
 	addFooter();
 
@@ -1355,7 +1601,42 @@ void panin::renderBrokerSummary()
 	m_bs_caption.draw();
 	m_bs_table_title.draw();
 
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	float myY = m_bs_table_title.PosY() - 30;
+	do
+	{
+		bbutil_render_text(m_font11, "RX", 30.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "Nama", 150.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 300.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 440.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+		bbutil_render_text(m_font11, "2000", 620.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+		myY -= 30.0f;
+	}
+	while (myY > m_footerHeight);
+
+	bbutil_render_text(m_font9, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	addFooter();
+
+	if (m_bShowBuy)
+	{
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell)
+	{
+		renderSellDialog();
+	}
 
 	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation)
 	{

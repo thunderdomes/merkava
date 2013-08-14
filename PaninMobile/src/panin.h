@@ -395,6 +395,9 @@ private:
 	std::string m_sTransFee;
 	std::string m_sPayable;
 
+	float m_footerHeight;
+	float m_headerHeight;
+
 	virtual void onLeftPress(float x, float y);
 	virtual void onLeftRelease(float x, float y);
 	virtual void onKeyPressed(char c);
