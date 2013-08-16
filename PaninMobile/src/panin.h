@@ -15,9 +15,10 @@
 //#include "Label.h"
 //#include "Button.h"
 
+
 #include <GLES/gl.h>
 
-#include "umum.h"
+
 
 #ifndef NDEBUG
 #include <assert.h>
@@ -192,8 +193,10 @@ private:
 
 	// untuk home
 	Sprite m_logo;
-	Sprite m_username_textfield;
-	Sprite m_password_textfield;
+	Sprite m_username_textfield_default;
+	Sprite m_username_textfield_regular;
+	Sprite m_password_textfield_default;
+	Sprite m_password_textfield_regular;
 	Sprite m_ihsg_bar;
 	Sprite m_ihsg_value_bg;
 	Sprite m_ihsg_volume_bg;
@@ -207,6 +210,8 @@ private:
 	button m_btn_login;
 	button m_btn_home_info;
 	button m_btn_home_setel;
+	button m_btn_home_username;
+	button m_btn_home_password;
 
 	// running trade
 	Sprite m_rt_caption;
@@ -379,6 +384,7 @@ private:
 	const char* m_message;
 	float m_messagePosX, m_messagePosY;
 
+	bool m_bLogged;
 	std::string m_u_name;
 	std::string m_u_pass;
 	std::string m_sIhsg_val;

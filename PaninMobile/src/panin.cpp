@@ -13,8 +13,33 @@
 #include <stdio.h>
 #include <string>
 #include <unistd.h>
+#include <pthread.h>
 
+typedef struct user
+{
+	std::string username;
+	std::string password;
+} user;
 
+user myUser;
+
+typedef struct threadVar
+{
+	user		t_myUser;
+} threadVar;
+
+enum _loginStatus
+{
+	NOT_SIGIN = 0,
+	SIGNINGIN,
+	SIGNEDIN,
+	SIGN_FAILED
+};
+
+_loginStatus loginStatus;
+
+ServerConnection * myServerConnection;
+std::ostringstream osStream;
 
 namespace paninMobile
 {
@@ -33,7 +58,8 @@ panin::panin(platform &myPlatform)
 	  m_bShowHomeInfo(false),
 	  m_bShowHomeSetel(false),
 	  m_bUsernameFocus(false),
-	  m_bPasswordFocus(false)
+	  m_bPasswordFocus(false),
+	  m_bLogged(false)
 {
 	// TODO Auto-generated constructor stub
 	m_platform.setEventHandler(this);
@@ -358,10 +384,12 @@ panin::panin(platform &myPlatform)
 	fprintf(stderr, "Load home.\n");
 	m_logo.load("app/native/assets/login/logo.png");
 	m_logo.setPosition((m_screenWidth - m_logo.Width())/2, m_screenHeight - m_logo.Height() - 106.0f);
-	m_username_textfield.load("app/native/assets/login/username.png");
-	m_username_textfield.setPosition((m_screenWidth - m_username_textfield.Width())/2, m_screenHeight - m_username_textfield.Height() - 574.0f);
-	m_password_textfield.load("app/native/assets/login/password.png");
-	m_password_textfield.setPosition((m_screenWidth - m_password_textfield.Width())/2, m_screenHeight - m_password_textfield.Height() - 635.0f);
+	m_username_textfield_default.load("app/native/assets/login/username.png");
+	m_username_textfield_regular.load("app/native/assets/login/username.png");
+	//m_username_textfield.setPosition((m_screenWidth - m_username_textfield.Width())/2, m_screenHeight - m_username_textfield.Height() - 574.0f);
+	m_password_textfield_default.load("app/native/assets/login/password.png");
+	m_password_textfield_regular.load("app/native/assets/login/password.png");
+	//m_password_textfield.setPosition((m_screenWidth - m_password_textfield.Width())/2, m_screenHeight - m_password_textfield.Height() - 635.0f);
 	m_ihsg_bar.load("app/native/assets/login/ihsg.png");
 	m_ihsg_bar.setPosition(0.0f, m_screenHeight - m_ihsg_bar.Height() - 827.0f);
 	m_ihsg_value_bg.load("app/native/assets/login/ihsg_val.png");
@@ -377,6 +405,35 @@ panin::panin(platform &myPlatform)
 	m_home_setel_default.load("app/native/assets/login/setel.png");
 	m_home_setel_pressed.load("app/native/assets/login/setel.png");
 
+	fprintf(stderr, "Load m_btn_home_username.\n");
+	m_btn_home_username.regular = &m_username_textfield_default;
+	m_btn_home_username.pressed = &m_username_textfield_regular;
+	m_btn_home_username.sizeX	= m_username_textfield_default.Width();
+	m_btn_home_username.sizeY	= m_username_textfield_default.Height();
+	m_btn_home_username.font	= m_font;
+	m_btn_home_username.text	= "";
+	m_btn_home_username.isPressed	= false;
+	m_btn_home_username.isEnabled = true;
+	if (m_bZ10)
+	{
+		m_btn_home_username.setPosition( (m_screenWidth - m_btn_home_username.sizeX)/2, m_screenHeight - m_username_textfield_regular.Height() - 574.0f );
+	}
+	else
+	{
+		m_btn_home_username.setPosition( (m_screenWidth - m_btn_home_username.sizeX)/2, 417.0f );
+	}
+
+	fprintf(stderr, "Load m_btn_home_password.\n");
+	m_btn_home_password.regular = &m_password_textfield_default;
+	m_btn_home_password.pressed = &m_password_textfield_regular;
+	m_btn_home_password.sizeX	= m_password_textfield_default.Width();
+	m_btn_home_password.sizeY	= m_password_textfield_default.Height();
+	m_btn_home_password.font	= m_font;
+	m_btn_home_password.text	= "";
+	m_btn_home_password.isPressed	= false;
+	m_btn_home_password.isEnabled = true;
+	m_btn_home_password.setPosition( (m_screenWidth - m_btn_home_password.sizeX)/2, m_btn_home_username.posY - 62.0f );
+
 	fprintf(stderr, "Load btn_login.\n");
 	m_btn_login.regular = &m_login_default;
 	m_btn_login.pressed = &m_login_pressed;
@@ -386,7 +443,7 @@ panin::panin(platform &myPlatform)
 	m_btn_login.text	= "";
 	m_btn_login.isPressed	= false;
 	m_btn_login.isEnabled = true;
-	m_btn_login.setPosition( (m_screenWidth - m_btn_login.sizeX)/2, m_screenHeight - m_btn_login.sizeY - 710.0 );
+	m_btn_login.setPosition( (m_screenWidth - m_btn_login.sizeX)/2, m_btn_home_password.posY - 90.0 );
 
 	fprintf(stderr, "Load m_btn_home_info.\n");
 	m_btn_home_info.regular = &m_home_info_default;
@@ -709,6 +766,8 @@ panin::panin(platform &myPlatform)
 	m_footerHeight = 100.0f;
 	m_headerHeight = m_screenHeight - 210.0f;
 
+	loginStatus = NOT_SIGIN;
+
 	fprintf(stderr, "Finish instantiate panin.\n");
 }
 
@@ -877,8 +936,10 @@ void panin::renderHome()
 
 	m_latar.draw();
 	m_logo.draw();
-	m_username_textfield.draw();
-	m_password_textfield.draw();
+	//m_username_textfield_regular.draw();
+	//m_password_textfield_regular.draw();
+	m_btn_home_username.draw();
+	m_btn_home_password.draw();
 	m_ihsg_bar.draw();
 	m_ihsg_value_bg.draw();
 	m_ihsg_volume_bg.draw();
@@ -895,13 +956,12 @@ void panin::renderHome()
     //bbutil_render_text(m_font, m_message, m_messagePosX, m_messagePosY, 0.75f, 0.75f, 0.75f, 1.0f);
     float text_width, text_height, pos_x, pos_y;
     bbutil_measure_text(m_font_global, m_u_name.c_str(), &text_width, &text_height);
-    pos_x = 390.0f;
-	pos_y = m_screenHeight -620.0f;
+    pos_x = m_btn_home_username.posX + 300.0f;
+    pos_y = m_btn_home_username.posY + 30.0f;
 	bbutil_render_text(m_font_global, m_u_name.c_str(), pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
 
 	bbutil_measure_text(m_font_global, m_u_pass.c_str(), &text_width, &text_height);
-	pos_x = 390;
-	pos_y = m_screenHeight -677;
+    pos_y = m_btn_home_password.posY + 30.0f;
 	bbutil_render_text(m_font_global, m_u_pass.c_str(), pos_x, pos_y, 0.05f, 0.05f, 0.05f, 1.0f);
 
 	bbutil_measure_text(m_font_ihsg_val, m_sIhsg_val.c_str(), &text_width, &text_height);
@@ -1832,6 +1892,7 @@ void panin::onLeftRelease(float x, float y)
 				fprintf(stderr, "button login is released.\n");
 				m_btn_login.isPressed = false;
 
+				loginStatus = SIGNINGIN;
 				periksaLogin();
 				//m_state = RUNNING_TRADE;
 				return;
@@ -2271,58 +2332,130 @@ void panin::setConfiguration(eConfiguration conf)
 	}
 }
 
-void panin::periksaLogin()
+void * threadLogin(void * Var)
 {
-	std::string hasil;
+	std::string u_name, u_pass;
 
-	fprintf(stderr, "sebelum curl.\n");
-	//const char * url = "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=parto&password=123456";
+	//u_name = *((std::string *) data);
+	//u_pass = *((std::string *) data +1);
+
+	threadVar myVar;
+	myVar = *((threadVar *) Var);
+
+	u_name = myVar.t_myUser.username;
+	u_pass = myVar.t_myUser.password;
+
 	char * url = new char[1024];
 	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=");
-	std::strcat(url, m_u_name.c_str());
+	std::strcat(url, u_name.c_str());
 	std::strcat(url, "&password=");
-	std::strcat(url, m_u_pass.c_str());
-	//url << "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=" << m_u_name.c_str() << "&password=" << m_u_pass.c_str();
-	if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
+	std::strcat(url, u_pass.c_str());
+
+	fprintf(stderr, "url yang diakses : %s.\n", url);
+	myServerConnection = new ServerConnection();
+
+	if (CURLE_OK == myServerConnection->doHttpGet(url, osStream, 30.0f))
 	{
-		std::string hasil = oss.str();
-		fprintf(stderr, "hasil : %s", hasil.c_str());
+		std::string hasil = osStream.str();
+		std::string check = "true";
+		fprintf(stderr, "%s\n", hasil.c_str());
+		fprintf(stderr, "%s\n", check.c_str());
 		if (hasil == "true")
 		{
-			m_btn_login.isEnabled = false;
-			m_btn_home_info.isEnabled = false;
-			m_btn_home_setel.isEnabled = false;
-			m_btn_setel_default.isEnabled = false;
-			m_btn_setel_set202.isEnabled = false;
-			m_btn_setel_set107.isEnabled = false;
-			m_btn_setel_save.isEnabled = false;
-			m_btn_setel_x.isEnabled = false;
-
-			m_state = RUNNING_TRADE;
+			loginStatus = SIGNEDIN;
+			fprintf(stderr, "login berhasil.\n");
 		}
 		else
 		{
-			m_u_name = "username salah";
-
-			// by pass
-			m_btn_login.isEnabled = false;
-			m_btn_home_info.isEnabled = false;
-			m_btn_home_setel.isEnabled = false;
-			m_btn_setel_default.isEnabled = false;
-			m_btn_setel_set202.isEnabled = false;
-			m_btn_setel_set107.isEnabled = false;
-			m_btn_setel_save.isEnabled = false;
-			m_btn_setel_x.isEnabled = false;
-
-			m_state = RUNNING_TRADE;
+			loginStatus = SIGN_FAILED;
+			fprintf(stderr, "login gagal.\n");
 		}
 	}
+//	if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
+//	{
+//		std::string hasil = oss.str();
+//		fprintf(stderr, "hasil : %s", hasil.c_str());
+//		if (hasil == "true")
+//		{
+//			m_btn_login.isEnabled = false;
+//			m_btn_home_info.isEnabled = false;
+//			m_btn_home_setel.isEnabled = false;
+//			m_btn_setel_default.isEnabled = false;
+//			m_btn_setel_set202.isEnabled = false;
+//			m_btn_setel_set107.isEnabled = false;
+//			m_btn_setel_save.isEnabled = false;
+//			m_btn_setel_x.isEnabled = false;
+//
+//			m_state = RUNNING_TRADE;
+//		}
+//		else
+//		{
+//			m_u_name = "username salah";
+//		}
+//	}
 	else
 	{
 		fprintf(stderr, "curl tidak ok.\n");
 	}
 
 	delete url;
+
+	return NULL;
+}
+
+void panin::periksaLogin()
+{
+	std::string hasil;
+	pthread_t pth;
+
+	myUser.username = "test-mob";
+	myUser.password = "336433";
+
+	threadVar myThreadVar[1];
+	myThreadVar[0].t_myUser.username = myUser.username;
+	myThreadVar[0].t_myUser.password = myUser.password;
+
+	pthread_create(&pth, NULL, threadLogin, (void*) myThreadVar);
+
+	// sementara
+//	m_u_name = "test-mob";
+//	m_u_pass = "336433";
+//	fprintf(stderr, "sebelum curl.\n");
+//	//const char * url = "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=parto&password=123456";
+//	char * url = new char[1024];
+//	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=");
+//	std::strcat(url, m_u_name.c_str());
+//	std::strcat(url, "&password=");
+//	std::strcat(url, m_u_pass.c_str());
+//	//url << "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=" << m_u_name.c_str() << "&password=" << m_u_pass.c_str();
+//	if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
+//	{
+//		std::string hasil = oss.str();
+//		fprintf(stderr, "hasil : %s", hasil.c_str());
+//		if (hasil == "true")
+//		{
+//			m_btn_login.isEnabled = false;
+//			m_btn_home_info.isEnabled = false;
+//			m_btn_home_setel.isEnabled = false;
+//			m_btn_setel_default.isEnabled = false;
+//			m_btn_setel_set202.isEnabled = false;
+//			m_btn_setel_set107.isEnabled = false;
+//			m_btn_setel_save.isEnabled = false;
+//			m_btn_setel_x.isEnabled = false;
+//
+//			m_state = RUNNING_TRADE;
+//		}
+//		else
+//		{
+//			m_u_name = "username salah";
+//		}
+//	}
+//	else
+//	{
+//		fprintf(stderr, "curl tidak ok.\n");
+//	}
+//
+//	delete url;
 }
 
 } /* namespace paninMobile */

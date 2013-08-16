@@ -26,6 +26,9 @@ public:
 
 private:
 	CURL * m_curl_handle;
+
+	std::ostringstream stream;
+
 };
 
 #endif /* SERVERCONNECTION_H_ */

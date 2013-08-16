@@ -90,12 +90,16 @@ CURLcode ServerConnection::doHttpGet(const char * url, std::ostream& os, long ti
 		}
 	}
 
+	timeout = 99999999.0f;
+
 	if(CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEFUNCTION, &write_data))
+	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEDATA, &stream))
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_NOPROGRESS, 1L))
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_FOLLOWLOCATION, 1L))
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_FILE, &os))
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_TIMEOUT, timeout))
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_URL, url))
+	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_COOKIEFILE, ""))
 	//&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEHEADER, headerfile))
 	)
 	{
