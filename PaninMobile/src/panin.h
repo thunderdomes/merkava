@@ -94,6 +94,7 @@ private:
 	float m_ePosX, m_ePosY;
 	float m_fmenu_width, m_fmenu_animation;
 	bool	m_bZ10;
+	float m_fLeftReffPos;
 
 	// menu
 	bool	m_bShowMenu;
@@ -135,6 +136,168 @@ private:
 			return ((clickX >= posX) && (clickX <= posX + sizeX) && (clickY >= posY) && (clickY <= posY  + sizeY));
 		}
 	};
+
+	struct _rtData {
+		std::string tgl;
+		std::string simp;
+		std::string rg;
+		std::string price;
+		std::string volume_lot;
+		std::string prev;
+		std::string buyer_code;
+		std::string buyer_type;
+		std::string seller_code;
+		std::string seller_type;
+		std::string stock_type;
+		std::string req;
+	} rtData;
+
+	struct _sqData {
+		std::string aali;
+		std::string ng;
+		std::string prev;
+		std::string open;
+		std::string high;
+		std::string low;
+		std::string last;
+		std::string volume;
+		std::string value;
+		std::string freq;
+		std::string best_bid_price;
+		std::string best_bid_vol;
+		std::string best_offer_vol;
+		std::string last_trade_vol;
+		std::string total_dom_sell_vol;
+		std::string total_dom_sell_freq;
+		std::string total_dom_sell_val;
+		std::string total_dom_buy_vol;
+		std::string total_dom_buy_freq;
+		std::string total_dom_buy_val;
+		std::string total_fgn_sell_vol;
+		std::string total_fgn_sell_freq;
+		std::string total_fgn_sell_val;
+		std::string total_fgn_buy_vol;
+		std::string total_fgn_buy_freq;
+		std::string total_fgn_buy_val;
+		std::string req;
+	} sqData;
+
+	struct _bqData {
+		std::string cc;
+		std::string rg;
+		std::string buy_freq;
+		std::string buy_vol;
+		std::string buy_val;
+		std::string sell_freq;
+		std::string sell_vol;
+		std::string sell_val;
+		std::string rg1;
+		std::string req;
+	} bqData;
+
+	struct _composite {
+		std::string composite;
+		std::string prev_price;
+		std::string open_price;
+		std::string last;
+		std::string high;
+		std::string low;
+		std::string freq;
+		std::string vol;
+		std::string value;
+		std::string req;
+	} composite;
+
+	struct _regionalIdx {
+		std::string hsifut;
+		std::string prev;
+		std::string open;
+		std::string high;
+		std::string low;
+		std::string last;
+		std::string vol;
+		std::string future;
+		std::string req;
+	} regionaldx;
+
+	struct _currencies {
+		std::string eurusd;
+		std::string bid;
+		std::string ask;
+		std::string last;
+		std::string usd;
+		std::string req;
+	} currencies;
+
+	struct _newsTitle {
+		std::string newsId;
+		std::string datetime;
+		std::string iqp;
+		std::string title;
+		std::string req;
+	} newsTitle;
+
+	struct _tradeBook {
+		std::string price;
+		std::string volume;
+		std::string freq;
+		std::string req;
+	} tradeBook;
+
+	struct _orderBook {
+		std::string ob;
+		std::string sequence_no;
+		std::string price;
+		std::string volume;
+		std::string freq;
+		std::string req;
+	} orderBook;
+
+	struct _stockSummary {
+		std::string az;
+		std::string domestic_buy_freq;
+		std::string domestic_buy_vol;
+		std::string domestic_buy_val;
+		std::string domestic_sell_freq;
+		std::string domestic_sell_vol;
+		std::string domestic_sell_val;
+		std::string foreign_buy_freq;
+		std::string foreign_buy_vol;
+		std::string foreign_buy_val;
+		std::string foreign_sell_freq;
+		std::string foreign_sell_vol;
+		std::string foreign_sell_val;
+		std::string req;
+	} stockSummary;
+
+	struct _brokerSmmary {
+		std::string asii;
+		std::string domestic_buy_freq;
+		std::string domestic_buy_vol;
+		std::string domestic_buy_val;
+		std::string domestic_sell_freq;
+		std::string domestic_sell_vol;
+		std::string domestic_sell_val;
+		std::string foreign_buy_freq;
+		std::string foreign_buy_vol;
+		std::string foreign_buy_val;
+		std::string foreign_sell_freq;
+		std::string foreign_sell_vol;
+		std::string foreign_sell_val;
+		std::string req;
+	} brokerSummary;
+
+	struct _stockChartUpdate {
+		std::string datetime;
+		std::string open;
+		std::string high;
+		std::string low;
+		std::string close;
+		std::string volume;
+		std::string reg;
+	};
+
+
 
 	// umum
 	Sprite m_latar;

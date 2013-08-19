@@ -8,6 +8,7 @@
 #ifndef UMUM_H_
 #define UMUM_H_
 
+
 struct position
 {
 	float x;

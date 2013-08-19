@@ -66,6 +66,9 @@ panin::panin(platform &myPlatform)
 	m_platform.getSize(m_screenWidth, m_screenHeight);
 	fprintf(stderr, "width, height: %f, %f\n", m_screenWidth, m_screenHeight);
 
+	m_footerHeight = 100.0f;
+	m_headerHeight = m_screenHeight - 135.0f;
+
 	int dpi = m_platform.getDPI();
 	int point_size = (int)(15.0f / ((float)dpi / 170.0f ));
 
@@ -177,20 +180,18 @@ panin::panin(platform &myPlatform)
 		m_latar.load("app/native/assets/umum/latarZ10.png");
 	}
 
-	m_latar.setPosition(0.0f, 0.0f);
+	m_fLeftReffPos = 0.0f;
+	m_latar.setPosition(m_fLeftReffPos, 0.0f);
 
 	fprintf(stderr, "load general assets.\n");
 	m_header_bar_bg.load("app/native/assets/umum/bar.png");
-	m_header_bar_bg.setPosition(0.0f, m_screenHeight - 137.0f);
+	m_header_bar_bg.setPosition(m_latar.PosX(), m_headerHeight);
 	m_header_post.load("app/native/assets/umum/post.png");
-	m_header_post.setPosition((m_screenWidth - m_header_post.Width())/2, m_screenHeight - 124.0f);
+	m_header_post.setPosition((m_screenWidth - m_header_post.Width())/2, m_header_bar_bg.PosY() + (m_header_bar_bg.Height() - m_header_post.Height())/2);
 	m_btn_info_bg.load("app/native/assets/umum/info_blue.png");
 	m_btn_menu_bg.load("app/native/assets/umum/menu_blue.png");
-	//m_btn_menu_bg.setPosition(25.0f, m_screenHeight - 128.0f);
 	m_btn_sell_bg.load("app/native/assets/umum/sell.png");
-	//m_btn_sell_bg.setPosition(622.0f, m_screenHeight - 1254.0f);
 	m_btn_buy_bg.load("app/native/assets/umum/buy.png");
-	//m_btn_buy_bg.setPosition(460.0f, m_screenHeight - 1254.0f);
 
 	m_btn_info.regular = &m_btn_info_bg;
 	m_btn_info.pressed = &m_btn_info_bg;
@@ -200,7 +201,7 @@ panin::panin(platform &myPlatform)
 	m_btn_info.text	= "";
 	m_btn_info.isPressed = false;
 	m_btn_info.isEnabled = true;
-	m_btn_info.setPosition( 680.0f, (m_screenHeight - 128.0) );
+	m_btn_info.setPosition(m_header_bar_bg.PosX() + m_screenWidth - 1.5 * m_btn_info.sizeX, m_header_bar_bg.PosY() + (m_header_bar_bg.Height() - m_btn_info.sizeY)/2);
 	m_btn_menu.regular = &m_btn_menu_bg;
 	m_btn_menu.pressed = &m_btn_menu_bg;
 	m_btn_menu.sizeX	= m_btn_menu_bg.Width();
@@ -209,16 +210,7 @@ panin::panin(platform &myPlatform)
 	m_btn_menu.text	= "";
 	m_btn_menu.isPressed	= false;
 	m_btn_menu.isEnabled = true;
-	m_btn_menu.setPosition( 25.0f, (m_screenHeight - 128.0) );
-	m_btn_buy.regular = &m_btn_buy_bg;
-	m_btn_buy.pressed = &m_btn_buy_bg;
-	m_btn_buy.sizeX	= m_btn_buy_bg.Width();
-	m_btn_buy.sizeY	= m_btn_buy_bg.Height();
-	m_btn_buy.font	= m_font;
-	m_btn_buy.text	= "";
-	m_btn_buy.isPressed	= false;
-	m_btn_buy.isEnabled = true;
-	m_btn_buy.setPosition(622.0f, (m_screenHeight - 1254.0f));
+	m_btn_menu.setPosition(m_header_bar_bg.PosX() + 0.5 * m_btn_menu.sizeX, m_header_bar_bg.PosY() + (m_header_bar_bg.Height() - m_btn_menu.sizeY)/2 );
 	m_btn_sell.regular = &m_btn_sell_bg;
 	m_btn_sell.pressed = &m_btn_sell_bg;
 	m_btn_sell.sizeX	= m_btn_sell_bg.Width();
@@ -227,20 +219,29 @@ panin::panin(platform &myPlatform)
 	m_btn_sell.text	= "";
 	m_btn_sell.isPressed	= false;
 	m_btn_sell.isEnabled = true;
-	m_btn_sell.setPosition( 460.0f, (m_screenHeight - 1254.0f));
+	m_btn_sell.setPosition( m_latar.PosX() + (m_screenWidth - m_btn_sell.sizeX - 20.0f), ( m_footerHeight - m_btn_sell.sizeY)/2);
+	m_btn_buy.regular = &m_btn_buy_bg;
+	m_btn_buy.pressed = &m_btn_buy_bg;
+	m_btn_buy.sizeX	= m_btn_buy_bg.Width();
+	m_btn_buy.sizeY	= m_btn_buy_bg.Height();
+	m_btn_buy.font	= m_font;
+	m_btn_buy.text	= "";
+	m_btn_buy.isPressed	= false;
+	m_btn_buy.isEnabled = true;
+	m_btn_buy.setPosition(m_btn_sell.posX - m_btn_buy.sizeX - 10.0f, m_btn_sell.posY);
+
 	//ihsg
 	m_ihsg2.load("app/native/assets/umum/ihsg.png");
-	//m_ihsg2.setPosition(17.0f, 20.0f);
-	m_ihsg2.setPosition(0.0f, 0.0f);
+	m_ihsg2.setPosition(0.0f, (m_footerHeight - m_ihsg2.Height())/2);
 	// buy
 	m_buy_bg.load("app/native/assets/umum/buy_bg.png");
-	m_buy_bg.setPosition(57.0f, m_screenHeight - 1020.0f);
+	m_buy_bg.setPosition(m_latar.PosX() + (m_screenWidth - m_buy_bg.Width())/2, (m_screenHeight - m_buy_bg.Height())/2);
 	m_buy_caption.load("app/native/assets/umum/buy_caption.png");
-	m_buy_caption.setPosition(75.0f, m_screenHeight - 416.0f);
+	m_buy_caption.setPosition(m_buy_bg.PosX() + 20.0f, m_buy_bg.PosY() + m_buy_bg.Height() - 2 *m_buy_caption.Height());
 	m_buy_refresh.load("app/native/assets/umum/buy_refresh.png");
 	m_buy_execute.load("app/native/assets/umum/buy_execute.png");
 	m_buy_band.load("app/native/assets/umum/white_bar.png");
-	m_buy_band.setPosition(74.0f, m_screenHeight - 922.0f);
+	m_buy_band.setPosition(m_buy_bg.PosX() + 0.0f +20.0f, m_buy_bg.PosY() + m_buy_bg.Height() - 600.0f);
 	m_buy_x.load("app/native/assets/umum/buy_x.png");
 	m_btn_buy_refresh.regular = &m_buy_refresh;
 	m_btn_buy_refresh.pressed = &m_buy_refresh;
@@ -249,7 +250,7 @@ panin::panin(platform &myPlatform)
 	m_btn_buy_refresh.font	= m_font;
 	m_btn_buy_refresh.text	= "";
 	m_btn_buy_refresh.isPressed	= false;
-	m_btn_buy_refresh.setPosition( 173.0f, m_screenHeight - 918.0 );
+	m_btn_buy_refresh.setPosition(m_buy_bg.PosX() +120.0f, m_buy_band.PosY() + (m_buy_band.Height() -m_btn_buy_refresh.sizeY)/2 );
 	m_btn_buy_execute.regular = &m_buy_execute;
 	m_btn_buy_execute.pressed = &m_buy_execute;
 	m_btn_buy_execute.sizeX	= m_buy_execute.Width();
@@ -257,7 +258,7 @@ panin::panin(platform &myPlatform)
 	m_btn_buy_execute.font	= m_font;
 	m_btn_buy_execute.text	= "";
 	m_btn_buy_execute.isPressed	= false;
-	m_btn_buy_execute.setPosition( 450.0f, m_screenHeight - 918.0 );
+	m_btn_buy_execute.setPosition( m_btn_buy_refresh.posX + m_btn_buy_refresh.sizeX + 100.0f, m_btn_buy_refresh.posY );
 	m_btn_buy_x.regular = &m_buy_x;
 	m_btn_buy_x.pressed = &m_buy_x;
 	m_btn_buy_x.sizeX	= m_buy_x.Width();
@@ -265,16 +266,16 @@ panin::panin(platform &myPlatform)
 	m_btn_buy_x.font	= m_font;
 	m_btn_buy_x.text	= "";
 	m_btn_buy_x.isPressed	= false;
-	m_btn_buy_x.setPosition( 662.0f, m_screenHeight - 412.0 );
+	m_btn_buy_x.setPosition( m_buy_caption.PosX() + m_buy_caption.Width() - 1.2*m_btn_buy_x.sizeX, m_buy_caption.PosY() + (m_buy_caption.Height() - m_btn_buy_x.sizeY)/2 + 4.0f );
 	//sell
 	m_sell_bg.load("app/native/assets/umum/sell_bg.png");
-	m_sell_bg.setPosition(57.0f, m_screenHeight - 1020.0f);
+	m_sell_bg.setPosition(m_latar.PosX() + (m_screenWidth - m_sell_bg.Width())/2, (m_screenHeight - m_sell_bg.Height())/2);
 	m_sell_caption.load("app/native/assets/umum/sell_caption.png");
-	m_sell_caption.setPosition(75.0f, m_screenHeight - 416.0f);
+	m_sell_caption.setPosition(m_sell_bg.PosX() + 20.0f, m_sell_bg.PosY() + m_sell_bg.Height() - 2 *m_sell_caption.Height());
 	m_sell_refresh.load("app/native/assets/umum/sell_refresh.png");
 	m_sell_execute.load("app/native/assets/umum/sell_execute.png");
 	m_sell_band.load("app/native/assets/umum/white_bar.png");
-	m_sell_band.setPosition(74.0f, m_screenHeight - 922.0f);
+	m_sell_band.setPosition(m_sell_bg.PosX() + 0.0f +20.0f, m_sell_bg.PosY() + m_sell_bg.Height() - 600.0f);
 	m_sell_x.load("app/native/assets/umum/sell_x.png");
 	m_btn_sell_refresh.regular = &m_sell_refresh;
 	m_btn_sell_refresh.pressed = &m_sell_refresh;
@@ -284,7 +285,7 @@ panin::panin(platform &myPlatform)
 	m_btn_sell_refresh.text	= "";
 	m_btn_sell_refresh.isPressed	= false;
 	m_btn_sell_refresh.isEnabled = true;
-	m_btn_sell_refresh.setPosition( 173.0f, m_screenHeight - 918.0 );
+	m_btn_sell_refresh.setPosition(m_sell_bg.PosX() +120.0f, m_sell_band.PosY() + (m_sell_band.Height() -m_btn_sell_refresh.sizeY)/2 );
 	m_btn_sell_execute.regular = &m_sell_execute;
 	m_btn_sell_execute.pressed = &m_sell_execute;
 	m_btn_sell_execute.sizeX	= m_sell_execute.Width();
@@ -293,7 +294,7 @@ panin::panin(platform &myPlatform)
 	m_btn_sell_execute.text	= "";
 	m_btn_sell_execute.isPressed	= false;
 	m_btn_sell_execute.isEnabled = true;
-	m_btn_sell_execute.setPosition( 450.0f, m_screenHeight - 918.0 );
+	m_btn_sell_execute.setPosition( m_btn_sell_refresh.posX + m_btn_sell_refresh.sizeX + 100.0f, m_btn_sell_refresh.posY );
 	m_btn_sell_x.regular = &m_sell_x;
 	m_btn_sell_x.pressed = &m_sell_x;
 	m_btn_sell_x.sizeX	= m_sell_x.Width();
@@ -302,13 +303,13 @@ panin::panin(platform &myPlatform)
 	m_btn_sell_x.text	= "";
 	m_btn_sell_x.isPressed	= false;
 	m_btn_sell_x.isEnabled = true;
-	m_btn_sell_x.setPosition( 662.0f, m_screenHeight - 412.0 );
+	m_btn_sell_x.setPosition( m_sell_caption.PosX() + m_sell_caption.Width() - 1.0*m_btn_sell_x.sizeX, m_sell_caption.PosY() + (m_sell_caption.Height() - m_btn_sell_x.sizeY)/2 + 2.0f );
 
 	m_buysell_textfield_bg.load("app/native/assets/umum/table_bg.png");
 
 	m_textfield_bg.load("app/native/assets/umum/textfield_bg.png");
 	m_dialog_bg.load("app/native/assets/umum/dialog_bg.png");
-	m_dialog_bg.setPosition(0.0f, m_screenHeight - 940.0f);
+	m_dialog_bg.setPosition((m_screenWidth - m_dialog_bg.Width()) /2, (m_screenHeight - m_dialog_bg.Height())/2);
 	m_blue_rect.load("app/native/assets/umum/btn_blue.png");
 	m_setel_default.load("app/native/assets/umum/btndefault.png");
 	m_setel_set202.load("app/native/assets/umum/btn202.png");
@@ -323,7 +324,7 @@ panin::panin(platform &myPlatform)
 	m_btn_conf_ok.text	= "OK";
 	m_btn_conf_ok.isPressed	= false;
 	m_btn_conf_ok.isEnabled = true;
-	m_btn_conf_ok.setPosition( 435.0f, m_screenHeight - 713.0 );
+	m_btn_conf_ok.setPosition( m_dialog_bg.PosX() + 435.0f, m_dialog_bg.PosY() + 60.0f );
 	m_btn_conf_cancel.regular = &m_blue_rect;
 	m_btn_conf_cancel.pressed = &m_blue_rect;
 	m_btn_conf_cancel.sizeX	= m_blue_rect.Width();
@@ -332,7 +333,7 @@ panin::panin(platform &myPlatform)
 	m_btn_conf_cancel.text	= "CANCEL";
 	m_btn_conf_cancel.isPressed	= false;
 	m_btn_conf_cancel.isEnabled = true;
-	m_btn_conf_cancel.setPosition( 220.0f, m_screenHeight - 713.0 );
+	m_btn_conf_cancel.setPosition( m_dialog_bg.PosX() + 210.0f, m_btn_conf_ok.posX );
 	m_btn_setel_default.regular = &m_setel_default;
 	m_btn_setel_default.pressed = &m_setel_default;
 	m_btn_setel_default.regular->setPosition(0.0f, 0.0f);
@@ -342,7 +343,7 @@ panin::panin(platform &myPlatform)
 	m_btn_setel_default.text	= "";
 	m_btn_setel_default.isPressed	= false;
 	m_btn_setel_default.isEnabled = true;
-	m_btn_setel_default.setPosition( 64.0f, m_screenHeight - 866.0f );
+	m_btn_setel_default.setPosition( m_dialog_bg.PosX() + 64.0f, m_dialog_bg.PosY() + 60.0f );
 	m_btn_setel_set202.regular = &m_setel_set202;
 	m_btn_setel_set202.pressed = &m_setel_set202;
 	m_btn_setel_set202.sizeX	= m_setel_set202.Width();
@@ -351,7 +352,7 @@ panin::panin(platform &myPlatform)
 	m_btn_setel_set202.text	= "";
 	m_btn_setel_set202.isPressed	= false;
 	m_btn_setel_set202.isEnabled = true;
-	m_btn_setel_set202.setPosition( 220.0f, m_screenHeight - 866.0f );
+	m_btn_setel_set202.setPosition( m_dialog_bg.PosX() + 220.0f, m_btn_setel_default.posY );
 	m_btn_setel_set107.regular = &m_setel_set107;
 	m_btn_setel_set107.pressed = &m_setel_set107;
 	m_btn_setel_set107.sizeX	= m_setel_set107.Width();
@@ -360,7 +361,7 @@ panin::panin(platform &myPlatform)
 	m_btn_setel_set107.text	= "";
 	m_btn_setel_set107.isPressed	= false;
 	m_btn_setel_set107.isEnabled = true;
-	m_btn_setel_set107.setPosition( 377.0f, m_screenHeight - 866.0f );
+	m_btn_setel_set107.setPosition( m_dialog_bg.PosX() + 377.0f, m_btn_setel_default.posY );
 	m_btn_setel_save.regular = &m_setel_save;
 	m_btn_setel_save.pressed = &m_setel_save;
 	m_btn_setel_save.sizeX	= m_setel_save.Width();
@@ -369,7 +370,7 @@ panin::panin(platform &myPlatform)
 	m_btn_setel_save.text	= "";
 	m_btn_setel_save.isPressed	= false;
 	m_btn_setel_save.isEnabled = true;
-	m_btn_setel_save.setPosition(536.0f, m_screenHeight - 866.0f );
+	m_btn_setel_save.setPosition(m_dialog_bg.PosX() + 536.0f, m_btn_setel_default.posY );
 	m_btn_setel_x.regular = &m_setel_x;
 	m_btn_setel_x.pressed = &m_setel_x;
 	m_btn_setel_x.sizeX	= m_setel_x.Width();
@@ -378,7 +379,7 @@ panin::panin(platform &myPlatform)
 	m_btn_setel_x.text	= "";
 	m_btn_setel_x.isPressed	= false;
 	m_btn_setel_x.isEnabled = true;
-	m_btn_setel_x.setPosition( 664.0f, m_screenHeight - 600.0f );
+	m_btn_setel_x.setPosition( m_dialog_bg.PosX() + m_dialog_bg.Width() - 4 *m_btn_setel_x.sizeX, m_dialog_bg.PosY() + m_dialog_bg.Height() - 100.0f );
 
 	// initialize home screen
 	fprintf(stderr, "Load home.\n");
@@ -386,10 +387,8 @@ panin::panin(platform &myPlatform)
 	m_logo.setPosition((m_screenWidth - m_logo.Width())/2, m_screenHeight - m_logo.Height() - 106.0f);
 	m_username_textfield_default.load("app/native/assets/login/username.png");
 	m_username_textfield_regular.load("app/native/assets/login/username.png");
-	//m_username_textfield.setPosition((m_screenWidth - m_username_textfield.Width())/2, m_screenHeight - m_username_textfield.Height() - 574.0f);
 	m_password_textfield_default.load("app/native/assets/login/password.png");
 	m_password_textfield_regular.load("app/native/assets/login/password.png");
-	//m_password_textfield.setPosition((m_screenWidth - m_password_textfield.Width())/2, m_screenHeight - m_password_textfield.Height() - 635.0f);
 	m_ihsg_bar.load("app/native/assets/login/ihsg.png");
 	m_ihsg_bar.setPosition(0.0f, m_screenHeight - m_ihsg_bar.Height() - 827.0f);
 	m_ihsg_value_bg.load("app/native/assets/login/ihsg_val.png");
@@ -470,71 +469,71 @@ panin::panin(platform &myPlatform)
 	//TRADE
 	fprintf(stderr, "Load running trade.\n");
 	m_rt_caption.load("app/native/assets/running_trade/rt_bar_title.png");
-	m_rt_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_rt_caption.setPosition(m_latar.PosX() + 27.0f, m_headerHeight - m_rt_caption.Height() - 20.0f);
 	m_rt_table_title.load("app/native/assets/running_trade/rt_table_title.png");
-	m_rt_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
+	m_rt_table_title.setPosition(m_latar.PosX(), m_rt_caption.PosY() - m_rt_table_title.Height() - 20.0f);
 
 	//stock watch
 	fprintf(stderr, "Load stock watch.\n");
 	m_sw_caption.load("app/native/assets/stock_watch/sw_caption.png");
-	m_sw_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_sw_caption.setPosition(m_latar.PosX() + 27.0f, m_headerHeight - m_sw_caption.Height() - 20.0f);
 	m_sw_box_black.load("app/native/assets/stock_watch/sw_box_black.png");
-	m_sw_box_black.setPosition(27.0f, m_screenHeight - 455.0f);
+	m_sw_box_black.setPosition(m_latar.PosX() + 27.0f, m_screenHeight - 455.0f);
 	m_sw_port1.load("app/native/assets/stock_watch/sw_port1.png");
-	m_sw_port1.setPosition(41.0f, m_screenHeight - 270.0f);
+	m_sw_port1.setPosition(m_latar.PosX() + 41.0f, m_sw_caption.PosY() - m_sw_port1.Height() - 20.0f);
 	m_sw_banking.load("app/native/assets/stock_watch/sw_banking.png");
-	m_sw_banking.setPosition(201.0f, m_screenHeight - 270.0f);
+	m_sw_banking.setPosition(m_latar.PosX() + m_sw_port1.PosX() + m_sw_port1.Width() +10.0f, m_sw_port1.PosY());
 	m_sw_mining.load("app/native/assets/stock_watch/sw_mining.png");
-	m_sw_mining.setPosition(362.0f, m_screenHeight - 270.0f);
+	m_sw_mining.setPosition(m_latar.PosX() + m_sw_banking.PosX() + m_sw_banking.Width() +10.0f, m_sw_port1.PosY());
 	m_sw_cons.load("app/native/assets/stock_watch/sw_cons.png");
-	m_sw_cons.setPosition(520.0f, m_screenHeight - 270.0f);
+	m_sw_cons.setPosition(m_latar.PosX() + m_sw_mining.PosX() + m_sw_mining.Width() +10.0f, m_sw_port1.PosY());
 	m_sw_plus_green.load("app/native/assets/stock_watch/sw_plus_green.png");
-	m_sw_plus_green.setPosition(676.0f, m_screenHeight - 270.0f);
+	m_sw_plus_green.setPosition(m_latar.PosX() + m_sw_cons.PosX() + m_sw_cons.Width() +10.0f, m_sw_port1.PosY());
 	m_sw_val_green.load("app/native/assets/stock_watch/sw_green.png");
-	m_sw_val_green.setPosition(40.0f, m_screenHeight - 413.0f);
+	m_sw_val_green.setPosition(m_latar.PosX() + 40.0f, m_screenHeight - 413.0f);
 	m_sw_val_yellow.load("app/native/assets/stock_watch/sw_yellow.png");
-	m_sw_val_yellow.setPosition(40.0f, m_screenHeight - 413.0f);
+	m_sw_val_yellow.setPosition(m_latar.PosX() + 40.0f, m_screenHeight - 413.0f);
 	m_sw_val_red.load("app/native/assets/stock_watch/sw_red.png");
-	m_sw_val_red.setPosition(240.0f, m_screenHeight - 413.0f);
+	m_sw_val_red.setPosition(m_latar.PosX() + 240.0f, m_screenHeight - 413.0f);
 
 	// complete book
 	fprintf(stderr, "Load complete book.\n");
 	m_cb_caption.load("app/native/assets/complete_book/completebook_caption.png");
-	m_cb_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_cb_caption.setPosition(m_latar.PosX() +27.0f, m_headerHeight - m_cb_caption.Height() - 20.0f);
 	m_cb_top_band.load("app/native/assets/complete_book/m_cb_top_band.png");
-	m_cb_top_band.setPosition(0.0f, m_screenHeight - 260.0f);
+	m_cb_top_band.setPosition(m_latar.PosX() +0.0f, m_cb_caption.PosY() - m_cb_top_band.Height() - 20.0f);
 	m_cb_table_title1.load("app/native/assets/complete_book/m_cb_table_title1.png");
-	m_cb_table_title1.setPosition(0.0f, m_screenHeight - 450.0f);
+	m_cb_table_title1.setPosition(m_latar.PosX() +0.0f, m_cb_top_band.PosY() - 190.0f);
 	m_cb_table_title2.load("app/native/assets/complete_book/m_cb_table_title2.png");
-	m_cb_table_title2.setPosition(0.0f, m_screenHeight - 750.0f);
+	m_cb_table_title2.setPosition(m_latar.PosX() +0.0f, m_cb_table_title1.PosY() - 280.0f);
 
 	// stock quote
 	fprintf(stderr, "Load stock quote.\n");
 	m_sq_caption.load("app/native/assets/stock_quote/sq_caption.png");
-	m_sq_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_sq_caption.setPosition(m_latar.PosX() +27.0f, m_headerHeight - m_sq_caption.Height() - 20.0f);
 	m_sq_table_title.load("app/native/assets/stock_quote/sq_table_title.png");
-	m_sq_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
+	m_sq_table_title.setPosition(m_latar.PosX() +0.0f, m_sq_caption.PosY() - m_sq_table_title.Height() - 20.0f);
 
 	// broker quote
 	fprintf(stderr, "Load broker quote.\n");
 	m_bq_caption.load("app/native/assets/broker_quote/bq_caption.png");
-	m_bq_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_bq_caption.setPosition(m_latar.PosX() +27.0f, m_headerHeight - m_bq_caption.Height() - 20.0f);
 	m_bq_table_title.load("app/native/assets/broker_quote/bq_table_title.png");
-	m_bq_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
+	m_bq_table_title.setPosition(m_latar.PosX() +0.0f, m_bq_caption.PosY() - m_bq_table_title.Height() - 20.0f);
 
 	// stock summary
 	fprintf(stderr, "Load stock summary.\n");
 	m_ss_caption.load("app/native/assets/stock_summary/ss_caption.png");
-	m_ss_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_ss_caption.setPosition(m_latar.PosX() +27.0f, m_headerHeight - m_ss_caption.Height() - 20.0f);
 	m_ss_table_title.load("app/native/assets/stock_summary/ss_table_title.png");
-	m_ss_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
+	m_ss_table_title.setPosition(m_latar.PosX() +0.0f, m_ss_caption.PosY() - m_ss_table_title.Height() - 20.0f);
 
 	// broker summary
 	fprintf(stderr, "Load broker summary.\n");
 	m_bs_caption.load("app/native/assets/broker_summary/bs_caption.png");
-	m_bs_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_bs_caption.setPosition(m_latar.PosX() +27.0f, m_headerHeight - m_bs_caption.Height() - 20.0f);
 	m_bs_table_title.load("app/native/assets/broker_summary/bs_table_title.png");
-	m_bs_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
+	m_bs_table_title.setPosition(m_latar.PosX() +0.0f, m_bs_caption.PosY() - m_bs_table_title.Height() - 20.0f);
 
 	// menu
 	fprintf(stderr, "Load menu.\n");
@@ -713,7 +712,7 @@ panin::panin(platform &myPlatform)
 
 	// password
 	m_pw_caption.load("app/native/assets/password/pw_caption.png");
-	m_pw_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_pw_caption.setPosition(m_latar.PosX() + 27.0f, m_headerHeight - m_pw_caption.Height() - 20.0f);
 	m_pw_text_bg.load("app/native/assets/password/pw_text_bg.png");
 	m_pw_save.load("app/native/assets/password/btn_save.png");
 	m_pw_btn_save.regular = &m_pw_save;
@@ -728,15 +727,15 @@ panin::panin(platform &myPlatform)
 
 	// portofolio
 	m_pf_caption.load("app/native/assets/portofolio/pf_caption.png");
-	m_pf_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_pf_caption.setPosition(m_latar.PosX() + 27.0f, m_headerHeight - m_pf_caption.Height() - 20.0f);
 	m_pf_table_title.load("app/native/assets/portofolio/pf_table_title.png");
-	m_pf_table_title.setPosition(0.0f, m_screenHeight - 262.0f);
+	m_pf_table_title.setPosition(m_latar.PosX() + 0.0f, m_pf_caption.PosY() - m_pf_table_title.Height() - 20.0f);
 	m_pf_acc_number.load("app/native/assets/portofolio/acc_no.png");
-	m_pf_acc_number.setPosition(0.0f, m_screenHeight - 262.0f);
+	m_pf_acc_number.setPosition(m_latar.PosX() + 0.0f, m_screenHeight - 262.0f);
 
 	// research
 	m_research_caption.load("app/native/assets/research/research_caption.png");
-	m_research_caption.setPosition(27.0f, m_screenHeight - 200.0f);
+	m_research_caption.setPosition(m_latar.PosX() + 27.0f, m_headerHeight - m_research_caption.Height() - 20.0f);
 
 	m_state = HOME;
 	m_ePosX = 0.0f;
@@ -762,9 +761,6 @@ panin::panin(platform &myPlatform)
 	m_sStockValue = "";
 	m_sTransFee = "";
 	m_sPayable = "";
-
-	m_footerHeight = 100.0f;
-	m_headerHeight = m_screenHeight - 210.0f;
 
 	loginStatus = NOT_SIGIN;
 
@@ -808,6 +804,10 @@ void panin::run() {
         case HOME:
         	updateHome();
             renderHome();
+        	if (loginStatus == SIGNEDIN)
+        	{
+        		m_state = RUNNING_TRADE;
+        	}
             break;
 
         case LOADING:
@@ -2357,10 +2357,10 @@ void * threadLogin(void * Var)
 	if (CURLE_OK == myServerConnection->doHttpGet(url, osStream, 30.0f))
 	{
 		std::string hasil = osStream.str();
-		std::string check = "true";
-		fprintf(stderr, "%s\n", hasil.c_str());
-		fprintf(stderr, "%s\n", check.c_str());
-		if (hasil == "true")
+		char s1[hasil.length()+1];
+		std::strncpy(s1, hasil.c_str(),hasil.length());
+		char s2[] = "true";
+		if (std::strncmp(s1, s2, std::strlen(s2)) == 0)
 		{
 			loginStatus = SIGNEDIN;
 			fprintf(stderr, "login berhasil.\n");
