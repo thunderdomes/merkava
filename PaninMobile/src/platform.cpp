@@ -156,7 +156,8 @@ void platform::processEvents() {
 
                     fprintf(stderr, "The '%c' key was pressed\n", (char)screenEventType);
 
-                    m_handler->onKeyPressed(static_cast<char>(screenEventType));
+                    //m_handler->onKeyPressed(static_cast<char>(screenEventType));
+                    m_handler->onKeyPressed(screenEventType);
                     /*switch (screenEventType) {
                     default:
                         break;

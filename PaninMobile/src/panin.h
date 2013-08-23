@@ -149,7 +149,6 @@ private:
 		std::string seller_code;
 		std::string seller_type;
 		std::string stock_type;
-		std::string req;
 	} rtData;
 
 	struct _sqData {
@@ -179,7 +178,6 @@ private:
 		std::string total_fgn_buy_vol;
 		std::string total_fgn_buy_freq;
 		std::string total_fgn_buy_val;
-		std::string req;
 	} sqData;
 
 	struct _bqData {
@@ -192,7 +190,6 @@ private:
 		std::string sell_vol;
 		std::string sell_val;
 		std::string rg1;
-		std::string req;
 	} bqData;
 
 	struct _composite {
@@ -205,7 +202,6 @@ private:
 		std::string freq;
 		std::string vol;
 		std::string value;
-		std::string req;
 	} composite;
 
 	struct _regionalIdx {
@@ -217,7 +213,6 @@ private:
 		std::string last;
 		std::string vol;
 		std::string future;
-		std::string req;
 	} regionaldx;
 
 	struct _currencies {
@@ -226,7 +221,6 @@ private:
 		std::string ask;
 		std::string last;
 		std::string usd;
-		std::string req;
 	} currencies;
 
 	struct _newsTitle {
@@ -234,14 +228,12 @@ private:
 		std::string datetime;
 		std::string iqp;
 		std::string title;
-		std::string req;
 	} newsTitle;
 
 	struct _tradeBook {
 		std::string price;
 		std::string volume;
 		std::string freq;
-		std::string req;
 	} tradeBook;
 
 	struct _orderBook {
@@ -250,7 +242,6 @@ private:
 		std::string price;
 		std::string volume;
 		std::string freq;
-		std::string req;
 	} orderBook;
 
 	struct _stockSummary {
@@ -267,7 +258,6 @@ private:
 		std::string foreign_sell_freq;
 		std::string foreign_sell_vol;
 		std::string foreign_sell_val;
-		std::string req;
 	} stockSummary;
 
 	struct _brokerSmmary {
@@ -284,7 +274,6 @@ private:
 		std::string foreign_sell_freq;
 		std::string foreign_sell_vol;
 		std::string foreign_sell_val;
-		std::string req;
 	} brokerSummary;
 
 	struct _stockChartUpdate {
@@ -294,7 +283,6 @@ private:
 		std::string low;
 		std::string close;
 		std::string volume;
-		std::string reg;
 	};
 
 
@@ -569,7 +557,7 @@ private:
 
 	virtual void onLeftPress(float x, float y);
 	virtual void onLeftRelease(float x, float y);
-	virtual void onKeyPressed(char c);
+	virtual void onKeyPressed(int c);
 	virtual void onExit();
 	virtual void onPromptOk(const std::string& input);
 
@@ -605,6 +593,7 @@ private:
 	void setConfiguration(eConfiguration conf);
 
 	void periksaLogin();
+	void ambilDataRunningTrade();
 };
 
 }		/* namespace paninMobile*/

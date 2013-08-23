@@ -90,7 +90,25 @@ CURLcode ServerConnection::doHttpGet(const char * url, std::ostream& os, long ti
 		}
 	}
 
-	timeout = 99999999.0f;
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEFUNCTION, &write_data)))
+//			fprintf(stderr, "error at CURLOPT_WRITEFUNCTION.\n");
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEDATA, &stream)))
+//			fprintf(stderr, "error at CURLOPT_WRITEDATA.\n");
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_NOPROGRESS, 1L)))
+//			fprintf(stderr, "error at CURLOPT_NOPROGRESS.\n");
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_FOLLOWLOCATION, 1L)))
+//			fprintf(stderr, "error at CURLOPT_FOLLOWLOCATION.\n");
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_FILE, &os)))
+//			fprintf(stderr, "error at CURLOPT_FILE.\n");
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_TIMEOUT, timeout)))
+//			fprintf(stderr, "error at CURLOPT_TIMEOUT.\n");
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_URL, url)))
+//			fprintf(stderr, "error at CURLOPT_URL.\n");
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_COOKIEFILE, "")))
+//			fprintf(stderr, "error at CURLOPT_COOKIEFILE.\n");
+//	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_VERBOSE, 1L)))
+//			fprintf(stderr, "error at CURLOPT_VERBOSE.\n");
+//	code = curl_easy_perform(m_curl_handle);
 
 	if(CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEFUNCTION, &write_data))
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEDATA, &stream))
@@ -100,6 +118,7 @@ CURLcode ServerConnection::doHttpGet(const char * url, std::ostream& os, long ti
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_TIMEOUT, timeout))
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_URL, url))
 	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_COOKIEFILE, ""))
+	&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_VERBOSE, 1L))
 	//&& CURLE_OK == (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEHEADER, headerfile))
 	)
 	{

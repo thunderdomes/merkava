@@ -35,7 +35,7 @@ public:
 
     virtual void onExit() = 0;
 
-    virtual void onKeyPressed(char c) = 0;
+    virtual void onKeyPressed(int c) = 0;
 
     //virtual void onPause() = 0;
 
