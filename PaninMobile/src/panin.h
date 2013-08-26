@@ -294,8 +294,11 @@ private:
 	Sprite m_btn_info_bg;
 	Sprite m_btn_info_p_bg;
 	Sprite m_btn_menu_bg;
+	Sprite m_btn_menu_bg_p;
 	Sprite m_btn_sell_bg;
+	Sprite m_btn_sell_bg_p;
 	Sprite m_btn_buy_bg;
+	Sprite m_btn_buy_bg_p;
 	Sprite m_ihsg2;
 	button m_btn_info;
 	button m_btn_menu;

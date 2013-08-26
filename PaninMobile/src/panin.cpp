@@ -190,8 +190,11 @@ panin::panin(platform &myPlatform) :
 	m_btn_info_bg.load("app/native/assets/umum/info_blue.png");
 	m_btn_info_p_bg.load("app/native/assets/umum/info_blue_p.png");
 	m_btn_menu_bg.load("app/native/assets/umum/menu_blue.png");
+	m_btn_menu_bg_p.load("app/native/assets/umum/menu_blue_p.png");
 	m_btn_sell_bg.load("app/native/assets/umum/sell.png");
+	m_btn_sell_bg_p.load("app/native/assets/umum/sell_p.png");
 	m_btn_buy_bg.load("app/native/assets/umum/buy.png");
+	m_btn_buy_bg_p.load("app/native/assets/umum/buy_p.png");
 
 	m_btn_info.regular = &m_btn_info_bg;
 	m_btn_info.pressed = &m_btn_info_p_bg;
@@ -206,7 +209,7 @@ panin::panin(platform &myPlatform) :
 			m_header_bar_bg.PosY()
 					+ (m_header_bar_bg.Height() - m_btn_info.sizeY) / 2);
 	m_btn_menu.regular = &m_btn_menu_bg;
-	m_btn_menu.pressed = &m_btn_menu_bg;
+	m_btn_menu.pressed = &m_btn_menu_bg_p;
 	m_btn_menu.sizeX = m_btn_menu_bg.Width();
 	m_btn_menu.sizeY = m_btn_menu_bg.Height();
 	m_btn_menu.font = m_font;
@@ -217,7 +220,7 @@ panin::panin(platform &myPlatform) :
 			m_header_bar_bg.PosY()
 					+ (m_header_bar_bg.Height() - m_btn_menu.sizeY) / 2);
 	m_btn_sell.regular = &m_btn_sell_bg;
-	m_btn_sell.pressed = &m_btn_sell_bg;
+	m_btn_sell.pressed = &m_btn_sell_bg_p;
 	m_btn_sell.sizeX = m_btn_sell_bg.Width();
 	m_btn_sell.sizeY = m_btn_sell_bg.Height();
 	m_btn_sell.font = m_font;
@@ -228,7 +231,7 @@ panin::panin(platform &myPlatform) :
 			m_latar.PosX() + (m_screenWidth - m_btn_sell.sizeX - 20.0f),
 			(m_footerHeight - m_btn_sell.sizeY) / 2);
 	m_btn_buy.regular = &m_btn_buy_bg;
-	m_btn_buy.pressed = &m_btn_buy_bg;
+	m_btn_buy.pressed = &m_btn_buy_bg_p;
 	m_btn_buy.sizeX = m_btn_buy_bg.Width();
 	m_btn_buy.sizeY = m_btn_buy_bg.Height();
 	m_btn_buy.font = m_font;
@@ -2428,6 +2431,14 @@ void panin::onLeftRelease(float x, float y) {
 			}
 		}
 
+		if (m_btn_info.isEnabled)
+		{
+			if (m_btn_info.isWithin(pX, pY))
+			{
+				m_btn_info.isPressed = false;
+			}
+		}
+
 		if (m_btn_buy.isEnabled)
 		{
 			if (m_btn_buy.isWithin(pX, pY))
@@ -2760,6 +2771,7 @@ void panin::onLeftPress(float x, float y) {
 			{
 				fprintf(stderr, "button home username is released.\n");
 				m_btn_home_username.isPressed = true;
+				return;
 			}
 		}
 
@@ -2769,6 +2781,7 @@ void panin::onLeftPress(float x, float y) {
 			{
 				fprintf(stderr, "button home password is released.\n");
 				m_btn_home_password.isPressed = true;
+				return;
 			}
 		}
 	}
@@ -2779,10 +2792,18 @@ void panin::onLeftPress(float x, float y) {
 			if (m_btn_menu.isWithin(pX, pY))
 			{
 				m_btn_menu.isPressed = true;
+				return;
 			}
-			return;
 		}
 
+		if (m_btn_info.isEnabled)
+		{
+			if (m_btn_info.isWithin(pX, pY))
+			{
+				m_btn_info.isPressed = true;
+				return;
+			}
+		}
 
 		if (m_btn_buy.isEnabled)
 		{
@@ -3078,9 +3099,10 @@ void * threadLogin(void * Var) {
 
 	if (CURLE_OK == myServerConnection->doHttpGet(url, osStream, 30.0f)) {
 		std::string hasil = osStream.str();
-		fprintf(stderr, "hasil balikan: %s.\n", hasil.c_str());
+		fprintf(stderr, "hasil balikan: %s -- %s.\n", hasil.c_str(), osStream.str().c_str());
 		char s1[hasil.length() + 1];
-		std::strncpy(s1, hasil.c_str(), hasil.length());
+		std::memset(s1, 0, hasil.length() + 1);
+		std::strncpy(s1, hasil.c_str(), hasil.length()-2);
 		char s2[] = "true";
 		if (std::strncmp(s1, s2, std::strlen(s2)) == 0) {
 			loginStatus = SIGNEDIN;
@@ -3092,28 +3114,6 @@ void * threadLogin(void * Var) {
 			fprintf(stderr, "login gagal.\n");
 		}
 	}
-//	if (CURLE_OK == m_platform.m_serverConnection->doHttpGet(url, oss, 30.0f))
-//	{
-//		std::string hasil = oss.str();
-//		fprintf(stderr, "hasil : %s", hasil.c_str());
-//		if (hasil == "true")
-//		{
-//			m_btn_login.isEnabled = false;
-//			m_btn_home_info.isEnabled = false;
-//			m_btn_home_setel.isEnabled = false;
-//			m_btn_setel_default.isEnabled = false;
-//			m_btn_setel_set202.isEnabled = false;
-//			m_btn_setel_set107.isEnabled = false;
-//			m_btn_setel_save.isEnabled = false;
-//			m_btn_setel_x.isEnabled = false;
-//
-//			m_state = RUNNING_TRADE;
-//		}
-//		else
-//		{
-//			m_u_name = "username salah";
-//		}
-//	}
 	else
 	{
 		fprintf(stderr, "curl tidak ok.\n");
@@ -3137,6 +3137,7 @@ void panin::periksaLogin() {
 	myThreadVar[0].t_myUser.username = myUser.username;
 	myThreadVar[0].t_myUser.password = myUser.password;
 
+	virtualkeyboard_hide();
 	pthread_create(&pth, NULL, threadLogin, (void*) myThreadVar);
 
 }
