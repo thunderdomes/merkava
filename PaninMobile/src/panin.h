@@ -292,6 +292,7 @@ private:
 	Sprite m_header_bar_bg;
 	Sprite m_header_post;
 	Sprite m_btn_info_bg;
+	Sprite m_btn_info_p_bg;
 	Sprite m_btn_menu_bg;
 	Sprite m_btn_sell_bg;
 	Sprite m_btn_buy_bg;
@@ -327,6 +328,7 @@ private:
 	//Sprite m_white_band;
 	Sprite m_dialog_bg;
 	Sprite m_blue_rect;
+	Sprite m_blue_rect_p;
 	button m_btn_conf_ok;
 	button m_btn_conf_cancel;
 	// home setelan
@@ -336,6 +338,11 @@ private:
 	Sprite m_setel_set107;
 	Sprite m_setel_save;
 	Sprite m_setel_x;
+	Sprite m_setel_default_p;
+	Sprite m_setel_set202_p;
+	Sprite m_setel_set107_p;
+	Sprite m_setel_save_p;
+	Sprite m_setel_x_p;
 	button m_btn_setel_default;
 	button m_btn_setel_set202;
 	button m_btn_setel_set107;
@@ -502,6 +509,21 @@ private:
 	Sprite m_menu_tc_stock_summary;
 	Sprite m_menu_tc_broker_summary;
 	Sprite m_menu_tc_non_regular;
+	Sprite m_menu_trade_central_p;
+	Sprite m_menu_charts_p;
+	Sprite m_menu_informations_p;
+	Sprite m_menu_portfolio_p;
+	Sprite m_menu_order_trade_p;
+	Sprite m_menu_my_account_p;
+	Sprite m_menu_logout_p;
+	Sprite m_menu_tc_running_trade_p;
+	Sprite m_menu_tc_stock_watch_p;
+	Sprite m_menu_tc_complete_book_p;
+	Sprite m_menu_tc_stock_quote_p;
+	Sprite m_menu_tc_broker_quote_p;
+	Sprite m_menu_tc_stock_summary_p;
+	Sprite m_menu_tc_broker_summary_p;
+	Sprite m_menu_tc_non_regular_p;
 	button m_menu_btn_trade_central;
 	button m_menu_btn_charts;
 	button m_menu_btn_informations;

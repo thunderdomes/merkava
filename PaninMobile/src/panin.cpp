@@ -16,6 +16,7 @@
 #include <pthread.h>
 
 #include <sys/keycodes.h>
+#include <bps/virtualkeyboard.h>
 
 typedef struct user {
 	std::string username;
@@ -187,12 +188,13 @@ panin::panin(platform &myPlatform) :
 			m_header_bar_bg.PosY()
 					+ (m_header_bar_bg.Height() - m_header_post.Height()) / 2);
 	m_btn_info_bg.load("app/native/assets/umum/info_blue.png");
+	m_btn_info_p_bg.load("app/native/assets/umum/info_blue_p.png");
 	m_btn_menu_bg.load("app/native/assets/umum/menu_blue.png");
 	m_btn_sell_bg.load("app/native/assets/umum/sell.png");
 	m_btn_buy_bg.load("app/native/assets/umum/buy.png");
 
 	m_btn_info.regular = &m_btn_info_bg;
-	m_btn_info.pressed = &m_btn_info_bg;
+	m_btn_info.pressed = &m_btn_info_p_bg;
 	m_btn_info.sizeX = m_btn_info_bg.Width();
 	m_btn_info.sizeY = m_btn_info_bg.Height();
 	m_btn_info.font = m_font_global;
@@ -344,13 +346,22 @@ panin::panin(platform &myPlatform) :
 	m_dialog_bg.setPosition((m_screenWidth - m_dialog_bg.Width()) / 2,
 			(m_screenHeight - m_dialog_bg.Height()) / 2);
 	m_blue_rect.load("app/native/assets/umum/btn_blue.png");
+	m_blue_rect_p.load("app/native/assets/umum/btn_blue_p.png");
+	m_setel_bg.load("app/native/assets/umum/setel_bg.png");
+	m_setel_bg.setPosition((m_screenWidth - m_setel_bg.Width()) / 2,
+			(m_screenHeight - m_setel_bg.Height()) / 2);
 	m_setel_default.load("app/native/assets/umum/btndefault.png");
 	m_setel_set202.load("app/native/assets/umum/btn202.png");
 	m_setel_set107.load("app/native/assets/umum/btn107.png");
 	m_setel_save.load("app/native/assets/umum/btnsave.png");
 	m_setel_x.load("app/native/assets/umum/btn_x.png");
+	m_setel_default_p.load("app/native/assets/umum/btndefault_p.png");
+	m_setel_set202_p.load("app/native/assets/umum/btn202_p.png");
+	m_setel_set107_p.load("app/native/assets/umum/btn107_p.png");
+	m_setel_save_p.load("app/native/assets/umum/btnsave_p.png");
+	m_setel_x_p.load("app/native/assets/umum/btn_x_p.png");
 	m_btn_conf_ok.regular = &m_blue_rect;
-	m_btn_conf_ok.pressed = &m_blue_rect;
+	m_btn_conf_ok.pressed = &m_blue_rect_p;
 	m_btn_conf_ok.sizeX = m_blue_rect.Width();
 	m_btn_conf_ok.sizeY = m_blue_rect.Height();
 	m_btn_conf_ok.font = m_font;
@@ -360,7 +371,7 @@ panin::panin(platform &myPlatform) :
 	m_btn_conf_ok.setPosition(m_dialog_bg.PosX() + 435.0f,
 			m_dialog_bg.PosY() + 60.0f);
 	m_btn_conf_cancel.regular = &m_blue_rect;
-	m_btn_conf_cancel.pressed = &m_blue_rect;
+	m_btn_conf_cancel.pressed = &m_blue_rect_p;
 	m_btn_conf_cancel.sizeX = m_blue_rect.Width();
 	m_btn_conf_cancel.sizeY = m_blue_rect.Height();
 	m_btn_conf_cancel.font = m_font;
@@ -370,7 +381,7 @@ panin::panin(platform &myPlatform) :
 	m_btn_conf_cancel.setPosition(m_dialog_bg.PosX() + 210.0f,
 			m_btn_conf_ok.posX);
 	m_btn_setel_default.regular = &m_setel_default;
-	m_btn_setel_default.pressed = &m_setel_default;
+	m_btn_setel_default.pressed = &m_setel_default_p;
 	m_btn_setel_default.regular->setPosition(0.0f, 0.0f);
 	m_btn_setel_default.sizeX = m_setel_default.Width();
 	m_btn_setel_default.sizeY = m_setel_default.Height();
@@ -381,7 +392,7 @@ panin::panin(platform &myPlatform) :
 	m_btn_setel_default.setPosition(m_dialog_bg.PosX() + 64.0f,
 			m_dialog_bg.PosY() + 60.0f);
 	m_btn_setel_set202.regular = &m_setel_set202;
-	m_btn_setel_set202.pressed = &m_setel_set202;
+	m_btn_setel_set202.pressed = &m_setel_set202_p;
 	m_btn_setel_set202.sizeX = m_setel_set202.Width();
 	m_btn_setel_set202.sizeY = m_setel_set202.Height();
 	m_btn_setel_set202.font = m_font;
@@ -391,7 +402,7 @@ panin::panin(platform &myPlatform) :
 	m_btn_setel_set202.setPosition(m_dialog_bg.PosX() + 220.0f,
 			m_btn_setel_default.posY);
 	m_btn_setel_set107.regular = &m_setel_set107;
-	m_btn_setel_set107.pressed = &m_setel_set107;
+	m_btn_setel_set107.pressed = &m_setel_set107_p;
 	m_btn_setel_set107.sizeX = m_setel_set107.Width();
 	m_btn_setel_set107.sizeY = m_setel_set107.Height();
 	m_btn_setel_set107.font = m_font;
@@ -401,7 +412,7 @@ panin::panin(platform &myPlatform) :
 	m_btn_setel_set107.setPosition(m_dialog_bg.PosX() + 377.0f,
 			m_btn_setel_default.posY);
 	m_btn_setel_save.regular = &m_setel_save;
-	m_btn_setel_save.pressed = &m_setel_save;
+	m_btn_setel_save.pressed = &m_setel_save_p;
 	m_btn_setel_save.sizeX = m_setel_save.Width();
 	m_btn_setel_save.sizeY = m_setel_save.Height();
 	m_btn_setel_save.font = m_font;
@@ -411,7 +422,7 @@ panin::panin(platform &myPlatform) :
 	m_btn_setel_save.setPosition(m_dialog_bg.PosX() + 536.0f,
 			m_btn_setel_default.posY);
 	m_btn_setel_x.regular = &m_setel_x;
-	m_btn_setel_x.pressed = &m_setel_x;
+	m_btn_setel_x.pressed = &m_setel_x_p;
 	m_btn_setel_x.sizeX = m_setel_x.Width();
 	m_btn_setel_x.sizeY = m_setel_x.Height();
 	m_btn_setel_x.font = m_font;
@@ -419,8 +430,8 @@ panin::panin(platform &myPlatform) :
 	m_btn_setel_x.isPressed = false;
 	m_btn_setel_x.isEnabled = true;
 	m_btn_setel_x.setPosition(
-			m_dialog_bg.PosX() + m_dialog_bg.Width() - 4 * m_btn_setel_x.sizeX,
-			m_dialog_bg.PosY() + m_dialog_bg.Height() - 100.0f);
+			m_dialog_bg.PosX() + m_dialog_bg.Width() - 1.8 * m_btn_setel_x.sizeX,
+			m_dialog_bg.PosY() + m_dialog_bg.Height() - 1.8 * m_btn_setel_x.sizeY);
 
 	// initialize home screen
 	fprintf(stderr, "Load home.\n");
@@ -428,9 +439,9 @@ panin::panin(platform &myPlatform) :
 	m_logo.setPosition((m_screenWidth - m_logo.Width()) / 2,
 			m_screenHeight - m_logo.Height() - 106.0f);
 	m_username_textfield_default.load("app/native/assets/login/username.png");
-	m_username_textfield_regular.load("app/native/assets/login/username.png");
+	m_username_textfield_regular.load("app/native/assets/login/username1.png");
 	m_password_textfield_default.load("app/native/assets/login/password.png");
-	m_password_textfield_regular.load("app/native/assets/login/password.png");
+	m_password_textfield_regular.load("app/native/assets/login/password1.png");
 	m_ihsg_bar.load("app/native/assets/login/ihsg.png");
 	m_ihsg_bar.setPosition(0.0f, m_screenHeight - m_ihsg_bar.Height() - 827.0f);
 	m_ihsg_value_bg.load("app/native/assets/login/ihsg_val.png");
@@ -443,11 +454,11 @@ panin::panin(platform &myPlatform) :
 	m_tanggal_bg.setPosition((m_screenWidth - m_tanggal_bg.Width()) / 2,
 			m_screenHeight - m_tanggal_bg.Height() - 1057.0f);
 	m_login_default.load("app/native/assets/login/login.png");
-	m_login_pressed.load("app/native/assets/login/login.png");
+	m_login_pressed.load("app/native/assets/login/login_p.png");
 	m_home_info_default.load("app/native/assets/login/info.png");
-	m_home_info_pressed.load("app/native/assets/login/info.png");
+	m_home_info_pressed.load("app/native/assets/login/info_p.png");
 	m_home_setel_default.load("app/native/assets/login/setel.png");
-	m_home_setel_pressed.load("app/native/assets/login/setel.png");
+	m_home_setel_pressed.load("app/native/assets/login/setel_p.png");
 
 	fprintf(stderr, "Load m_btn_home_username.\n");
 	m_btn_home_username.regular = &m_username_textfield_default;
@@ -643,6 +654,23 @@ panin::panin(platform &myPlatform) :
 	m_menu_tc_broker_summary.load(
 			"app/native/assets/menu/tc_broker_summary.png");
 	m_menu_tc_non_regular.load("app/native/assets/menu/tc_non_regular.png");
+
+	m_menu_trade_central_p.load("app/native/assets/menu/trade_central_p.png");
+	m_menu_charts_p.load("app/native/assets/menu/charts_p.png");
+	m_menu_informations_p.load("app/native/assets/menu/informations_p.png");
+	m_menu_portfolio_p.load("app/native/assets/menu/portfolio_p.png");
+	m_menu_order_trade_p.load("app/native/assets/menu/order_trade_p.png");
+	m_menu_my_account_p.load("app/native/assets/menu/my_account_p.png");
+	m_menu_logout_p.load("app/native/assets/menu/logout_p.png");
+	m_menu_tc_running_trade_p.load("app/native/assets/menu/tc_running_trade_p.png");
+	m_menu_tc_stock_watch_p.load("app/native/assets/menu/tc_stock_watch_p.png");
+	m_menu_tc_complete_book_p.load("app/native/assets/menu/tc_complete_book_p.png");
+	m_menu_tc_stock_quote_p.load("app/native/assets/menu/tc_stock_quote_p.png");
+	m_menu_tc_broker_quote_p.load("app/native/assets/menu/tc_broker_quote_p.png");
+	m_menu_tc_stock_summary_p.load("app/native/assets/menu/tc_stock_summary_p.png");
+	m_menu_tc_broker_summary_p.load(
+			"app/native/assets/menu/tc_broker_summary_p.png");
+	m_menu_tc_non_regular_p.load("app/native/assets/menu/tc_non_regular_p.png");
 	// button menu trade central
 	m_menu_btn_trade_central.regular = &m_menu_trade_central;
 	m_menu_btn_trade_central.pressed = &m_menu_trade_central;
@@ -917,7 +945,8 @@ void panin::run() {
 			} else if (loginStatus == SIGN_FAILED) {
 				m_u_name = "username false";
 				loginStatus = NOT_SIGNIN;
-				m_platform.displayPrompt("wrong user.\n");
+				m_state = HOME;
+				//m_platform.displayPrompt("wrong user.\n");
 			}
 			break;
 
@@ -1030,7 +1059,26 @@ void panin::updateHome() {
 		}
 	}
 
-	m_sIhsg_val = "7000";
+	if (m_bUsernameFocus)
+	{
+		m_btn_home_username.regular = &m_username_textfield_regular;
+		virtualkeyboard_show();
+	}
+	else
+	{
+		m_btn_home_username.regular = &m_username_textfield_default;
+	}
+
+	if (m_bPasswordFocus)
+	{
+		m_btn_home_password.regular = &m_password_textfield_regular;
+		virtualkeyboard_show();
+	}
+	else
+	{
+		m_btn_home_password.regular = &m_password_textfield_default;
+	}
+	m_sIhsg_val = "5000";
 	m_sIhsg_volume = "3415.10 bn";
 	m_sIhsg_percent = "17.77 (30%)";
 
@@ -1126,11 +1174,12 @@ void panin::renderHomeSetel() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	m_dialog_bg.draw();
-	m_textfield_bg.setPosition(80.0f, m_screenHeight - 686.0f);
-	m_textfield_bg.draw();
-	m_textfield_bg.setPosition(80.0f, m_screenHeight - 784.0f);
-	m_textfield_bg.draw();
+	//m_dialog_bg.draw();
+	m_setel_bg.draw();
+	//m_textfield_bg.setPosition(80.0f, m_screenHeight - 686.0f);
+	//m_textfield_bg.draw();
+	//m_textfield_bg.setPosition(80.0f, m_screenHeight - 784.0f);
+	//m_textfield_bg.draw();
 	m_btn_setel_default.draw();
 	m_btn_setel_set107.draw();
 	m_btn_setel_set202.draw();
@@ -1142,16 +1191,16 @@ void panin::renderHomeSetel() {
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 
-	bbutil_render_text(m_font, "SERVER A", 80.0f, m_screenHeight - 644.0f, 1.0f,
-			1.0f, 1.0f, 1.0f);
-	bbutil_render_text(m_font, "SERVER B", 80.0f, m_screenHeight - 744.0f, 1.0f,
-			1.0f, 1.0f, 1.0f);
+	//bbutil_render_text(m_font, "SERVER A", 80.0f, m_screenHeight - 644.0f, 1.0f,
+	//		1.0f, 1.0f, 1.0f);
+	//bbutil_render_text(m_font, "SERVER B", 80.0f, m_screenHeight - 744.0f, 1.0f,
+	//		1.0f, 1.0f, 1.0f);
 	//bbutil_render_text(m_font, "172.31.2.78:8080", 120.0f, m_screenHeight - 682.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//bbutil_render_text(m_font, "172.31.2.78:8443", 120.0f, m_screenHeight - 780.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	bbutil_render_text(m_font, m_platform.server1.c_str(), 120.0f,
-			m_screenHeight - 682.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	bbutil_render_text(m_font, m_platform.server2.c_str(), 120.0f,
-			m_screenHeight - 780.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font, m_platform.server1.c_str(), m_setel_bg.PosX() + 140.0f,
+			m_setel_bg.PosY() + 250.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font, m_platform.server2.c_str(), m_setel_bg.PosX() + 140.0f,
+			m_setel_bg.PosY() + 152.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 }
 
@@ -2197,414 +2246,694 @@ void panin::onLeftRelease(float x, float y) {
 				m_btn_login.isPressed = false;
 
 				loginStatus = SIGNINGIN;
+				m_bUsernameFocus = false;
+				m_bPasswordFocus = false;
+
 				periksaLogin();
+				return;
 				//m_state = RUNNING_TRADE;
-
-			m_bUsernameFocus = false;
-			m_bPasswordFocus = false;
-			return;
-		}
-	}
-
-	if (m_btn_home_info.isEnabled)
-	{
-		if (m_btn_home_info.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home info is released.\n");
-			m_btn_home_info.isPressed = false;
-			m_bShowHomeInfo = true;
-
-			m_bUsernameFocus = false;
-			m_bPasswordFocus = false;
-			/*
-			 m_btn_login.isEnabled = false;
-			 m_btn_home_info.isEnabled = false;
-			 m_btn_home_setel.isEnabled = false;
-			 m_btn_setel_default.isEnabled = true;
-			 m_btn_setel_set202.isEnabled = true;
-			 m_btn_setel_set107.isEnabled = true;
-			 m_btn_setel_save.isEnabled = true;
-			 m_btn_setel_x.isEnabled = true;
-			 */
-		}
-	}
-
-	if (m_btn_home_setel.isEnabled)
-	{
-		if (m_btn_home_setel.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home setel is released.\n");
-			m_btn_home_setel.isPressed = false;
-			m_bShowHomeSetel = true;
-
-			m_btn_login.isEnabled = false;
-			m_btn_home_info.isEnabled = false;
-			m_btn_home_setel.isEnabled = false;
-			m_btn_setel_default.isEnabled = true;
-			m_btn_setel_set202.isEnabled = true;
-			m_btn_setel_set107.isEnabled = true;
-			m_btn_setel_save.isEnabled = true;
-			m_btn_setel_x.isEnabled = true;
-
-			m_bUsernameFocus = false;
-			m_bPasswordFocus = false;
-			return;
-		}
-	}
-
-	if (m_btn_setel_default.isEnabled)
-	{
-		if (m_btn_setel_default.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home setel default is released.\n");
-			m_btn_setel_default.isPressed = false;
-
-			setConfiguration(CONF_DEFAULT);
-			return;
-		}
-	}
-	if (m_btn_setel_set202.isEnabled)
-	{
-		if (m_btn_setel_set202.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home setel set202 is released.\n");
-			m_btn_setel_set202.isPressed = false;
-
-			setConfiguration(CONF_SET202);
-			return;
-		}
-	}
-	if (m_btn_setel_set107.isEnabled)
-	{
-		if (m_btn_setel_set107.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home setel set107 is released.\n");
-			m_btn_setel_set107.isPressed = false;
-
-			setConfiguration(CONF_SET107);
-			return;
-		}
-	}
-	if (m_btn_setel_save.isEnabled)
-	{
-		if (m_btn_setel_save.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home setel save is released.\n");
-			m_btn_setel_save.isPressed = false;
-
-			m_bShowHomeSetel = false;
-			m_btn_login.isEnabled = true;
-			m_btn_home_info.isEnabled = true;
-			m_btn_home_setel.isEnabled = true;
-			m_btn_setel_default.isEnabled = false;
-			m_btn_setel_set202.isEnabled = false;
-			m_btn_setel_set107.isEnabled = false;
-			m_btn_setel_save.isEnabled = false;
-			m_btn_setel_x.isEnabled = false;
-			setConfiguration(CONF_SAVE);
-			return;
-		}
-	}
-	if (m_btn_setel_x.isEnabled)
-	{
-		if (m_btn_setel_x.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home setel x is released.\n");
-			m_btn_setel_x.isPressed = false;
-
-			m_bShowHomeSetel = false;
-			m_btn_login.isEnabled = true;
-			m_btn_home_info.isEnabled = true;
-			m_btn_home_setel.isEnabled = true;
-			m_btn_setel_default.isEnabled = false;
-			m_btn_setel_set202.isEnabled = false;
-			m_btn_setel_set107.isEnabled = false;
-			m_btn_setel_save.isEnabled = false;
-			m_btn_setel_x.isEnabled = false;
-
-			return;
-		}
-	}
-	if (m_btn_home_username.isEnabled)
-	{
-		if (m_btn_home_username.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home username x is released.\n");
-
-			m_u_name.clear();
-			m_bUsernameFocus = true;
-			m_bPasswordFocus = false;
-		}
-	}
-
-	if (m_btn_home_password.isEnabled)
-	{
-		if (m_btn_home_password.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button home password x is released.\n");
-
-			m_u_pass.clear();
-			m_bUsernameFocus = false;
-			m_bPasswordFocus = true;
-		}
-	}
-}
-else
-{
-	if (m_btn_menu.isEnabled)
-	{
-		if (m_btn_menu.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button menu is released.\n");
-			m_bShowMenu = !m_bShowMenu;
-			if (m_bShowMenu)
-			{
-				fprintf(stderr, "Show Menu.\n");
-				//m_bMenuShowAnimation = true;
-				m_bMenuActive = true;
 			}
-			else
+		}
+
+
+		if (m_btn_home_info.isEnabled)
+		{
+			if (m_btn_home_info.isWithin(pX, pY))
 			{
-				fprintf(stderr, "Hide Menu.\n");
+				fprintf(stderr, "button home info is released.\n");
+				m_btn_home_info.isPressed = false;
+				m_bShowHomeInfo = true;
+
+				m_bUsernameFocus = false;
+				m_bPasswordFocus = false;
+				/*
+				 m_btn_login.isEnabled = false;
+				 m_btn_home_info.isEnabled = false;
+				 m_btn_home_setel.isEnabled = false;
+				 m_btn_setel_default.isEnabled = true;
+				 m_btn_setel_set202.isEnabled = true;
+				 m_btn_setel_set107.isEnabled = true;
+				 m_btn_setel_save.isEnabled = true;
+				 m_btn_setel_x.isEnabled = true;
+				 */
+			}
+		}
+
+		if (m_btn_home_setel.isEnabled)
+		{
+			if (m_btn_home_setel.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel is released.\n");
+				m_btn_home_setel.isPressed = false;
+				m_bShowHomeSetel = true;
+
+				m_btn_login.isEnabled = false;
+				m_btn_home_info.isEnabled = false;
+				m_btn_home_setel.isEnabled = false;
+				m_btn_setel_default.isEnabled = true;
+				m_btn_setel_set202.isEnabled = true;
+				m_btn_setel_set107.isEnabled = true;
+				m_btn_setel_save.isEnabled = true;
+				m_btn_setel_x.isEnabled = true;
+
+				m_bUsernameFocus = false;
+				m_bPasswordFocus = false;
+				return;
+			}
+		}
+
+		if (m_btn_setel_default.isEnabled)
+		{
+			if (m_btn_setel_default.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel default is released.\n");
+				m_btn_setel_default.isPressed = false;
+
+				setConfiguration(CONF_DEFAULT);
+				return;
+			}
+		}
+		if (m_btn_setel_set202.isEnabled)
+		{
+			if (m_btn_setel_set202.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel set202 is released.\n");
+				m_btn_setel_set202.isPressed = false;
+
+				setConfiguration(CONF_SET202);
+				return;
+			}
+		}
+		if (m_btn_setel_set107.isEnabled)
+		{
+			if (m_btn_setel_set107.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel set107 is released.\n");
+				m_btn_setel_set107.isPressed = false;
+
+				setConfiguration(CONF_SET107);
+				return;
+			}
+		}
+		if (m_btn_setel_save.isEnabled)
+		{
+			if (m_btn_setel_save.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel save is released.\n");
+				m_btn_setel_save.isPressed = false;
+
+				m_bShowHomeSetel = false;
+				m_btn_login.isEnabled = true;
+				m_btn_home_info.isEnabled = true;
+				m_btn_home_setel.isEnabled = true;
+				m_btn_setel_default.isEnabled = false;
+				m_btn_setel_set202.isEnabled = false;
+				m_btn_setel_set107.isEnabled = false;
+				m_btn_setel_save.isEnabled = false;
+				m_btn_setel_x.isEnabled = false;
+				setConfiguration(CONF_SAVE);
+				return;
+			}
+		}
+		if (m_btn_setel_x.isEnabled)
+		{
+			if (m_btn_setel_x.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel x is released.\n");
+				m_btn_setel_x.isPressed = false;
+
+				m_bShowHomeSetel = false;
+				m_btn_login.isEnabled = true;
+				m_btn_home_info.isEnabled = true;
+				m_btn_home_setel.isEnabled = true;
+				m_btn_setel_default.isEnabled = false;
+				m_btn_setel_set202.isEnabled = false;
+				m_btn_setel_set107.isEnabled = false;
+				m_btn_setel_save.isEnabled = false;
+				m_btn_setel_x.isEnabled = false;
+
+				return;
+			}
+		}
+		if (m_btn_home_username.isEnabled)
+		{
+			if (m_btn_home_username.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home username x is released.\n");
+				m_btn_home_username.isPressed = false;
+				m_u_name.clear();
+				m_bUsernameFocus = true;
+				m_bPasswordFocus = false;
+				virtualkeyboard_show();
+			}
+		}
+
+		if (m_btn_home_password.isEnabled)
+		{
+			if (m_btn_home_password.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home password x is released.\n");
+				m_btn_home_password.isPressed = false;
+				m_u_pass.clear();
+				m_bUsernameFocus = false;
+				m_bPasswordFocus = true;
+				virtualkeyboard_show();
+			}
+		}
+	}
+	else
+	{
+		if (m_btn_menu.isEnabled)
+		{
+			if (m_btn_menu.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button menu is released.\n");
+				m_btn_menu.isPressed = false;
+				m_bShowMenu = !m_bShowMenu;
+				if (m_bShowMenu)
+				{
+					fprintf(stderr, "Show Menu.\n");
+					//m_bMenuShowAnimation = true;
+					m_bMenuActive = true;
+				}
+				else
+				{
+					fprintf(stderr, "Hide Menu.\n");
+					//m_bMenuHideAnimation = true;
+					m_bMenuActive = false;
+				}
+
+				// update semua posisi.
+				return;
+			}
+		}
+
+		if (m_btn_buy.isEnabled)
+		{
+			if (m_btn_buy.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button buy is released.\n");
+				m_btn_buy.isPressed = false;
+				m_bShowBuy = true;
+				m_btn_buy.isEnabled = false;
+				m_btn_sell.isEnabled = false;
+				return;
+			}
+		}
+
+		if (m_btn_sell.isEnabled)
+		{
+			if (m_btn_sell.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button sell is released.\n");
+				m_btn_sell.isPressed = false;
+				m_bShowSell = true;
+				m_btn_buy.isEnabled = false;
+				m_btn_sell.isEnabled = false;
+				return;
+			}
+		}
+
+		if (m_bShowSell)
+		{
+			if (m_btn_sell_execute.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button sell execute is released.\n");
+				m_btn_sell_execute.isPressed = false;
+				return;
+			}
+			if (m_btn_sell_refresh.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button sell refresh is released.\n");
+				m_btn_sell_refresh.isPressed = false;
+				return;
+			}
+			if (m_btn_sell_x.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button sell x is released.\n");
+				m_btn_sell_x.isPressed = false;
+				m_bShowSell = false;
+				m_btn_sell.isEnabled = true;
+				m_btn_buy.isEnabled = true;
+				return;
+			}
+		}
+
+		if (m_bShowBuy)
+		{
+			if (m_btn_buy_execute.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button buy execute is released.\n");
+				m_btn_buy_execute.isPressed = false;
+				return;
+			}
+			if (m_btn_buy_refresh.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button buy refresh is released.\n");
+				m_btn_buy_refresh.isPressed = false;
+				return;
+			}
+			if (m_btn_buy_x.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button buy x is released.\n");
+				m_btn_buy_x.isPressed = false;
+				m_bShowBuy = false;
+				m_btn_sell.isEnabled = true;
+				m_btn_buy.isEnabled = true;
+				return;
+			}
+		}
+
+		// menu item di klik
+		if (m_bMenuActive)
+		{
+			if (m_menu_btn_trade_central.isWithin(pX, pY))
+			{
+				m_menu_btn_trade_central.isPressed = false;
+				m_bShowSubmenuTC = !m_bShowSubmenuTC;
+				//m_bShowMenu = false;
+				//m_bMenuActive = false;
 				//m_bMenuHideAnimation = true;
+				return;
+			}
+			if (m_menu_btn_charts.isWithin(pX, pY))
+			{
+				m_menu_btn_charts.isPressed = false;
+
+				m_state = CHARTS;
+				m_bShowMenu = false;
 				m_bMenuActive = false;
+				//m_bMenuHideAnimation = true;
+				m_bShowSubmenuTC = false;
+				return;
+			}
+			if (m_menu_btn_informations.isWithin(pX, pY))
+			{
+				m_menu_btn_informations.isPressed = false;
+
+				m_state = INFORMATIONS;
+				m_bShowMenu = false;
+				m_bMenuActive = false;
+				//m_bMenuHideAnimation = true;
+				m_bShowSubmenuTC = false;
+				return;
+			}
+			if (m_menu_btn_portfolio.isWithin(pX, pY))
+			{
+				m_menu_btn_portfolio.isPressed = false;
+				m_state = PORTFOLIO;
+				m_bShowMenu = false;
+				m_bMenuActive = false;
+				//m_bMenuHideAnimation = true;
+				m_bShowSubmenuTC = false;
+				return;
+			}
+			if (m_menu_btn_order_trade.isWithin(pX, pY))
+			{
+				m_menu_btn_order_trade.isPressed = false;
+
+				m_state = ORDER_TRADE;
+				m_bShowMenu = false;
+				m_bMenuActive = false;
+				//m_bMenuHideAnimation = true;
+				m_bShowSubmenuTC = false;
+				return;
+			}
+			if (m_menu_btn_logout.isWithin(pX, pY))
+			{
+				m_menu_btn_logout.isPressed = false;
+
+				m_state = HOME;
+				m_bShowMenu = false;
+				m_bMenuActive = false;
+				m_bLogged = false;
+				m_bShowSubmenuTC = false;
+				loginStatus = NOT_SIGNIN;
+				return;
 			}
 
-			// update semua posisi.
-			return;
-		}
-	}
+			if (m_bShowSubmenuTC)
+			{
+				m_bShowMenu = false;
+				m_bMenuActive = false;
+				m_bShowSubmenuTC = false;
+				if (m_menu_tc_btn_running_trade.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_running_trade.isPressed = false;
 
-	if (m_btn_buy.isEnabled)
-	{
-		if (m_btn_buy.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button buy is released.\n");
-			m_bShowBuy = true;
-			m_btn_buy.isEnabled = false;
-			m_btn_sell.isEnabled = false;
-			return;
-		}
-	}
+					m_state = RUNNING_TRADE;
+					//ambilDataRunningTrade();
+					//m_bMenuHideAnimation = true;
+					return;
+				}
+				if (m_menu_tc_btn_stock_watch.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_stock_watch.isPressed = false;
 
-	if (m_btn_sell.isEnabled)
-	{
-		if (m_btn_sell.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button sell is released.\n");
-			m_bShowSell = true;
-			m_btn_buy.isEnabled = false;
-			m_btn_sell.isEnabled = false;
-			return;
-		}
-	}
+					m_state = STOCK_WATCH;
+					//m_bMenuHideAnimation = true;
+					return;
+				}
+				if (m_menu_tc_btn_complete_book.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_complete_book.isPressed = false;
 
-	if (m_bShowSell)
-	{
-		if (m_btn_sell_execute.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button sell execute is released.\n");
-			return;
-		}
-		if (m_btn_sell_refresh.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button sell refresh is released.\n");
-			return;
-		}
-		if (m_btn_sell_x.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button sell x is released.\n");
-			m_bShowSell = false;
-			m_btn_sell.isEnabled = true;
-			m_btn_buy.isEnabled = true;
-			return;
-		}
-	}
+					m_state = COMPLETE_BOOK;
+					//m_bMenuHideAnimation = true;
+					return;
+				}
+				if (m_menu_tc_btn_stock_quote.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_stock_quote.isPressed = false;
 
-	if (m_bShowBuy)
-	{
-		if (m_btn_buy_execute.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button buy execute is released.\n");
-			return;
-		}
-		if (m_btn_buy_refresh.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button buy refresh is released.\n");
-			return;
-		}
-		if (m_btn_buy_x.isWithin(pX, pY))
-		{
-			fprintf(stderr, "button buy x is released.\n");
-			m_bShowBuy = false;
-			m_btn_sell.isEnabled = true;
-			m_btn_buy.isEnabled = true;
-			return;
-		}
-	}
+					m_state = STOCK_QUOTE;
+					//m_bMenuHideAnimation = true;
+					return;
+				}
+				if (m_menu_tc_btn_broker_quote.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_broker_quote.isPressed = false;
 
-	// menu item di klik
-	if (m_bMenuActive)
-	{
-		if (m_menu_btn_trade_central.isWithin(pX, pY))
-		{
-			m_bShowSubmenuTC = !m_bShowSubmenuTC;
-			//m_bShowMenu = false;
-			//m_bMenuActive = false;
-			//m_bMenuHideAnimation = true;
-			return;
-		}
-		if (m_menu_btn_charts.isWithin(pX, pY))
-		{
-			m_state = CHARTS;
+					m_state = BROKER_QUOTE;
+					//m_bMenuHideAnimation = true;
+					return;
+				}
+				if (m_menu_tc_btn_stock_summary.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_stock_summary.isPressed = false;
+
+					m_state = STOCK_SUMMARY;
+					//m_bMenuHideAnimation = true;
+					return;
+				}
+				if (m_menu_tc_btn_broker_summary.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_broker_summary.isPressed = false;
+
+					m_state = BROKER_SUMMARY;
+					//m_bMenuHideAnimation = true;
+					return;
+				}
+				if (m_menu_tc_btn_non_regular.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_non_regular.isPressed = false;
+
+					m_state = NON_REGULAR;
+					//m_bMenuHideAnimation = true;
+					return;
+				}
+			}
 			m_bShowMenu = false;
 			m_bMenuActive = false;
-			//m_bMenuHideAnimation = true;
-			return;
-		}
-		if (m_menu_btn_informations.isWithin(pX, pY))
-		{
-			m_state = INFORMATIONS;
-			m_bShowMenu = false;
-			m_bMenuActive = false;
-			//m_bMenuHideAnimation = true;
-			return;
-		}
-		if (m_menu_btn_portfolio.isWithin(pX, pY))
-		{
-			m_state = PORTFOLIO;
-			m_bShowMenu = false;
-			m_bMenuActive = false;
-			//m_bMenuHideAnimation = true;
-			return;
-		}
-		if (m_menu_btn_order_trade.isWithin(pX, pY))
-		{
-			m_state = ORDER_TRADE;
-			m_bShowMenu = false;
-			m_bMenuActive = false;
-			//m_bMenuHideAnimation = true;
-			return;
-		}
-		if (m_menu_btn_logout.isWithin(pX, pY))
-		{
-			m_state = HOME;
-			m_bShowMenu = false;
-			m_bMenuActive = false;
-			m_bLogged = false;
-			loginStatus = NOT_SIGNIN;
-			return;
 		}
 
-		if (m_bShowSubmenuTC)
+		switch (m_state)
 		{
-			if (m_menu_tc_btn_running_trade.isWithin(pX, pY))
-			{
-				m_state = RUNNING_TRADE;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				ambilDataRunningTrade();
-				//m_bMenuHideAnimation = true;
-				return;
-			}
-			if (m_menu_tc_btn_stock_watch.isWithin(pX, pY))
-			{
-				m_state = STOCK_WATCH;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				//m_bMenuHideAnimation = true;
-				return;
-			}
-			if (m_menu_tc_btn_complete_book.isWithin(pX, pY))
-			{
-				m_state = COMPLETE_BOOK;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				//m_bMenuHideAnimation = true;
-				return;
-			}
-			if (m_menu_tc_btn_stock_quote.isWithin(pX, pY))
-			{
-				m_state = STOCK_QUOTE;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				//m_bMenuHideAnimation = true;
-				return;
-			}
-			if (m_menu_tc_btn_broker_quote.isWithin(pX, pY))
-			{
-				m_state = BROKER_QUOTE;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				//m_bMenuHideAnimation = true;
-				return;
-			}
-			if (m_menu_tc_btn_stock_summary.isWithin(pX, pY))
-			{
-				m_state = STOCK_SUMMARY;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				//m_bMenuHideAnimation = true;
-				return;
-			}
-			if (m_menu_tc_btn_broker_summary.isWithin(pX, pY))
-			{
-				m_state = BROKER_SUMMARY;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				//m_bMenuHideAnimation = true;
-				return;
-			}
-			if (m_menu_tc_btn_non_regular.isWithin(pX, pY))
-			{
-				m_state = NON_REGULAR;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
-				//m_bMenuHideAnimation = true;
-				return;
-			}
+			case RUNNING_TRADE:
+			case STOCK_WATCH:
+			case COMPLETE_BOOK:
+			case STOCK_QUOTE:
+			case BROKER_QUOTE:
+			case STOCK_SUMMARY:
+			case BROKER_SUMMARY:
+			case NON_REGULAR:
+			case CHARTS:
+			case INFORMATIONS:
+			case PORTFOLIO:
+			case ORDER_TRADE:
+			break;
 		}
 	}
-
-	switch (m_state)
-	{
-		case RUNNING_TRADE:
-		case STOCK_WATCH:
-		case COMPLETE_BOOK:
-		case STOCK_QUOTE:
-		case BROKER_QUOTE:
-		case STOCK_SUMMARY:
-		case BROKER_SUMMARY:
-		case NON_REGULAR:
-		case CHARTS:
-		case INFORMATIONS:
-		case PORTFOLIO:
-		case ORDER_TRADE:
-		break;
-	}
-}
 
 }
 
 void panin::onLeftPress(float x, float y) {
 	fprintf(stderr, "onLeftPress.\n");
+	float pX, pY;
+	pX = x;
+	pY = m_screenHeight - y;
+
+	fprintf(stderr, "posisi: %f, %f, %f, %f.\n", pX, pY, x, y);
+
 	if (m_state == HOME)
 	{
 		if (m_btn_login.isEnabled)
 		{
-			if (m_btn_login.isWithin(x, m_screenHeight - y))
+			if (m_btn_login.isWithin(pX, pY))
 			{
 				m_btn_login.isPressed = true;
 				fprintf(stderr, "Button login di tekan.\n");
+				return;
+			}
+
+		}
+
+
+		if (m_btn_home_info.isEnabled)
+		{
+			if (m_btn_home_info.isWithin(pX, pY))
+			{
+				m_btn_home_info.isPressed = true;
+				fprintf(stderr, "Button info ditekan.\n");
+				return;
 			}
 		}
+
 		if (m_btn_home_setel.isEnabled)
 		{
-			if (m_btn_home_setel.isWithin(x, m_screenHeight -y))
+			if (m_btn_home_setel.isWithin(pX, pY))
 			{
 				m_btn_home_setel.isPressed = true;
 				fprintf(stderr, "Button setel ditekan.\n");
+				return;
 			}
+		}
+
+		if (m_btn_setel_default.isEnabled)
+		{
+			if (m_btn_setel_default.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel default is released.\n");
+				m_btn_setel_default.isPressed = true;
+				return;
+			}
+		}
+		if (m_btn_setel_set202.isEnabled)
+		{
+			if (m_btn_setel_set202.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel set202 is released.\n");
+				m_btn_setel_set202.isPressed = true;
+				return;
+			}
+		}
+		if (m_btn_setel_set107.isEnabled)
+		{
+			if (m_btn_setel_set107.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel set107 is released.\n");
+				m_btn_setel_set107.isPressed = true;
+				return;
+			}
+		}
+		if (m_btn_setel_save.isEnabled)
+		{
+			if (m_btn_setel_save.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel save is released.\n");
+				m_btn_setel_save.isPressed = true;
+				return;
+			}
+		}
+		if (m_btn_setel_x.isEnabled)
+		{
+			if (m_btn_setel_x.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home setel x is released.\n");
+				m_btn_setel_x.isPressed = true;
+				return;
+			}
+		}
+		if (m_btn_home_username.isEnabled)
+		{
+			if (m_btn_home_username.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home username is released.\n");
+				m_btn_home_username.isPressed = true;
+			}
+		}
+
+		if (m_btn_home_password.isEnabled)
+		{
+			if (m_btn_home_password.isWithin(pX, pY))
+			{
+				fprintf(stderr, "button home password is released.\n");
+				m_btn_home_password.isPressed = true;
+			}
+		}
+	}
+	else
+	{
+		if (m_btn_menu.isEnabled)
+		{
+			if (m_btn_menu.isWithin(pX, pY))
+			{
+				m_btn_menu.isPressed = true;
+			}
+			return;
+		}
+
+
+		if (m_btn_buy.isEnabled)
+		{
+			if (m_btn_buy.isWithin(pX, pY))
+			{
+				m_btn_buy.isPressed = true;
+				return;
+			}
+		}
+
+		if (m_btn_sell.isEnabled)
+		{
+			if (m_btn_sell.isWithin(pX, pY))
+			{
+				m_btn_sell.isPressed = true;
+				return;
+			}
+		}
+
+		if (m_bShowSell)
+		{
+			if (m_btn_sell_execute.isWithin(pX, pY))
+			{
+				m_btn_sell_execute.isPressed = true;
+				return;
+			}
+			if (m_btn_sell_refresh.isWithin(pX, pY))
+			{
+				m_btn_sell_refresh.isPressed = true;
+				return;
+			}
+			if (m_btn_sell_x.isWithin(pX, pY))
+			{
+				m_btn_sell_x.isPressed = true;
+				return;
+			}
+		}
+
+		if (m_bShowBuy)
+		{
+			if (m_btn_buy_execute.isWithin(pX, pY))
+			{
+				m_btn_buy_execute.isPressed = true;
+				return;
+			}
+			if (m_btn_buy_refresh.isWithin(pX, pY))
+			{
+				m_btn_buy_refresh.isPressed = true;
+				return;
+			}
+			if (m_btn_buy_x.isWithin(pX, pY))
+			{
+				m_btn_buy_x.isPressed = true;
+				return;
+			}
+		}
+
+		// menu item di klik
+		if (m_bMenuActive)
+		{
+			if (m_menu_btn_trade_central.isWithin(pX, pY))
+			{
+				m_menu_btn_trade_central.isPressed = true;
+				return;
+			}
+			if (m_menu_btn_charts.isWithin(pX, pY))
+			{
+				m_menu_btn_charts.isPressed = true;
+				return;
+			}
+			if (m_menu_btn_informations.isWithin(pX, pY))
+			{
+				m_menu_btn_informations.isPressed = true;
+				return;
+			}
+			if (m_menu_btn_portfolio.isWithin(pX, pY))
+			{
+				m_menu_btn_portfolio.isPressed = true;
+				return;
+			}
+			if (m_menu_btn_order_trade.isWithin(pX, pY))
+			{
+				m_menu_btn_order_trade.isPressed = true;
+				return;
+			}
+			if (m_menu_btn_logout.isWithin(pX, pY))
+			{
+				m_menu_btn_logout.isPressed = true;
+				return;
+			}
+
+			if (m_bShowSubmenuTC)
+			{
+				if (m_menu_tc_btn_running_trade.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_running_trade.isPressed = true;
+					return;
+				}
+				if (m_menu_tc_btn_stock_watch.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_stock_watch.isPressed = true;
+					return;
+				}
+				if (m_menu_tc_btn_complete_book.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_complete_book.isPressed = true;
+					return;
+				}
+				if (m_menu_tc_btn_stock_quote.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_stock_quote.isPressed = true;
+					return;
+				}
+				if (m_menu_tc_btn_broker_quote.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_broker_quote.isPressed = true;
+					return;
+				}
+				if (m_menu_tc_btn_stock_summary.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_stock_summary.isPressed = true;
+					return;
+				}
+				if (m_menu_tc_btn_broker_summary.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_broker_summary.isPressed = true;
+					return;
+				}
+				if (m_menu_tc_btn_non_regular.isWithin(pX, pY))
+				{
+					m_menu_tc_btn_non_regular.isPressed = true;
+					return;
+				}
+			}
+		}
+
+		switch (m_state)
+		{
+			case RUNNING_TRADE:
+			case STOCK_WATCH:
+			case COMPLETE_BOOK:
+			case STOCK_QUOTE:
+			case BROKER_QUOTE:
+			case STOCK_SUMMARY:
+			case BROKER_SUMMARY:
+			case NON_REGULAR:
+			case CHARTS:
+			case INFORMATIONS:
+			case PORTFOLIO:
+			case ORDER_TRADE:
+			break;
 		}
 	}
 }
@@ -2618,6 +2947,17 @@ void panin::onKeyPressed(int c) {
 			m_bUsernameFocus = false;
 			m_bPasswordFocus = true;
 		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_u_name.length() > 0)
+			{
+				char name [m_u_name.length()];
+				std::memset(name, 0, m_u_name.length());
+				std::strncpy(name, m_u_name.c_str(), m_u_name.length()-1);
+				m_u_name = "";
+				m_u_name = name;
+			}
+		}
 		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
 		{
 			m_u_name = m_u_name + (char)c;
@@ -2630,6 +2970,17 @@ void panin::onKeyPressed(int c) {
 			m_bUsernameFocus = false;
 			m_bPasswordFocus = false;
 			periksaLogin();
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_u_pass.length() > 0)
+			{
+				char name [m_u_pass.length()];
+				std::memset(name, 0, m_u_pass.length());
+				std::strncpy(name, m_u_pass.c_str(), m_u_pass.length()-1);
+				m_u_pass = "";
+				m_u_pass = name;
+			}
 		}
 		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
 		{
@@ -2777,10 +3128,10 @@ void panin::periksaLogin() {
 	//std::string hasil;
 	pthread_t pth;
 
-	//myUser.username = "test-mob";
-	//myUser.password = "336433";
-	myUser.username = m_u_name;
-	myUser.password = m_u_pass;
+	myUser.username = "test-mob";
+	myUser.password = "336433";
+	//myUser.username = m_u_name;
+	//myUser.password = m_u_pass;
 
 	threadVar myThreadVar[1];
 	myThreadVar[0].t_myUser.username = myUser.username;
