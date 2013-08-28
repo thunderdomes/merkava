@@ -253,13 +253,16 @@ panin::panin(platform &myPlatform) :
 	m_buy_caption.setPosition(m_buy_bg.PosX() + 20.0f,
 			m_buy_bg.PosY() + m_buy_bg.Height() - 2 * m_buy_caption.Height());
 	m_buy_refresh.load("app/native/assets/umum/buy_refresh.png");
+	m_buy_refresh_p.load("app/native/assets/umum/buy_refresh_p.png");
 	m_buy_execute.load("app/native/assets/umum/buy_execute.png");
+	m_buy_execute_p.load("app/native/assets/umum/buy_execute_p.png");
 	m_buy_band.load("app/native/assets/umum/white_bar.png");
 	m_buy_band.setPosition(m_buy_bg.PosX() + 0.0f + 20.0f,
 			m_buy_bg.PosY() + m_buy_bg.Height() - 600.0f);
 	m_buy_x.load("app/native/assets/umum/buy_x.png");
+	m_buy_x_p.load("app/native/assets/umum/buy_x_p.png");
 	m_btn_buy_refresh.regular = &m_buy_refresh;
-	m_btn_buy_refresh.pressed = &m_buy_refresh;
+	m_btn_buy_refresh.pressed = &m_buy_refresh_p;
 	m_btn_buy_refresh.sizeX = m_buy_refresh.Width();
 	m_btn_buy_refresh.sizeY = m_buy_refresh.Height();
 	m_btn_buy_refresh.font = m_font;
@@ -269,7 +272,7 @@ panin::panin(platform &myPlatform) :
 			m_buy_band.PosY()
 					+ (m_buy_band.Height() - m_btn_buy_refresh.sizeY) / 2);
 	m_btn_buy_execute.regular = &m_buy_execute;
-	m_btn_buy_execute.pressed = &m_buy_execute;
+	m_btn_buy_execute.pressed = &m_buy_execute_p;
 	m_btn_buy_execute.sizeX = m_buy_execute.Width();
 	m_btn_buy_execute.sizeY = m_buy_execute.Height();
 	m_btn_buy_execute.font = m_font;
@@ -300,13 +303,16 @@ panin::panin(platform &myPlatform) :
 			m_sell_bg.PosY() + m_sell_bg.Height()
 					- 2 * m_sell_caption.Height());
 	m_sell_refresh.load("app/native/assets/umum/sell_refresh.png");
+	m_sell_refresh_p.load("app/native/assets/umum/sell_refresh_p.png");
 	m_sell_execute.load("app/native/assets/umum/sell_execute.png");
+	m_sell_execute_p.load("app/native/assets/umum/sell_execute_p.png");
 	m_sell_band.load("app/native/assets/umum/white_bar.png");
 	m_sell_band.setPosition(m_sell_bg.PosX() + 0.0f + 20.0f,
 			m_sell_bg.PosY() + m_sell_bg.Height() - 600.0f);
 	m_sell_x.load("app/native/assets/umum/sell_x.png");
+	m_sell_x_p.load("app/native/assets/umum/sell_x_p.png");
 	m_btn_sell_refresh.regular = &m_sell_refresh;
-	m_btn_sell_refresh.pressed = &m_sell_refresh;
+	m_btn_sell_refresh.pressed = &m_sell_refresh_p;
 	m_btn_sell_refresh.sizeX = m_sell_refresh.Width();
 	m_btn_sell_refresh.sizeY = m_sell_refresh.Height();
 	m_btn_sell_refresh.font = m_font;
@@ -317,7 +323,7 @@ panin::panin(platform &myPlatform) :
 			m_sell_band.PosY()
 					+ (m_sell_band.Height() - m_btn_sell_refresh.sizeY) / 2);
 	m_btn_sell_execute.regular = &m_sell_execute;
-	m_btn_sell_execute.pressed = &m_sell_execute;
+	m_btn_sell_execute.pressed = &m_sell_execute_p;
 	m_btn_sell_execute.sizeX = m_sell_execute.Width();
 	m_btn_sell_execute.sizeY = m_sell_execute.Height();
 	m_btn_sell_execute.font = m_font;
@@ -328,7 +334,7 @@ panin::panin(platform &myPlatform) :
 			m_btn_sell_refresh.posX + m_btn_sell_refresh.sizeX + 100.0f,
 			m_btn_sell_refresh.posY);
 	m_btn_sell_x.regular = &m_sell_x;
-	m_btn_sell_x.pressed = &m_sell_x;
+	m_btn_sell_x.pressed = &m_sell_x_p;
 	m_btn_sell_x.sizeX = m_sell_x.Width();
 	m_btn_sell_x.sizeY = m_sell_x.Height();
 	m_btn_sell_x.font = m_font;
@@ -549,24 +555,29 @@ panin::panin(platform &myPlatform) :
 	m_sw_box_black.load("app/native/assets/stock_watch/sw_box_black.png");
 	m_sw_box_black.setPosition(m_latar.PosX() + 27.0f, m_screenHeight - 455.0f);
 	m_sw_port1.load("app/native/assets/stock_watch/sw_port1.png");
-	m_sw_port1.setPosition(m_latar.PosX() + 41.0f,
-			m_sw_caption.PosY() - m_sw_port1.Height() - 20.0f);
+	m_sw_port1_p.load("app/native/assets/stock_watch/sw_port1_p.png");
+	//m_sw_port1.setPosition(m_latar.PosX() + 41.0f,
+	//		m_sw_caption.PosY() - m_sw_port1.Height() - 20.0f);
 	m_sw_banking.load("app/native/assets/stock_watch/sw_banking.png");
-	m_sw_banking.setPosition(
-			m_latar.PosX() + m_sw_port1.PosX() + m_sw_port1.Width() + 10.0f,
-			m_sw_port1.PosY());
+	m_sw_banking_p.load("app/native/assets/stock_watch/sw_banking_p.png");
+	//m_sw_banking.setPosition(
+	//		m_latar.PosX() + m_sw_port1.PosX() + m_sw_port1.Width() + 10.0f,
+	//		m_sw_port1.PosY());
 	m_sw_mining.load("app/native/assets/stock_watch/sw_mining.png");
-	m_sw_mining.setPosition(
-			m_latar.PosX() + m_sw_banking.PosX() + m_sw_banking.Width() + 10.0f,
-			m_sw_port1.PosY());
+	m_sw_mining_p.load("app/native/assets/stock_watch/sw_mining_p.png");
+	//m_sw_mining.setPosition(
+	//		m_latar.PosX() + m_sw_banking.PosX() + m_sw_banking.Width() + 10.0f,
+	//		m_sw_port1.PosY());
 	m_sw_cons.load("app/native/assets/stock_watch/sw_cons.png");
-	m_sw_cons.setPosition(
-			m_latar.PosX() + m_sw_mining.PosX() + m_sw_mining.Width() + 10.0f,
-			m_sw_port1.PosY());
+	m_sw_cons_p.load("app/native/assets/stock_watch/sw_cons_p.png");
+	//m_sw_cons.setPosition(
+	//		m_latar.PosX() + m_sw_mining.PosX() + m_sw_mining.Width() + 10.0f,
+	//		m_sw_port1.PosY());
 	m_sw_plus_green.load("app/native/assets/stock_watch/sw_plus_green.png");
-	m_sw_plus_green.setPosition(
-			m_latar.PosX() + m_sw_cons.PosX() + m_sw_cons.Width() + 10.0f,
-			m_sw_port1.PosY());
+	m_sw_plus_green_p.load("app/native/assets/stock_watch/sw_plus_green_p.png");
+	//m_sw_plus_green.setPosition(
+	//		m_latar.PosX() + m_sw_cons.PosX() + m_sw_cons.Width() + 10.0f,
+	//		m_sw_port1.PosY());
 	m_sw_val_green.load("app/native/assets/stock_watch/sw_green.png");
 	m_sw_val_green.setPosition(m_latar.PosX() + 40.0f, m_screenHeight - 413.0f);
 	m_sw_val_yellow.load("app/native/assets/stock_watch/sw_yellow.png");
@@ -574,6 +585,58 @@ panin::panin(platform &myPlatform) :
 			m_screenHeight - 413.0f);
 	m_sw_val_red.load("app/native/assets/stock_watch/sw_red.png");
 	m_sw_val_red.setPosition(m_latar.PosX() + 240.0f, m_screenHeight - 413.0f);
+	//m_sw_btn_port1
+	m_sw_btn_port1.regular = &m_sw_port1;
+	m_sw_btn_port1.pressed = &m_sw_port1_p;
+	m_sw_btn_port1.sizeX = m_sw_port1.Width();
+	m_sw_btn_port1.sizeY = m_sw_port1.Height();
+	m_sw_btn_port1.font = m_font;
+	m_sw_btn_port1.text = "";
+	m_sw_btn_port1.isPressed = false;
+	m_sw_btn_port1.isEnabled = true;
+	m_sw_btn_port1.setPosition(m_latar.PosX() + 41.0f,
+			m_sw_caption.PosY() - m_sw_port1.Height() - 20.0f);
+
+	m_sw_btn_banking.regular = &m_sw_banking;
+	m_sw_btn_banking.pressed = &m_sw_banking_p;
+	m_sw_btn_banking.sizeX = m_sw_banking.Width();
+	m_sw_btn_banking.sizeY = m_sw_banking.Height();
+	m_sw_btn_banking.font = m_font;
+	m_sw_btn_banking.text = "";
+	m_sw_btn_banking.isPressed = false;
+	m_sw_btn_banking.isEnabled = true;
+	m_sw_btn_banking.setPosition(m_sw_btn_port1.posX + m_sw_btn_port1.sizeX + 10.0f,
+			m_sw_btn_port1.posY);
+
+	m_sw_btn_mining.regular = &m_sw_mining;
+	m_sw_btn_mining.pressed = &m_sw_mining_p;
+	m_sw_btn_mining.sizeX = m_sw_mining.Width();
+	m_sw_btn_mining.sizeY = m_sw_mining.Height();
+	m_sw_btn_mining.font = m_font;
+	m_sw_btn_mining.text = "";
+	m_sw_btn_mining.isPressed = false;
+	m_sw_btn_mining.isEnabled = true;
+	m_sw_btn_mining.setPosition(m_sw_btn_banking.posX + m_sw_btn_banking.sizeX + 10.0f,	m_sw_btn_banking.posY);
+
+	m_sw_btn_cons.regular = &m_sw_cons;
+	m_sw_btn_cons.pressed = &m_sw_cons_p;
+	m_sw_btn_cons.sizeX = m_sw_cons.Width();
+	m_sw_btn_cons.sizeY = m_sw_cons.Height();
+	m_sw_btn_cons.font = m_font;
+	m_sw_btn_cons.text = "";
+	m_sw_btn_cons.isPressed = false;
+	m_sw_btn_cons.isEnabled = true;
+	m_sw_btn_cons.setPosition(m_sw_btn_mining.posX + m_sw_btn_mining.sizeX + 10.0f,	m_sw_btn_mining.posY);
+
+	m_sw_btn_plus_green.regular = &m_sw_plus_green;
+	m_sw_btn_plus_green.pressed = &m_sw_plus_green_p;
+	m_sw_btn_plus_green.sizeX = m_sw_plus_green.Width();
+	m_sw_btn_plus_green.sizeY = m_sw_plus_green.Height();
+	m_sw_btn_plus_green.font = m_font;
+	m_sw_btn_plus_green.text = "";
+	m_sw_btn_plus_green.isPressed = false;
+	m_sw_btn_plus_green.isEnabled = true;
+	m_sw_btn_plus_green.setPosition(m_sw_btn_cons.posX + m_sw_btn_cons.sizeX + 10.0f,	m_sw_btn_cons.posY);
 
 	// complete book
 	fprintf(stderr, "Load complete book.\n");
@@ -629,6 +692,133 @@ panin::panin(platform &myPlatform) :
 			"app/native/assets/broker_summary/bs_table_title.png");
 	m_bs_table_title.setPosition(m_latar.PosX() + 0.0f,
 			m_bs_caption.PosY() - m_bs_table_title.Height() - 20.0f);
+
+	// company
+	fprintf(stderr, "Load company.\n");
+	m_cpy_caption.load("app/native/assets/companies/cpy_caption.png");
+	m_cpy_caption.setPosition(m_latar.PosX() + 27.0f,
+			m_headerHeight - m_cpy_caption.Height() - 20.0f);
+//	m_cpy_company1.load("app/native/assets/companies/company1.png");
+//	m_cpy_company2.load("app/native/assets/companies/company2.png");
+//	m_cpy_financial1.load("app/native/assets/companies/m_cpy_financial1.png");
+//	m_cpy_financial2.load("app/native/assets/companies/m_cpy_financial2.png");
+//	m_cpy_ratio1.load("app/native/assets/companies/m_cpy_ratio1.png");
+//	m_cpy_ratio2.load("app/native/assets/companies/m_cpy_ratio2.png");
+
+//	m_cpy_btn_company.regular = &m_cpy_company1;
+//	m_cpy_btn_company.pressed = &m_cpy_company1;
+//	m_cpy_btn_company.sizeX = m_cpy_company1.Width();
+//	m_cpy_btn_company.sizeY = m_cpy_company1.Height();
+//	m_cpy_btn_company.font = m_font;
+//	m_cpy_btn_company.text = "";
+//	m_cpy_btn_company.isPressed = false;
+//	m_cpy_btn_company.isEnabled = true;
+//	m_cpy_btn_company.setPosition(m_sw_btn_cons.posX + m_sw_btn_cons.sizeX + 10.0f,	m_sw_btn_cons.posY);
+
+//	m_cpy_btn_financial.regular = &m_cpy_financial1;
+//	m_cpy_btn_financial.pressed = &m_cpy_financial1;
+//	m_cpy_btn_financial.sizeX = m_cpy_financial1.Width();
+//	m_cpy_btn_financial.sizeY = m_cpy_financial1.Height();
+//	m_cpy_btn_financial.font = m_font;
+//	m_cpy_btn_financial.text = "";
+//	m_cpy_btn_financial.isPressed = false;
+//	m_cpy_btn_financial.isEnabled = true;
+//	m_cpy_btn_financial.setPosition(m_sw_btn_cons.posX + m_cpy_financial1.sizeX + 10.0f,	m_sw_btn_cons.posY);
+
+//	m_cpy_btn_ratio.regular = &m_cpy_ratio1;
+//	m_cpy_btn_ratio.pressed = &m_cpy_ratio1;
+//	m_cpy_btn_ratio.sizeX = m_cpy_ratio1.Width();
+//	m_cpy_btn_ratio.sizeY = m_cpy_ratio1.Height();
+//	m_cpy_btn_ratio.font = m_font;
+//	m_cpy_btn_ratio.text = "";
+//	m_cpy_btn_ratio.isPressed = false;
+//	m_cpy_btn_ratio.isEnabled = true;
+//	m_cpy_btn_ratio.setPosition(m_sw_btn_cons.posX + m_cpy_ratio1.sizeX + 10.0f,	m_sw_btn_cons.posY);
+
+	//corporate action
+	fprintf(stderr, "Load corporate action.\n");
+	m_ca_caption.load("app/native/assets/corporate_action/ca_caption.png");
+	m_ca_caption.setPosition(m_latar.PosX() + 27.0f,
+			m_headerHeight - m_ca_caption.Height() - 20.0f);
+	m_ca_dividen1.load("app/native/assets/corporate_action/devidend1.png");
+	m_ca_dividen2.load("app/native/assets/corporate_action/devidend2.png");
+	m_ca_bonus1.load("app/native/assets/corporate_action/bonus1.png");
+	m_ca_bonus2.load("app/native/assets/corporate_action/bonus2.png");
+	m_ca_split1.load("app/native/assets/corporate_action/split1.png");
+	m_ca_split2.load("app/native/assets/corporate_action/split2.png");
+	m_ca_warrant1.load("app/native/assets/corporate_action/warrant1.png");
+	m_ca_warrant2.load("app/native/assets/corporate_action/warrant2.png");
+	m_ca_rights1.load("app/native/assets/corporate_action/rights1.png");
+	m_ca_rights2.load("app/native/assets/corporate_action/rights2.png");
+	m_ca_rups1.load("app/native/assets/corporate_action/rups1.png");
+	m_ca_rups2.load("app/native/assets/corporate_action/rups2.png");
+
+	m_ca_btn_dividen.regular = &m_ca_dividen1;
+	m_ca_btn_dividen.pressed = &m_ca_dividen1;
+	m_ca_btn_dividen.sizeX = m_ca_dividen1.Width();
+	m_ca_btn_dividen.sizeY = m_ca_dividen1.Height();
+	m_ca_btn_dividen.font = m_font;
+	m_ca_btn_dividen.text = "";
+	m_ca_btn_dividen.isPressed = false;
+	m_ca_btn_dividen.isEnabled = true;
+	m_ca_btn_dividen.setPosition(m_ca_caption.PosX(), m_ca_caption.PosY() - m_ca_btn_dividen.sizeY - 10.0f);
+
+	m_ca_btn_bonus.regular = &m_ca_bonus1;
+	m_ca_btn_bonus.pressed = &m_ca_bonus1;
+	m_ca_btn_bonus.sizeX = m_ca_bonus1.Width();
+	m_ca_btn_bonus.sizeY = m_ca_bonus1.Height();
+	m_ca_btn_bonus.font = m_font;
+	m_ca_btn_bonus.text = "";
+	m_ca_btn_bonus.isPressed = false;
+	m_ca_btn_bonus.isEnabled = true;
+	m_ca_btn_bonus.setPosition(m_ca_btn_dividen.posX + m_ca_btn_dividen.sizeX + 10.0f, m_ca_btn_dividen.posY);
+
+	m_ca_btn_split.regular = &m_ca_split1;
+	m_ca_btn_split.pressed = &m_ca_split1;
+	m_ca_btn_split.sizeX = m_ca_split1.Width();
+	m_ca_btn_split.sizeY = m_ca_split1.Height();
+	m_ca_btn_split.font = m_font;
+	m_ca_btn_split.text = "";
+	m_ca_btn_split.isPressed = false;
+	m_ca_btn_split.isEnabled = true;
+	m_ca_btn_split.setPosition(m_ca_btn_bonus.posX + m_ca_btn_bonus.sizeX + 10.0f, m_ca_btn_bonus.posY);
+
+	m_ca_btn_warrant.regular = &m_ca_warrant1;
+	m_ca_btn_warrant.pressed = &m_ca_warrant1;
+	m_ca_btn_warrant.sizeX = m_ca_warrant1.Width();
+	m_ca_btn_warrant.sizeY = m_ca_warrant1.Height();
+	m_ca_btn_warrant.font = m_font;
+	m_ca_btn_warrant.text = "";
+	m_ca_btn_warrant.isPressed = false;
+	m_ca_btn_warrant.isEnabled = true;
+	m_ca_btn_warrant.setPosition(m_ca_btn_split.posX + m_ca_btn_split.sizeX + 10.0f, m_ca_btn_split.posY);
+
+	m_ca_btn_rights.regular = &m_ca_dividen1;
+	m_ca_btn_rights.pressed = &m_ca_dividen1;
+	m_ca_btn_rights.sizeX = m_ca_dividen1.Width();
+	m_ca_btn_rights.sizeY = m_ca_dividen1.Height();
+	m_ca_btn_rights.font = m_font;
+	m_ca_btn_rights.text = "";
+	m_ca_btn_rights.isPressed = false;
+	m_ca_btn_rights.isEnabled = true;
+	m_ca_btn_rights.setPosition(m_ca_btn_warrant.posX + m_ca_btn_warrant.sizeX + 10.0f, m_ca_btn_warrant.posY);
+
+	m_ca_btn_rups.regular = &m_ca_dividen1;
+	m_ca_btn_rups.pressed = &m_ca_dividen1;
+	m_ca_btn_rups.sizeX = m_ca_dividen1.Width();
+	m_ca_btn_rups.sizeY = m_ca_dividen1.Height();
+	m_ca_btn_rups.font = m_font;
+	m_ca_btn_rups.text = "";
+	m_ca_btn_rups.isPressed = false;
+	m_ca_btn_rups.isEnabled = true;
+	m_ca_btn_rups.setPosition(m_ca_btn_rights.posX + m_ca_btn_rights.sizeX + 10.0f, m_ca_btn_rights.posY);
+
+	// my account
+	fprintf(stderr, "Load my account.\n");
+	m_ac_password.load("app/native/assets/password/pw_caption.png");
+	m_ac_password.setPosition(m_latar.PosX() + 27.0f,
+			m_headerHeight - m_ac_password.Height() - 20.0f);
+
 
 	// menu
 	fprintf(stderr, "Load menu.\n");
@@ -872,6 +1062,97 @@ panin::panin(platform &myPlatform) :
 	m_research_caption.setPosition(m_latar.PosX() + 27.0f,
 			m_headerHeight - m_research_caption.Height() - 20.0f);
 
+	// chart
+	m_chart_bg.load("app/native/assets/charts/chart_bg.png");
+	m_chart_bg.setPosition(0.0f, 0.0f);
+	m_chart_post_bar.load("app/native/assets/charts/post_2.png");
+	m_chart_post_bar.setPosition(m_chart_bg.PosY() + m_screenWidth - m_chart_post_bar.Height() - 2.0f, m_chart_bg.PosX());
+	m_chart_caption_bottom.load("app/native/assets/charts/chart_caption_bottom.png");
+	m_chart_caption_bottom.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_text_bg.load("app/native/assets/charts/text_bg.png");
+	m_chart_text_bg.setPosition(m_chart_bg.PosY() +80.0f, 570.0f);
+	m_icon_search.load("app/native/assets/charts/icon_search.png");
+	//m_icon_search.setPosition(m_chart_text_bg.PosY() + m_chart_text_bg.Width() - m_icon_search.Width(), m_chart_text_bg.PosX());
+	m_chart_1day_big.load("app/native/assets/charts/1day_big.png");
+	m_chart_1day_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_1week_big.load("app/native/assets/charts/1week_big.png");
+	m_chart_1week_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_1month_big.load("app/native/assets/charts/1month_big.png");
+	m_chart_1month_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_1year_big.load("app/native/assets/charts/1year_big.png");
+	m_chart_1year_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_3year_big.load("app/native/assets/charts/3year_big.png");
+	m_chart_3year_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_1day_small.load("app/native/assets/charts/1day_small.png");
+	m_chart_1week_small.load("app/native/assets/charts/1week_small.png");
+	m_chart_1month_small.load("app/native/assets/charts/1month_small.png");
+	m_chart_1year_small.load("app/native/assets/charts/1year_small.png");
+	m_chart_3year_small.load("app/native/assets/charts/3year_small.png");
+
+	m_chart_btn_search.regular = &m_icon_search;
+	m_chart_btn_search.pressed = &m_icon_search;
+	m_chart_btn_search.sizeX = m_icon_search.Width();
+	m_chart_btn_search.sizeY = m_icon_search.Height();
+	m_chart_btn_search.font = m_font;
+	m_chart_btn_search.text = "";
+	m_chart_btn_search.isPressed = false;
+	m_chart_btn_search.isEnabled = true;
+	m_chart_btn_search.setPosition(m_chart_text_bg.PosY() + m_chart_text_bg.Width() - m_icon_search.Width(), m_chart_text_bg.PosX());
+
+	m_chart_btn_1day.regular = &m_chart_1day_small;
+	m_chart_btn_1day.pressed = &m_chart_1day_small;
+	m_chart_btn_1day.sizeX = m_chart_1day_small.Width();
+	m_chart_btn_1day.sizeY = m_chart_1day_small.Height();
+	m_chart_btn_1day.font = m_font;
+	m_chart_btn_1day.text = "";
+	m_chart_btn_1day.isPressed = false;
+	m_chart_btn_1day.isEnabled = true;
+	m_chart_btn_1day.setPosition(m_chart_caption_bottom.PosY() + 222.0f, m_chart_caption_bottom.PosX() + 35.0f);
+
+	m_chart_btn_1week.regular = &m_chart_1week_small;
+	m_chart_btn_1week.pressed = &m_chart_1week_small;
+	m_chart_btn_1week.sizeX = m_chart_1week_small.Width();
+	m_chart_btn_1week.sizeY = m_chart_1week_small.Height();
+	m_chart_btn_1week.font = m_font;
+	m_chart_btn_1week.text = "";
+	m_chart_btn_1week.isPressed = false;
+	m_chart_btn_1week.isEnabled = true;
+	m_chart_btn_1week.setPosition(m_chart_btn_1day.posY, m_chart_btn_1day.posX);
+
+	m_chart_btn_1month.regular = &m_chart_1month_small;
+	m_chart_btn_1month.pressed = &m_chart_1month_small;
+	m_chart_btn_1month.sizeX = m_chart_1month_small.Width();
+	m_chart_btn_1month.sizeY = m_chart_1month_small.Height();
+	m_chart_btn_1month.font = m_font;
+	m_chart_btn_1month.text = "";
+	m_chart_btn_1month.isPressed = false;
+	m_chart_btn_1month.isEnabled = true;
+	m_chart_btn_1month.setPosition(m_chart_btn_1day.posY + m_chart_btn_1day.sizeX + 10.0f, m_chart_btn_1day.posX);
+
+	m_chart_btn_1year.regular = &m_chart_1year_small;
+	m_chart_btn_1year.pressed = &m_chart_1year_small;
+	m_chart_btn_1year.sizeX = m_chart_1year_small.Width();
+	m_chart_btn_1year.sizeY = m_chart_1year_small.Height();
+	m_chart_btn_1year.font = m_font;
+	m_chart_btn_1year.text = "";
+	m_chart_btn_1year.isPressed = false;
+	m_chart_btn_1year.isEnabled = true;
+	m_chart_btn_1year.setPosition(m_chart_btn_1month.posY + m_chart_btn_1month.sizeX + 10.0f, m_chart_btn_1month.posX);
+
+	m_chart_btn_3year.regular = &m_chart_3year_small;
+	m_chart_btn_3year.pressed = &m_chart_3year_small;
+	m_chart_btn_3year.sizeX = m_chart_3year_small.Width();
+	m_chart_btn_3year.sizeY = m_chart_3year_small.Height();
+	m_chart_btn_3year.font = m_font;
+	m_chart_btn_3year.text = "";
+	m_chart_btn_3year.isPressed = false;
+	m_chart_btn_3year.isEnabled = true;
+	m_chart_btn_3year.setPosition(m_chart_btn_1year.posY + m_chart_btn_1year.sizeX + 10.0f, m_chart_btn_1year.posX);
+
+
+
+
+
 	m_state = HOME;
 	m_ePosX = 0.0f;
 	m_ePosY = 0.0f;
@@ -1088,6 +1369,7 @@ void panin::updateHome() {
 }
 
 void panin::renderHome() {
+
 	m_platform.beginRender();
 
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -1163,7 +1445,6 @@ void panin::renderHome() {
 	if (m_bShowHomeSetel) {
 		//fprintf(stderr, "render HomeSetel.\n");
 		renderHomeSetel();
-
 	}
 
 	m_platform.finishRender();
@@ -1339,6 +1620,11 @@ void panin::renderStockWatch() {
 	addHeader();
 
 	m_sw_caption.draw();
+	m_sw_btn_port1.draw();
+	m_sw_btn_banking.draw();
+	m_sw_btn_mining.draw();
+	m_sw_btn_cons.draw();
+	m_sw_btn_plus_green.draw();
 
 	for (int i = 0; i < 5; ++i) {
 		for (int j = 0; j < 3; ++j) {
@@ -1408,11 +1694,11 @@ void panin::renderStockWatch() {
 		}
 	}
 
-	m_sw_port1.draw();
-	m_sw_banking.draw();
-	m_sw_mining.draw();
-	m_sw_cons.draw();
-	m_sw_plus_green.draw();
+	//m_sw_port1.draw();
+	//m_sw_banking.draw();
+	//m_sw_mining.draw();
+	//m_sw_cons.draw();
+	//m_sw_plus_green.draw();
 	m_sw_val_green.draw();
 	m_sw_val_yellow.draw();
 	m_sw_val_red.draw();
@@ -1935,19 +2221,21 @@ void panin::renderCharts() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	m_latar.draw();
+	m_chart_bg.draw();
+	m_chart_caption_bottom.draw();
+	m_chart_post_bar.draw();
 
 	addHeader();
 
-	addFooter();
+//	addFooter();
 
-	if (m_bShowBuy) {
-		renderBuyDialog();
-	}
-
-	if (m_bShowSell) {
-		renderSellDialog();
-	}
+//	if (m_bShowBuy) {
+//		renderBuyDialog();
+//	}
+//
+//	if (m_bShowSell) {
+//		renderSellDialog();
+//	}
 
 	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation) {
 		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
@@ -2301,6 +2589,7 @@ void panin::onLeftRelease(float x, float y) {
 
 				m_bUsernameFocus = false;
 				m_bPasswordFocus = false;
+
 				return;
 			}
 		}
@@ -2529,6 +2818,10 @@ void panin::onLeftRelease(float x, float y) {
 			}
 			if (m_menu_btn_charts.isWithin(pX, pY))
 			{
+				//m_platform.setOrientation(0);
+				//m_chart_bg.load("app/native/assets/charts/chart_bg.png");
+				//m_chart_bg.setPosition(0.0f, 0.0f);
+
 				m_menu_btn_charts.isPressed = false;
 
 				m_state = CHARTS;
@@ -2662,6 +2955,47 @@ void panin::onLeftRelease(float x, float y) {
 		{
 			case RUNNING_TRADE:
 			case STOCK_WATCH:
+				if (m_sw_btn_port1.isEnabled)
+				{
+					if (m_sw_btn_port1.isWithin(pX, pY))
+					{
+						m_sw_btn_port1.isPressed = false;
+						return;
+					}
+				}
+				if (m_sw_btn_banking.isEnabled)
+				{
+					if (m_sw_btn_banking.isWithin(pX, pY))
+					{
+						m_sw_btn_banking.isPressed = false;
+						return;
+					}
+				}
+				if (m_sw_btn_mining.isEnabled)
+				{
+					if (m_sw_btn_mining.isWithin(pX, pY))
+					{
+						m_sw_btn_mining.isPressed = false;
+						return;
+					}
+				}
+				if (m_sw_btn_cons.isEnabled)
+				{
+					if (m_sw_btn_cons.isWithin(pX, pY))
+					{
+						m_sw_btn_cons.isPressed = false;
+						return;
+					}
+				}
+				if (m_sw_btn_plus_green.isEnabled)
+				{
+					if (m_sw_btn_plus_green.isWithin(pX, pY))
+					{
+						m_sw_btn_plus_green.isPressed = false;
+						return;
+					}
+				}
+				break;
 			case COMPLETE_BOOK:
 			case STOCK_QUOTE:
 			case BROKER_QUOTE:
@@ -2944,6 +3278,47 @@ void panin::onLeftPress(float x, float y) {
 		{
 			case RUNNING_TRADE:
 			case STOCK_WATCH:
+				if (m_sw_btn_port1.isEnabled)
+				{
+					if (m_sw_btn_port1.isWithin(pX, pY))
+					{
+						m_sw_btn_port1.isPressed = true;
+						return;
+					}
+				}
+				if (m_sw_btn_banking.isEnabled)
+				{
+					if (m_sw_btn_banking.isWithin(pX, pY))
+					{
+						m_sw_btn_banking.isPressed = true;
+						return;
+					}
+				}
+				if (m_sw_btn_mining.isEnabled)
+				{
+					if (m_sw_btn_mining.isWithin(pX, pY))
+					{
+						m_sw_btn_mining.isPressed = true;
+						return;
+					}
+				}
+				if (m_sw_btn_cons.isEnabled)
+				{
+					if (m_sw_btn_cons.isWithin(pX, pY))
+					{
+						m_sw_btn_cons.isPressed = true;
+						return;
+					}
+				}
+				if (m_sw_btn_plus_green.isEnabled)
+				{
+					if (m_sw_btn_plus_green.isWithin(pX, pY))
+					{
+						m_sw_btn_plus_green.isPressed = true;
+						return;
+					}
+				}
+				break;
 			case COMPLETE_BOOK:
 			case STOCK_QUOTE:
 			case BROKER_QUOTE:

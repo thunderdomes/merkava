@@ -308,9 +308,12 @@ private:
 	Sprite m_buy_bg;
 	Sprite m_buy_caption;
 	Sprite m_buy_refresh;
+	Sprite m_buy_refresh_p;
 	Sprite m_buy_execute;
+	Sprite m_buy_execute_p;
 	Sprite m_buy_band;
 	Sprite m_buy_x;
+	Sprite m_buy_x_p;
 	button m_btn_buy_refresh;
 	button m_btn_buy_execute;
 	button m_btn_buy_x;
@@ -318,9 +321,12 @@ private:
 	Sprite m_sell_bg;
 	Sprite m_sell_caption;
 	Sprite m_sell_refresh;
+	Sprite m_sell_refresh_p;
 	Sprite m_sell_execute;
+	Sprite m_sell_execute_p;
 	Sprite m_sell_band;
 	Sprite m_sell_x;
+	Sprite m_sell_x_p;
 	button m_btn_sell_refresh;
 	button m_btn_sell_execute;
 	button m_btn_sell_x;
@@ -382,13 +388,23 @@ private:
 	Sprite m_sw_caption;
 	Sprite m_sw_box_black;
 	Sprite m_sw_port1;
+	Sprite m_sw_port1_p;
 	Sprite m_sw_banking;
+	Sprite m_sw_banking_p;
 	Sprite m_sw_mining;
+	Sprite m_sw_mining_p;
 	Sprite m_sw_cons;
+	Sprite m_sw_cons_p;
 	Sprite m_sw_plus_green;
+	Sprite m_sw_plus_green_p;
 	Sprite m_sw_val_green;
 	Sprite m_sw_val_yellow;
 	Sprite m_sw_val_red;
+	button m_sw_btn_port1;
+	button m_sw_btn_banking;
+	button m_sw_btn_mining;
+	button m_sw_btn_cons;
+	button m_sw_btn_plus_green;
 
 
 	// complete book
@@ -417,6 +433,7 @@ private:
 	// Non regular
 
 	// companies
+	Sprite m_cpy_caption;
 	Sprite m_cpy_company1;
 	Sprite m_cpy_financial1;
 	Sprite m_cpy_ratio1;
@@ -455,7 +472,8 @@ private:
 	Sprite m_ac_bg_black;
 	Sprite m_ac_textfield_bg;
 	Sprite m_ac_save;
-	button m_btn_save;
+	button m_btn_save1;
+	button m_btn_save2;
 
 	// tradelist
 	Sprite m_tl_order_caption;

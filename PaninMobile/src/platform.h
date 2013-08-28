@@ -66,6 +66,8 @@ public:
 
 	void finishRender();
 
+	void setOrientation(int i);
+
 	void getSize(float& width, float& height) const;
 
 	int getDPI() const;
@@ -95,11 +97,13 @@ private:
 	SC_InitData_t m_scoreloopInitData;
 	PlatformEventHandler* m_handler;
 	screen_context_t m_screenContext;
+	screen_window_t screen_win;
 	const char* m_username;
 	const char* m_password;
 	bool m_promptInProgress;
 	bool m_buttonPressed;
 	bool m_keyboard_visible;
+
 
 	DateTime * m_DateTime;
 

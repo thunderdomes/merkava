@@ -299,6 +299,7 @@ bbutil_terminate() {
         }
         if (screen_win != NULL) {
             screen_destroy_window(screen_win);
+            fprintf(stderr, "destroy screen_win.\n");
             screen_win = NULL;
         }
         eglTerminate(egl_disp);
@@ -986,6 +987,7 @@ int bbutil_rotate_screen_surface(int angle) {
             break;
     }
 
+    fprintf(stderr, "ukuran layar: %d, %d.\n", size[0], size[1]);
     if (!skip) {
         rc = eglMakeCurrent(egl_disp, NULL, NULL, NULL);
         if (rc != EGL_TRUE) {
@@ -1010,6 +1012,7 @@ int bbutil_rotate_screen_surface(int angle) {
             perror("screen_set_window_property_iv");
             return EXIT_FAILURE;
         }
+
         egl_surf = eglCreateWindowSurface(egl_disp, egl_conf, screen_win, NULL);
         if (egl_surf == EGL_NO_SURFACE) {
             bbutil_egl_perror("eglCreateWindowSurface");
@@ -1035,6 +1038,7 @@ int bbutil_rotate_screen_surface(int angle) {
         return EXIT_FAILURE;
     }
 
+    fprintf(stderr, "exit rotate success.\n");
     return EXIT_SUCCESS;
 }
 

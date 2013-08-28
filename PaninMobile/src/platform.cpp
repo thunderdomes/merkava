@@ -50,7 +50,7 @@ platform::platform()
 	navigator_request_events(0);
 	dialog_request_events(0);
 
-	// Lock in landscape mode.
+	// Lock in potrait mode.
 	navigator_rotation_lock(true);
 	bbutil_init_egl(m_screenContext);
 	m_DateTime = new DateTime();
@@ -192,6 +192,71 @@ void platform::beginRender() {
 
 void platform::finishRender() {
     bbutil_swap();
+}
+
+void platform::setOrientation(int i)
+{
+
+	navigator_rotation_lock(false);
+	bps_event_t* event = NULL;
+	int rc = bps_get_event(&event, 0);
+
+    ASSERT(BPS_SUCCESS == rc);
+    if (rc != BPS_SUCCESS) {
+        fprintf(stderr, "BPS error getting an event: %d\n", errno);
+        return;
+    }
+
+    navigator_request_events(0);
+    navigator_orientation_check_response(event, true);
+
+    char * id;
+    navigator_set_orientation(NAVIGATOR_RIGHT_UP, &id);
+
+	bbutil_rotate_screen_surface(90);
+	navigator_done_orientation(event);
+	navigator_rotation_lock(true);
+
+//	navigator_rotation_lock(false);
+//
+//    bps_event_t* event = NULL;
+//    int rc = bps_get_event(&event, 0);
+//
+//    ASSERT(BPS_SUCCESS == rc);
+//    if (rc != BPS_SUCCESS) {
+//        fprintf(stderr, "BPS error getting an event: %d\n", errno);
+//        return;
+//    }
+//
+////    if (event == NULL) {
+////        // No more events in the queue
+////    	fprintf(stderr, "No event: %d\n", errno);
+////        return;
+////    }
+//
+//    char * id;
+//
+//	navigator_request_events(0);
+//	navigator_orientation_check_response(event, true);
+//	navigator_set_orientation(NAVIGATOR_RIGHT_UP, &id);
+//	//screen_set_window_property_iv();
+//
+//
+//	switch (i)
+//	{
+//	case 0:
+//		//navigator_set_orientation(NAVIGATOR_RIGHT_UP, &id);
+//		break;
+//
+//	case 1:
+//		break;
+//
+//	case 2: break;
+//
+//	case 3:
+//		break;
+//	}
+//	navigator_done_orientation(event);
 }
 
 int platform::getDPI() const {
