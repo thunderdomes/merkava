@@ -59,6 +59,8 @@ platform::platform()
 	user_name = "";
 	user_pw = "";
 
+	m_orientation = 0;
+
 	// nouvelle: https://202.53.249.2:8443/
 	server1 = "https://202.53.249.2:8443";
 	server2 = "172.31.2.78:8443";
@@ -211,52 +213,28 @@ void platform::setOrientation(int i)
     navigator_orientation_check_response(event, true);
 
     char * id;
-    navigator_set_orientation(NAVIGATOR_RIGHT_UP, &id);
 
-	bbutil_rotate_screen_surface(90);
+
+    m_orientation = i;
+
+    if (m_orientation == 1)
+    {
+    	navigator_set_orientation(NAVIGATOR_RIGHT_UP, &id);
+    	bbutil_rotate_screen_surface(90);
+    }
+    else
+    {
+    	navigator_set_orientation(NAVIGATOR_PORTRAIT, &id);
+    	bbutil_rotate_screen_surface(0);
+    }
 	navigator_done_orientation(event);
 	navigator_rotation_lock(true);
 
-//	navigator_rotation_lock(false);
-//
-//    bps_event_t* event = NULL;
-//    int rc = bps_get_event(&event, 0);
-//
-//    ASSERT(BPS_SUCCESS == rc);
-//    if (rc != BPS_SUCCESS) {
-//        fprintf(stderr, "BPS error getting an event: %d\n", errno);
-//        return;
-//    }
-//
-////    if (event == NULL) {
-////        // No more events in the queue
-////    	fprintf(stderr, "No event: %d\n", errno);
-////        return;
-////    }
-//
-//    char * id;
-//
-//	navigator_request_events(0);
-//	navigator_orientation_check_response(event, true);
-//	navigator_set_orientation(NAVIGATOR_RIGHT_UP, &id);
-//	//screen_set_window_property_iv();
-//
-//
-//	switch (i)
-//	{
-//	case 0:
-//		//navigator_set_orientation(NAVIGATOR_RIGHT_UP, &id);
-//		break;
-//
-//	case 1:
-//		break;
-//
-//	case 2: break;
-//
-//	case 3:
-//		break;
-//	}
-//	navigator_done_orientation(event);
+}
+
+int platform::getOrientation()
+{
+	return m_orientation;
 }
 
 int platform::getDPI() const {

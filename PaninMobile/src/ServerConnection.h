@@ -20,6 +20,7 @@ public:
 	virtual ~ServerConnection();
 
 	bool init(bool bInit);
+	CURLcode doLogin(const char * url, std::ostream& os, long timeout);
 	CURLcode doHttpPost(const std::string& url, std::ostream& os, long timeout);
 	CURLcode doHttpGet (const char * url, std::ostream& os, long timeout);
 	CURLcode doHttpPut (const std::string& url, long timeout);
@@ -28,6 +29,7 @@ private:
 	CURL * m_curl_handle;
 
 	std::ostringstream stream;
+	std::ostringstream stream_login;
 
 };
 

@@ -68,6 +68,8 @@ public:
 
 	void setOrientation(int i);
 
+	int getOrientation();
+
 	void getSize(float& width, float& height) const;
 
 	int getDPI() const;
@@ -104,7 +106,7 @@ private:
 	bool m_buttonPressed;
 	bool m_keyboard_visible;
 
-
+	int m_orientation;
 	DateTime * m_DateTime;
 
 };

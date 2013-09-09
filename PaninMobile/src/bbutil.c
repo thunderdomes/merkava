@@ -987,7 +987,6 @@ int bbutil_rotate_screen_surface(int angle) {
             break;
     }
 
-    fprintf(stderr, "ukuran layar: %d, %d.\n", size[0], size[1]);
     if (!skip) {
         rc = eglMakeCurrent(egl_disp, NULL, NULL, NULL);
         if (rc != EGL_TRUE) {

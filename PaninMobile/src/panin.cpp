@@ -37,22 +37,40 @@ _loginStatus loginStatus;
 
 ServerConnection * myServerConnection;
 std::ostringstream osStream;
+std::ostringstream osStreamLogin;
+
 
 namespace paninMobile {
 
 panin::panin(platform &myPlatform) :
-		PlatformEventHandler(), m_platform(myPlatform), m_shutdown(false), m_state(
-				HOME), m_bZ10(false), m_bShowMenu(false), m_bShowSubmenuTC(
-				false), m_bShowInfo(false), m_bShowBuy(false), m_bShowSell(
-				false), m_bShowHomeInfo(false), m_bShowHomeSetel(false), m_bUsernameFocus(
-				false), m_bPasswordFocus(false), m_bLogged(false) {
+		PlatformEventHandler(), m_platform(myPlatform),
+		m_shutdown(false),
+		m_state(HOME),
+		m_bZ10(false),
+		m_bShowMenu(false),
+		m_bShowSubmenuTC(false),
+		m_bShowSubmenuInformation(false),
+		m_bShowInfo(false),
+		m_bShowBuy(false),
+		m_bShowSell(false),
+		m_bAccountIdFocused(false),
+		m_bStockTradeFocused(false),
+		m_bPriceFocused(false),
+		m_bVolumeFocused(false),
+		m_bVirtualKeyboardShow(false),
+		m_bShowHomeInfo(false),
+		m_bShowHomeSetel(false),
+		m_bUsernameFocus(false),
+		m_bPasswordFocus(false),
+		m_bLogged(false)
+{
 	// TODO Auto-generated constructor stub
 	m_platform.setEventHandler(this);
 	m_platform.getSize(m_screenWidth, m_screenHeight);
 	fprintf(stderr, "width, height: %f, %f\n", m_screenWidth, m_screenHeight);
 
 	m_footerHeight = 100.0f;
-	m_headerHeight = m_screenHeight - 135.0f;
+	m_headerHeight = m_screenHeight - 80.0f;
 
 	int dpi = m_platform.getDPI();
 	int point_size = (int) (15.0f / ((float) dpi / 170.0f));
@@ -349,6 +367,7 @@ panin::panin(platform &myPlatform) :
 					+ 2.0f);
 
 	m_buysell_textfield_bg.load("app/native/assets/umum/table_bg.png");
+	m_buysell_textfield_bg_focus.load("app/native/assets/umum/table_bg_focus.png");
 
 	m_textfield_bg.load("app/native/assets/umum/textfield_bg.png");
 	m_dialog_bg.load("app/native/assets/umum/dialog_bg.png");
@@ -698,42 +717,49 @@ panin::panin(platform &myPlatform) :
 	m_cpy_caption.load("app/native/assets/companies/cpy_caption.png");
 	m_cpy_caption.setPosition(m_latar.PosX() + 27.0f,
 			m_headerHeight - m_cpy_caption.Height() - 20.0f);
-//	m_cpy_company1.load("app/native/assets/companies/company1.png");
-//	m_cpy_company2.load("app/native/assets/companies/company2.png");
-//	m_cpy_financial1.load("app/native/assets/companies/m_cpy_financial1.png");
-//	m_cpy_financial2.load("app/native/assets/companies/m_cpy_financial2.png");
-//	m_cpy_ratio1.load("app/native/assets/companies/m_cpy_ratio1.png");
-//	m_cpy_ratio2.load("app/native/assets/companies/m_cpy_ratio2.png");
+	m_cpy_company.load("app/native/assets/companies/company.png");
+	m_cpy_company1.load("app/native/assets/companies/company1.png");
+	m_cpy_company2.load("app/native/assets/companies/company2.png");
+	m_cpy_financial.load("app/native/assets/companies/finance.png");
+	m_cpy_financial1.load("app/native/assets/companies/financial1.png");
+	m_cpy_financial2.load("app/native/assets/companies/financial2.png");
+	m_cpy_ratio.load("app/native/assets/companies/ratio.png");
+	m_cpy_ratio1.load("app/native/assets/companies/ratio1.png");
+	m_cpy_ratio2.load("app/native/assets/companies/ratio2.png");
 
-//	m_cpy_btn_company.regular = &m_cpy_company1;
-//	m_cpy_btn_company.pressed = &m_cpy_company1;
-//	m_cpy_btn_company.sizeX = m_cpy_company1.Width();
-//	m_cpy_btn_company.sizeY = m_cpy_company1.Height();
-//	m_cpy_btn_company.font = m_font;
-//	m_cpy_btn_company.text = "";
-//	m_cpy_btn_company.isPressed = false;
-//	m_cpy_btn_company.isEnabled = true;
-//	m_cpy_btn_company.setPosition(m_sw_btn_cons.posX + m_sw_btn_cons.sizeX + 10.0f,	m_sw_btn_cons.posY);
+	m_cpy_company.setPosition(m_cpy_caption.PosX(), m_cpy_caption.PosY());
+	m_cpy_financial.setPosition(m_cpy_company.PosX(), m_cpy_company.PosY());
+	m_cpy_ratio.setPosition(m_cpy_company.PosX(), m_cpy_company.PosY());
 
-//	m_cpy_btn_financial.regular = &m_cpy_financial1;
-//	m_cpy_btn_financial.pressed = &m_cpy_financial1;
-//	m_cpy_btn_financial.sizeX = m_cpy_financial1.Width();
-//	m_cpy_btn_financial.sizeY = m_cpy_financial1.Height();
-//	m_cpy_btn_financial.font = m_font;
-//	m_cpy_btn_financial.text = "";
-//	m_cpy_btn_financial.isPressed = false;
-//	m_cpy_btn_financial.isEnabled = true;
-//	m_cpy_btn_financial.setPosition(m_sw_btn_cons.posX + m_cpy_financial1.sizeX + 10.0f,	m_sw_btn_cons.posY);
+	m_cpy_btn_company.regular = &m_cpy_company1;
+	m_cpy_btn_company.pressed = &m_cpy_company1;
+	m_cpy_btn_company.sizeX = m_cpy_company1.Width();
+	m_cpy_btn_company.sizeY = m_cpy_company1.Height();
+	m_cpy_btn_company.font = m_font;
+	m_cpy_btn_company.text = "";
+	m_cpy_btn_company.isPressed = false;
+	m_cpy_btn_company.isEnabled = true;
+	m_cpy_btn_company.setPosition(m_sw_btn_cons.posX + m_sw_btn_cons.sizeX + 10.0f,	m_sw_btn_cons.posY);
 
-//	m_cpy_btn_ratio.regular = &m_cpy_ratio1;
-//	m_cpy_btn_ratio.pressed = &m_cpy_ratio1;
-//	m_cpy_btn_ratio.sizeX = m_cpy_ratio1.Width();
-//	m_cpy_btn_ratio.sizeY = m_cpy_ratio1.Height();
-//	m_cpy_btn_ratio.font = m_font;
-//	m_cpy_btn_ratio.text = "";
-//	m_cpy_btn_ratio.isPressed = false;
-//	m_cpy_btn_ratio.isEnabled = true;
-//	m_cpy_btn_ratio.setPosition(m_sw_btn_cons.posX + m_cpy_ratio1.sizeX + 10.0f,	m_sw_btn_cons.posY);
+	m_cpy_btn_financial.regular = &m_cpy_financial1;
+	m_cpy_btn_financial.pressed = &m_cpy_financial1;
+	m_cpy_btn_financial.sizeX = m_cpy_financial1.Width();
+	m_cpy_btn_financial.sizeY = m_cpy_financial1.Height();
+	m_cpy_btn_financial.font = m_font;
+	m_cpy_btn_financial.text = "";
+	m_cpy_btn_financial.isPressed = false;
+	m_cpy_btn_financial.isEnabled = true;
+	m_cpy_btn_financial.setPosition(m_sw_btn_cons.posX + m_cpy_btn_financial.sizeX + 10.0f,	m_sw_btn_cons.posY);
+
+	m_cpy_btn_ratio.regular = &m_cpy_ratio1;
+	m_cpy_btn_ratio.pressed = &m_cpy_ratio1;
+	m_cpy_btn_ratio.sizeX = m_cpy_ratio1.Width();
+	m_cpy_btn_ratio.sizeY = m_cpy_ratio1.Height();
+	m_cpy_btn_ratio.font = m_font;
+	m_cpy_btn_ratio.text = "";
+	m_cpy_btn_ratio.isPressed = false;
+	m_cpy_btn_ratio.isEnabled = true;
+	m_cpy_btn_ratio.setPosition(m_sw_btn_cons.posX + m_cpy_btn_ratio.sizeX + 10.0f,	m_sw_btn_cons.posY);
 
 	//corporate action
 	fprintf(stderr, "Load corporate action.\n");
@@ -744,12 +770,16 @@ panin::panin(platform &myPlatform) :
 	m_ca_dividen2.load("app/native/assets/corporate_action/devidend2.png");
 	m_ca_bonus1.load("app/native/assets/corporate_action/bonus1.png");
 	m_ca_bonus2.load("app/native/assets/corporate_action/bonus2.png");
+	m_ca_bonus3.load("app/native/assets/corporate_action/bonus3.png");
 	m_ca_split1.load("app/native/assets/corporate_action/split1.png");
 	m_ca_split2.load("app/native/assets/corporate_action/split2.png");
+	m_ca_split3.load("app/native/assets/corporate_action/split3.png");
 	m_ca_warrant1.load("app/native/assets/corporate_action/warrant1.png");
 	m_ca_warrant2.load("app/native/assets/corporate_action/warrant2.png");
+	m_ca_warrant3.load("app/native/assets/corporate_action/warrant3.png");
 	m_ca_rights1.load("app/native/assets/corporate_action/rights1.png");
 	m_ca_rights2.load("app/native/assets/corporate_action/rights2.png");
+	m_ca_rights3.load("app/native/assets/corporate_action/rights3.png");
 	m_ca_rups1.load("app/native/assets/corporate_action/rups1.png");
 	m_ca_rups2.load("app/native/assets/corporate_action/rups2.png");
 
@@ -813,6 +843,10 @@ panin::panin(platform &myPlatform) :
 	m_ca_btn_rups.isEnabled = true;
 	m_ca_btn_rups.setPosition(m_ca_btn_rights.posX + m_ca_btn_rights.sizeX + 10.0f, m_ca_btn_rights.posY);
 
+	// portfolio
+	fprintf(stderr, "Load portfolio.\n");
+	m_ca_caption.load("app/native/assets/portfolio/pf_caption.png");
+
 	// my account
 	fprintf(stderr, "Load my account.\n");
 	m_ac_password.load("app/native/assets/password/pw_caption.png");
@@ -824,10 +858,10 @@ panin::panin(platform &myPlatform) :
 	fprintf(stderr, "Load menu.\n");
 	m_menu_bg.load("app/native/assets/menu/menu_bg.png");
 	//m_menu_bg.setPosition(-m_menu_bg.Width(), m_screenHeight - m_menu_bg.Height());
-	m_menu_bg.setPosition(0.0f, m_screenHeight - m_menu_bg.Height() - 140.0f);
+	m_menu_bg.setPosition(0.0f, m_header_bar_bg.PosY() - m_menu_bg.Height());
 	m_menu_acc_number.load("app/native/assets/menu/acc_number.png");
 	m_menu_acc_number.setPosition(m_menu_bg.PosX(),
-			m_screenHeight - m_menu_acc_number.Height() - 50.0f);
+			m_header_bar_bg.PosY() - m_menu_acc_number.Height());
 	m_menu_tc_bg.load("app/native/assets/menu/menu_tc_bg.png");
 	m_menu_tc_bg.setPosition(m_menu_bg.PosX(),
 			m_menu_acc_number.PosY() - m_menu_tc_bg.Height());
@@ -847,6 +881,8 @@ panin::panin(platform &myPlatform) :
 	m_menu_tc_broker_summary.load(
 			"app/native/assets/menu/tc_broker_summary.png");
 	m_menu_tc_non_regular.load("app/native/assets/menu/tc_non_regular.png");
+	m_menu_i_news.load("app/native/assets/menu/i_news.png");
+	m_menu_i_compinfo.load("app/native/assets/menu/i_compinfo.png");
 
 	m_menu_trade_central_p.load("app/native/assets/menu/trade_central_p.png");
 	m_menu_charts_p.load("app/native/assets/menu/charts_p.png");
@@ -864,6 +900,9 @@ panin::panin(platform &myPlatform) :
 	m_menu_tc_broker_summary_p.load(
 			"app/native/assets/menu/tc_broker_summary_p.png");
 	m_menu_tc_non_regular_p.load("app/native/assets/menu/tc_non_regular_p.png");
+	m_menu_i_news_p.load("app/native/assets/menu/i_news_p.png");
+	m_menu_i_compinfo_p.load("app/native/assets/menu/i_compinfo_p.png");
+
 	// button menu trade central
 	m_menu_btn_trade_central.regular = &m_menu_trade_central;
 	m_menu_btn_trade_central.pressed = &m_menu_trade_central;
@@ -1031,6 +1070,28 @@ panin::panin(platform &myPlatform) :
 	m_menu_tc_btn_non_regular.setPosition(m_menu_bg.PosX(),
 			m_menu_tc_btn_broker_summary.posY - m_menu_tc_non_regular.Height());
 
+	m_menu_i_btn_news.regular = &m_menu_i_news;
+	m_menu_i_btn_news.pressed = &m_menu_i_news_p;
+	m_menu_i_btn_news.sizeX = m_menu_i_news.Width();
+	m_menu_i_btn_news.sizeY = m_menu_i_news.Height();
+	m_menu_i_btn_news.font = m_font;
+	m_menu_i_btn_news.text = "";
+	m_menu_i_btn_news.isPressed = false;
+	m_menu_i_btn_news.isEnabled = true;
+	m_menu_i_btn_news.setPosition(m_menu_bg.PosX(),
+			m_menu_btn_informations.posY - m_menu_i_news.Height());
+
+	m_menu_i_btn_compinfo.regular = &m_menu_i_compinfo;
+	m_menu_i_btn_compinfo.pressed = &m_menu_i_compinfo_p;
+	m_menu_i_btn_compinfo.sizeX = m_menu_i_compinfo.Width();
+	m_menu_i_btn_compinfo.sizeY = m_menu_i_compinfo.Height();
+	m_menu_i_btn_compinfo.font = m_font;
+	m_menu_i_btn_compinfo.text = "";
+	m_menu_i_btn_compinfo.isPressed = false;
+	m_menu_i_btn_compinfo.isEnabled = true;
+	m_menu_i_btn_compinfo.setPosition(m_menu_bg.PosX(),
+			m_menu_i_btn_news.posY - m_menu_i_compinfo.Height());
+
 	// password
 	m_pw_caption.load("app/native/assets/password/pw_caption.png");
 	m_pw_caption.setPosition(m_latar.PosX() + 27.0f,
@@ -1047,14 +1108,14 @@ panin::panin(platform &myPlatform) :
 	m_pw_btn_save.isEnabled = true;
 	m_pw_btn_save.setPosition(0.0f, 0.0f);
 
-	// portofolio
-	m_pf_caption.load("app/native/assets/portofolio/pf_caption.png");
+	// portfolio
+	m_pf_caption.load("app/native/assets/portfolio/pf_caption.png");
 	m_pf_caption.setPosition(m_latar.PosX() + 27.0f,
 			m_headerHeight - m_pf_caption.Height() - 20.0f);
-	m_pf_table_title.load("app/native/assets/portofolio/pf_table_title.png");
+	m_pf_table_title.load("app/native/assets/portfolio/pf_table_title.png");
 	m_pf_table_title.setPosition(m_latar.PosX() + 0.0f,
-			m_pf_caption.PosY() - m_pf_table_title.Height() - 20.0f);
-	m_pf_acc_number.load("app/native/assets/portofolio/acc_no.png");
+			m_pf_caption.PosY() - m_pf_table_title.Height() - 160.0f);
+	m_pf_acc_number.load("app/native/assets/portfolio/acc_no.png");
 	m_pf_acc_number.setPosition(m_latar.PosX() + 0.0f, m_screenHeight - 262.0f);
 
 	// research
@@ -1066,23 +1127,24 @@ panin::panin(platform &myPlatform) :
 	m_chart_bg.load("app/native/assets/charts/chart_bg.png");
 	m_chart_bg.setPosition(0.0f, 0.0f);
 	m_chart_post_bar.load("app/native/assets/charts/post_2.png");
-	m_chart_post_bar.setPosition(m_chart_bg.PosY() + m_screenWidth - m_chart_post_bar.Height() - 2.0f, m_chart_bg.PosX());
+	//m_chart_post_bar.setPosition(m_chart_bg.PosX(), m_chart_bg.PosY() + m_screenHeight - m_chart_post_bar.Height() - 2.0f);
+	m_chart_post_bar.setPosition(m_latar.PosX(), m_headerHeight);
 	m_chart_caption_bottom.load("app/native/assets/charts/chart_caption_bottom.png");
-	m_chart_caption_bottom.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_caption_bottom.setPosition(m_chart_bg.PosX() +20.0f, 27.0f);
 	m_chart_text_bg.load("app/native/assets/charts/text_bg.png");
-	m_chart_text_bg.setPosition(m_chart_bg.PosY() +80.0f, 570.0f);
+	m_chart_text_bg.setPosition(m_chart_bg.PosX() +80.0f, 570.0f);
 	m_icon_search.load("app/native/assets/charts/icon_search.png");
-	//m_icon_search.setPosition(m_chart_text_bg.PosY() + m_chart_text_bg.Width() - m_icon_search.Width(), m_chart_text_bg.PosX());
+	m_icon_search.setPosition(m_chart_text_bg.PosX() + m_chart_text_bg.Width() - m_icon_search.Width(), m_chart_text_bg.PosY());
 	m_chart_1day_big.load("app/native/assets/charts/1day_big.png");
-	m_chart_1day_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_1day_big.setPosition(m_chart_bg.PosX() +20.0f, 27.0f);
 	m_chart_1week_big.load("app/native/assets/charts/1week_big.png");
-	m_chart_1week_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_1week_big.setPosition(m_chart_bg.PosX() +20.0f, 27.0f);
 	m_chart_1month_big.load("app/native/assets/charts/1month_big.png");
-	m_chart_1month_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_1month_big.setPosition(m_chart_bg.PosX() +20.0f, 27.0f);
 	m_chart_1year_big.load("app/native/assets/charts/1year_big.png");
-	m_chart_1year_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_1year_big.setPosition(m_chart_bg.PosX() +20.0f, 27.0f);
 	m_chart_3year_big.load("app/native/assets/charts/3year_big.png");
-	m_chart_3year_big.setPosition(m_chart_bg.PosY() +20.0f, 27.0f);
+	m_chart_3year_big.setPosition(m_chart_bg.PosX() +20.0f, 27.0f);
 	m_chart_1day_small.load("app/native/assets/charts/1day_small.png");
 	m_chart_1week_small.load("app/native/assets/charts/1week_small.png");
 	m_chart_1month_small.load("app/native/assets/charts/1month_small.png");
@@ -1097,7 +1159,7 @@ panin::panin(platform &myPlatform) :
 	m_chart_btn_search.text = "";
 	m_chart_btn_search.isPressed = false;
 	m_chart_btn_search.isEnabled = true;
-	m_chart_btn_search.setPosition(m_chart_text_bg.PosY() + m_chart_text_bg.Width() - m_icon_search.Width(), m_chart_text_bg.PosX());
+	m_chart_btn_search.setPosition(m_chart_text_bg.PosX() + m_chart_text_bg.Width() - m_icon_search.Width(), m_chart_text_bg.PosY());
 
 	m_chart_btn_1day.regular = &m_chart_1day_small;
 	m_chart_btn_1day.pressed = &m_chart_1day_small;
@@ -1117,7 +1179,7 @@ panin::panin(platform &myPlatform) :
 	m_chart_btn_1week.text = "";
 	m_chart_btn_1week.isPressed = false;
 	m_chart_btn_1week.isEnabled = true;
-	m_chart_btn_1week.setPosition(m_chart_btn_1day.posY, m_chart_btn_1day.posX);
+	m_chart_btn_1week.setPosition(m_chart_btn_1day.posX, m_chart_btn_1day.posY);
 
 	m_chart_btn_1month.regular = &m_chart_1month_small;
 	m_chart_btn_1month.pressed = &m_chart_1month_small;
@@ -1127,7 +1189,7 @@ panin::panin(platform &myPlatform) :
 	m_chart_btn_1month.text = "";
 	m_chart_btn_1month.isPressed = false;
 	m_chart_btn_1month.isEnabled = true;
-	m_chart_btn_1month.setPosition(m_chart_btn_1day.posY + m_chart_btn_1day.sizeX + 10.0f, m_chart_btn_1day.posX);
+	m_chart_btn_1month.setPosition(m_chart_btn_1day.posX + m_chart_btn_1day.sizeX + 10.0f, m_chart_btn_1day.posY);
 
 	m_chart_btn_1year.regular = &m_chart_1year_small;
 	m_chart_btn_1year.pressed = &m_chart_1year_small;
@@ -1137,7 +1199,7 @@ panin::panin(platform &myPlatform) :
 	m_chart_btn_1year.text = "";
 	m_chart_btn_1year.isPressed = false;
 	m_chart_btn_1year.isEnabled = true;
-	m_chart_btn_1year.setPosition(m_chart_btn_1month.posY + m_chart_btn_1month.sizeX + 10.0f, m_chart_btn_1month.posX);
+	m_chart_btn_1year.setPosition(m_chart_btn_1month.posX + m_chart_btn_1month.sizeX + 10.0f, m_chart_btn_1month.posY);
 
 	m_chart_btn_3year.regular = &m_chart_3year_small;
 	m_chart_btn_3year.pressed = &m_chart_3year_small;
@@ -1147,13 +1209,14 @@ panin::panin(platform &myPlatform) :
 	m_chart_btn_3year.text = "";
 	m_chart_btn_3year.isPressed = false;
 	m_chart_btn_3year.isEnabled = true;
-	m_chart_btn_3year.setPosition(m_chart_btn_1year.posY + m_chart_btn_1year.sizeX + 10.0f, m_chart_btn_1year.posX);
+	m_chart_btn_3year.setPosition(m_chart_btn_1year.posX + m_chart_btn_1year.sizeX + 10.0f, m_chart_btn_1year.posY);
 
 
 
 
 
-	m_state = HOME;
+	//m_state = HOME;
+	m_state = RUNNING_TRADE;
 	m_ePosX = 0.0f;
 	m_ePosY = 0.0f;
 	m_bMenuShowAnimation = false;
@@ -1178,6 +1241,9 @@ panin::panin(platform &myPlatform) :
 	m_sTransFee = "";
 	m_sPayable = "";
 
+	companyInfoFlag = 0;		// 0: company, 1: financial, 2: ratio.
+	corporateActionFlag = 0;	// 0: devidend, 1: bonus, 2: split, 3: warrant, 4: rights, 5 rups.
+
 	loginStatus = NOT_SIGNIN;
 
 	fprintf(stderr, "Finish instantiate panin.\n");
@@ -1188,6 +1254,28 @@ panin::panin(platform &myPlatform) :
 //}
 
 void panin::enable2D() {
+	//Initialize GL for 2D rendering
+	glViewport(0, 0, static_cast<int>(m_screenWidth),
+			static_cast<int>(m_screenHeight));
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glOrthof(0.0f, m_screenWidth / m_screenHeight, 0.0f, 1.0f, -1.0f, 1.0f);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	//Set world coordinates to coincide with screen pixels
+	glScalef(1.0f / m_screenHeight, 1.0f / m_screenHeight, 1.0f);
+	glClearColor(0.775f, 0.775f, 0.775f, 1.0f);
+
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void panin::enable2D_land() {
 	//Initialize GL for 2D rendering
 	glViewport(0, 0, static_cast<int>(m_screenWidth),
 			static_cast<int>(m_screenHeight));
@@ -1238,74 +1326,84 @@ void panin::run() {
 			fprintf(stderr, "eka at loading.");
 			//update();
 			//renderGame();
-					break;
+			break;
 
-					case RUNNING_TRADE:
-					update();
-					renderRunningTrade();
-					break;
+		case RUNNING_TRADE:
+			update();
+			renderRunningTrade();
+			break;
 
-					case STOCK_WATCH:
-					update();
-					renderStockWatch();
-					break;
+		case STOCK_WATCH:
+			update();
+			renderStockWatch();
+			break;
 
-					case COMPLETE_BOOK:
-					update();
-					renderCompleteBook();
-					break;
+		case COMPLETE_BOOK:
+			update();
+			renderCompleteBook();
+			break;
 
-					case STOCK_QUOTE:
-					update();
-					renderStockQuote();
-					break;
+		case STOCK_QUOTE:
+			update();
+			renderStockQuote();
+			break;
 
-					case BROKER_QUOTE:
-					update();
-					renderBrokerSummary();
-					break;
+		case BROKER_QUOTE:
+			update();
+			renderBrokerSummary();
+			break;
 
-					case STOCK_SUMMARY:
-					update();
-					renderStockSummary();
-					break;
+		case STOCK_SUMMARY:
+			update();
+			renderStockSummary();
+			break;
 
-					case BROKER_SUMMARY:
-					update();
-					renderBrokerSummary();
-					break;
+		case BROKER_SUMMARY:
+			update();
+			renderBrokerSummary();
+			break;
 
-					case NON_REGULAR:
-					update();
-					renderNonRegular();
-					break;
+		case NON_REGULAR:
+			update();
+			renderNonRegular();
+			break;
 
-					case CHARTS:
-					update();
-					renderCharts();
-					break;
+		case CHARTS:
+			update();
+			renderCharts();
+			break;
 
-					case INFORMATIONS:
-					update();
-					renderInformations();
-					break;
+		case INFORMATIONS:
+			update();
+			renderInformations();
+			break;
 
-					case PORTFOLIO:
-					update();
-					renderPortfolio();
-					break;
+		case NEWS:
+			update();
+			renderNews();
+			break;
 
-					case ORDER_TRADE:
-					update();
-					renderOrderTrade();
-					break;
+		case COMPANY_INFO:
+			update();
+			renderCompanyInfo();
+			break;
 
-					default:
-					fprintf(stderr, "eka at default.");
-					break;
-				}
-			}
+		case PORTFOLIO:
+			update();
+			renderPortfolio();
+			break;
+
+		case ORDER_TRADE:
+			update();
+			renderOrderTrade();
+			break;
+
+		default:
+			fprintf(stderr, "eka at default.");
+			break;
 		}
+	}
+}
 
 void panin::update() {
 	if (m_bMenuShowAnimation) {
@@ -1328,6 +1426,52 @@ void panin::update() {
 
 	m_ePosX = m_fmenu_animation;
 
+}
+
+void panin::updateForLandscape() {
+	m_chart_post_bar.setPosition(m_latar.PosX(), m_screenHeight - m_chart_post_bar.Height() -2.0f);
+	m_btn_info.setPosition(
+			m_chart_post_bar.PosX() + m_screenWidth - 1.5 * m_btn_info.sizeX,
+			m_chart_post_bar.PosY()
+					+ (m_chart_post_bar.Height() - m_btn_info.sizeY) / 2);
+
+	m_btn_menu.setPosition(m_chart_post_bar.PosX() + 0.5 * m_btn_menu.sizeX,
+			m_chart_post_bar.PosY()
+						+ (m_chart_post_bar.Height() - m_btn_menu.sizeY) / 2);
+
+	m_menu_bg.setPosition(0.0f, m_chart_post_bar.PosY() - m_menu_bg.Height());
+
+	m_menu_acc_number.setPosition(m_menu_bg.PosX(),
+			m_chart_post_bar.PosY() - m_menu_acc_number.Height());
+
+	m_menu_tc_bg.setPosition(m_menu_bg.PosX(),
+			m_menu_acc_number.PosY() - m_menu_tc_bg.Height());
+
+	m_menu_btn_trade_central.setPosition(m_menu_bg.PosX(),
+			m_menu_acc_number.PosY() - m_menu_trade_central.Height());
+}
+
+void panin::updateForPotrait() {
+
+	m_btn_info.setPosition(
+			m_header_bar_bg.PosX() + m_screenWidth - 1.5 * m_btn_info.sizeX,
+			m_header_bar_bg.PosY()
+					+ (m_header_bar_bg.Height() - m_btn_info.sizeY) / 2);
+
+	m_btn_menu.setPosition(m_header_bar_bg.PosX() + 0.5 * m_btn_menu.sizeX,
+				m_header_bar_bg.PosY()
+						+ (m_header_bar_bg.Height() - m_btn_menu.sizeY) / 2);
+
+	m_menu_bg.setPosition(0.0f, m_header_bar_bg.PosY() - m_menu_bg.Height());
+
+	m_menu_acc_number.setPosition(m_menu_bg.PosX(),
+			m_header_bar_bg.PosY() - m_menu_acc_number.Height());
+
+	m_menu_tc_bg.setPosition(m_menu_bg.PosX(),
+			m_menu_acc_number.PosY() - m_menu_tc_bg.Height());
+
+	m_menu_btn_trade_central.setPosition(m_menu_bg.PosX(),
+			m_menu_acc_number.PosY() - m_menu_trade_central.Height());
 }
 
 void panin::updateHome() {
@@ -1494,6 +1638,7 @@ void panin::renderHomeInfo() {
 
 void panin::renderMenu() {
 	m_menu_bg.draw();
+	m_menu_acc_number.draw();
 	m_menu_btn_trade_central.draw();
 	float p1 = m_menu_btn_trade_central.posY;
 	if (m_bShowSubmenuTC) {
@@ -1514,8 +1659,15 @@ void panin::renderMenu() {
 	m_menu_btn_informations.setPosition(m_menu_btn_informations.posX,
 			m_menu_btn_charts.posY - m_menu_btn_informations.sizeY);
 	m_menu_btn_informations.draw();
+	p1 = m_menu_btn_informations.posY;
+	if (m_bShowSubmenuInformation)
+	{
+		m_menu_i_btn_news.draw();
+		m_menu_i_btn_compinfo.draw();
+		p1 = m_menu_i_btn_compinfo.posY;
+	}
 	m_menu_btn_portfolio.setPosition(m_menu_btn_portfolio.posX,
-			m_menu_btn_informations.posY - m_menu_btn_portfolio.sizeY);
+			p1 - m_menu_btn_portfolio.sizeY);
 	m_menu_btn_portfolio.draw();
 	m_menu_btn_order_trade.setPosition(m_menu_btn_order_trade.posX,
 			m_menu_btn_portfolio.posY - m_menu_btn_order_trade.sizeY);
@@ -2223,7 +2375,14 @@ void panin::renderCharts() {
 
 	m_chart_bg.draw();
 	m_chart_caption_bottom.draw();
-	m_chart_post_bar.draw();
+	//m_chart_post_bar.draw();
+	m_chart_text_bg.draw();
+	m_chart_btn_search.draw();
+	m_chart_btn_1day.draw();
+	m_chart_btn_1week.draw();
+	m_chart_btn_1month.draw();
+	m_chart_btn_1year.draw();
+	m_chart_btn_3year.draw();
 
 	addHeader();
 
@@ -2242,8 +2401,91 @@ void panin::renderCharts() {
 		renderMenu();
 	}
 
+	// latar chart
+	GLfloat vertices[8];
+    vertices[0] = -0.25f;
+    vertices[1] = -0.25f;
+
+    vertices[2] = 0.25f;
+    vertices[3] = -0.25f;
+
+    vertices[4] = -0.25f;
+    vertices[5] = 0.25f;
+
+    vertices[6] = 0.25f;
+    vertices[7] = 0.25f;
+
+    GLfloat colors[16];
+    colors[0] = 1.0f;
+    colors[1] = 0.0f;
+    colors[2] = 1.0f;
+    colors[3] = 1.0f;
+
+    colors[4] = 1.0f;
+    colors[5] = 1.0f;
+    colors[6] = 0.0f;
+    colors[7] = 1.0f;
+
+    colors[8] = 0.0f;
+    colors[9] = 1.0f;
+    colors[10] = 1.0f;
+    colors[11] = 1.0f;
+
+    colors[12] = 0.0f;
+    colors[13] = 1.0f;
+    colors[14] = 1.0f;
+    colors[15] = 1.0f;
+
+	GLfloat eka[4], ekav[4];
+	eka[0] = 0.0f;
+	eka[1] = 0.50f;
+	eka[2] = 1.0f;
+	eka[3] = 0.50f;
+	ekav[0] = 0.0f;
+	ekav[1] = m_screenHeight/2;
+	ekav[2] = m_screenWidth;
+	ekav[3] = m_screenHeight/2;
+
+    glVertexPointer(2, GL_FLOAT, 0, vertices);
+    glTexCoordPointer(2, GL_FLOAT, 0, vertices);
+
+    glEnableClientState(GL_COLOR_ARRAY);
+    glColorPointer(4, GL_FLOAT, 0, colors);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+//	GLfloat dashedLine[1296];
+//	float a, b;
+//	int i = 0;
+//	for (a = -0.4f; a <= 0.4f; a += 0.1f)
+//	{
+//		for (b = -0.825f; b <= 0.950f; b += 0.025f)
+//		{
+//			dashedLine[i] = a;
+//			i++;
+//			dashedLine[i] = b;
+//			i++;
+//		}
+//	}
+//
+//
+//
+//	glLineWidth(1.0f);
+//	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+//	glVertexPointer(2, GL_FLOAT, 0, dashedLine);
+//	glDrawArrays(GL_LINES, 0, 648);
+
+
+	glLineWidth(4.0f);
+	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
+	glVertexPointer(2, GL_FLOAT, 0, ekav);
+	glTexCoordPointer(2, GL_FLOAT, 0, eka);
+	glDrawArrays(GL_LINES, 0, 2);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 	m_platform.finishRender();
@@ -2284,6 +2526,128 @@ void panin::renderInformations() {
 	m_platform.finishRender();
 }
 
+void panin::renderNews() {
+	m_platform.beginRender();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	m_latar.draw();
+
+	addHeader();
+
+	addFooter();
+
+	if (m_bShowBuy) {
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell) {
+		renderSellDialog();
+	}
+
+	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation) {
+		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
+		renderMenu();
+	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+	m_platform.finishRender();
+}
+
+void panin::renderCompanyInfo() {
+	m_platform.beginRender();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	m_latar.draw();
+	m_cpy_caption.draw();
+	if (companyInfoFlag == 0)
+	{
+
+	}
+	//m_cpy_btn_financial.draw();
+	//m_cpy_btn_ratio.draw();
+
+	addHeader();
+
+	addFooter();
+
+	if (m_bShowBuy) {
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell) {
+		renderSellDialog();
+	}
+
+	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation) {
+		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
+		renderMenu();
+	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+	m_platform.finishRender();
+}
+
+void panin::renderCorporateAction() {
+	m_platform.beginRender();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	m_latar.draw();
+	m_ca_caption.draw();
+
+	m_ca_btn_dividen.draw();
+	m_ca_btn_bonus.draw();
+	m_ca_btn_split.draw();
+	m_ca_btn_warrant.draw();
+	m_ca_btn_rights.draw();
+	m_ca_btn_rups.draw();
+
+	m_ca_table_title.draw();
+
+	addHeader();
+
+	addFooter();
+
+	if (m_bShowBuy) {
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell) {
+		renderSellDialog();
+	}
+
+	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation) {
+		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
+		renderMenu();
+	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+	m_platform.finishRender();
+}
+
 void panin::renderPortfolio() {
 	m_platform.beginRender();
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -2294,6 +2658,108 @@ void panin::renderPortfolio() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_latar.draw();
+	m_pf_caption.draw();
+	m_pf_table_title.draw();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	float pos_x, pos_y, text_width, text_height;
+
+	// acc number
+	bbutil_measure_text(m_font11, m_sAccNumber.c_str(), &text_width, &text_height);
+	pos_x = m_pf_caption.PosX();
+	pos_y = m_pf_caption.PosY() - 40.0f;
+	bbutil_render_text(m_font11, m_sAccNumber.c_str(), pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	/////
+	bbutil_measure_text(m_font11, "TRADING LIMIT", &text_width, &text_height);
+	pos_x = m_pf_caption.PosX();
+	pos_y = m_pf_caption.PosY() - 40.0f;
+	bbutil_render_text(m_font11, "TRADING LIMIT", pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	pos_x += text_width + 10.0f;
+	bbutil_render_text(m_font11, m_s_pf_tradingLimit.c_str(), pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "RATIO", &text_width, &text_height);
+	pos_x = m_pf_caption.PosX();
+	pos_y = m_pf_caption.PosY() - 80.0f;
+	bbutil_render_text(m_font11, "RATIO", pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	pos_x += text_width + 10.0f;
+	bbutil_render_text(m_font11, m_s_pf_ratio.c_str(), pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "EQUITY", &text_width, &text_height);
+	pos_x = m_pf_caption.PosX();
+	pos_y = m_pf_caption.PosY() - 120.0f;
+	bbutil_render_text(m_font11, "EQUITY", pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	pos_x += text_width + 10.0f;
+	bbutil_render_text(m_font11, m_s_pf_equity.c_str(), pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "CASH / LOAN", &text_width, &text_height);
+	pos_x = m_pf_caption.PosX() + 380.0f;
+	pos_y = m_pf_caption.PosY() - 40.0f;
+	bbutil_render_text(m_font11, "CASH / LOAN", pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	pos_x += text_width + 10.0f;
+	bbutil_render_text(m_font11, m_s_pf_cashloan.c_str(), pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "STOCK VALUE", &text_width, &text_height);
+	pos_x = m_pf_caption.PosX() + 380.0f;
+	pos_y = m_pf_caption.PosY() - 80.0f;
+	bbutil_render_text(m_font11, "STOCK VALUE", pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	pos_x += text_width + 10.0f;
+	bbutil_render_text(m_font11, m_s_pf_stockValue.c_str(), pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "NETT. TODAY", &text_width, &text_height);
+	pos_x = m_pf_caption.PosX() + 380.0f;
+	pos_y = m_pf_caption.PosY() - 120.0f;
+	bbutil_render_text(m_font11, "NETT. TODAY", pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	pos_x += text_width + 10.0f;
+	bbutil_render_text(m_font11, m_s_pf_nettToday.c_str(), pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+
+
+	// nama di bawah
+	std::string sNama;
+	sNama = "NAMA : " + m_sAccName;
+	bbutil_measure_text(m_font12, sNama.c_str(), &text_width, &text_height);
+	pos_x = m_screenWidth - text_width - 20.0f;
+	pos_y = m_footerHeight + 20.0f;
+	bbutil_render_text(m_font12, sNama.c_str(), pos_x, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+
+	// isi tabel.
+	pos_y = m_pf_table_title.PosY() - 40.0f;
+	for (int i = 0; i < 30; ++i)
+	{
+//		m_s_pf_tableContent[i][0] = "1000";
+//		m_s_pf_tableContent[i][1] = "2000";
+//		m_s_pf_tableContent[i][2] = "3000";
+//		m_s_pf_tableContent[i][3] = "4000";
+//		m_s_pf_tableContent[i][4] = "5000";
+		bbutil_render_text(m_font12, "1000", m_pf_table_title.PosX() + 30.0f, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+		bbutil_render_text(m_font12, "1000", m_pf_table_title.PosX() + 140.0f, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+		bbutil_render_text(m_font12, "1000", m_pf_table_title.PosX() + 310.0f, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+		bbutil_render_text(m_font12, "1000", m_pf_table_title.PosX() + 490.0f, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+		bbutil_render_text(m_font12, "1000", m_pf_table_title.PosX() + 660.0f, pos_y, 1.0f, 1.0f,	1.0f, 1.0f);
+		pos_y -= 40.0f;
+		if (pos_y < m_footerHeight + 60.0f)
+		{
+			break;
+		}
+	}
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
 	addHeader();
 
@@ -2357,9 +2823,57 @@ void panin::renderOrderTrade() {
 	m_platform.finishRender();
 }
 
+void panin::renderResearch() {
+	m_platform.beginRender();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	m_latar.draw();
+	m_research_caption.draw();
+
+	addHeader();
+
+	m_tl_order_caption.draw();
+	m_tl_order_table_caption.draw();
+
+	addFooter();
+
+	if (m_bShowBuy) {
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell) {
+		renderSellDialog();
+	}
+
+	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation) {
+		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
+		renderMenu();
+	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+	m_platform.finishRender();
+}
+
+
+
 void panin::addHeader() {
-	m_header_bar_bg.draw();
-	m_header_post.draw();
+	if (m_platform.getOrientation() == 0)
+	{
+		m_header_bar_bg.draw();
+		m_header_post.draw();
+	}
+	else
+	{
+		m_chart_post_bar.draw();
+	}
 	m_btn_info.draw();
 	m_btn_menu.draw();
 
@@ -2422,6 +2936,23 @@ void panin::renderBuyDialog() {
 	m_buysell_textfield_bg.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 400.0f);
 	m_buysell_textfield_bg.draw();
 
+	if (m_bAccountIdFocused)
+	{
+		m_buysell_textfield_bg_focus.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 545.0f);
+	}
+	if (m_bStockTradeFocused)
+	{
+		m_buysell_textfield_bg_focus.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 495.0f);
+	}
+	if (m_bPriceFocused)
+	{
+		m_buysell_textfield_bg_focus.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 450.0f);
+	}
+	if (m_bVolumeFocused)
+	{
+		m_buysell_textfield_bg_focus.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 400.0f);
+	}
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisable(GL_TEXTURE_2D);
@@ -2434,6 +2965,15 @@ void panin::renderBuyDialog() {
 	bbutil_render_text(m_font14, "PRICE", m_buy_bg.PosX() + 130.0f, m_buy_bg.PosY() + 450.0f, 1.0f,
 			1.0f, 1.0f, 1.0f);
 	bbutil_render_text(m_font14, "VOLUME", m_buy_bg.PosX() + 130.0f, m_buy_bg.PosY() + 400.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, m_sAccID.c_str(), m_buy_bg.PosX() + 430.0f, m_buy_bg.PosY() + 545.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sStockCode.c_str(), m_buy_bg.PosX() + 430.0f, m_buy_bg.PosY() + 495.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sPrice.c_str(), m_buy_bg.PosX() + 430.0f, m_buy_bg.PosY() + 450.0f, 1.0f,
+			1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sLot.c_str(), m_buy_bg.PosX() + 430.0f, m_buy_bg.PosY() + 400.0f,
 			1.0f, 1.0f, 1.0f, 1.0f);
 
 	bbutil_render_text(m_font14, "Max Buy", m_buy_bg.PosX() + 37.0f, m_buy_bg.PosY() + 335.0f,
@@ -2471,15 +3011,31 @@ void panin::renderSellDialog() {
 	m_btn_sell_execute.draw();
 	m_btn_sell_x.draw();
 
-	m_buysell_textfield_bg.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 545.0f);
+	m_buysell_textfield_bg.setPosition(m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 545.0f);
 	m_buysell_textfield_bg.draw();
-	m_buysell_textfield_bg.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 495.0f);
+	m_buysell_textfield_bg.setPosition(m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 495.0f);
 	m_buysell_textfield_bg.draw();
-	m_buysell_textfield_bg.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 450.0f);
+	m_buysell_textfield_bg.setPosition(m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 450.0f);
 	m_buysell_textfield_bg.draw();
-	m_buysell_textfield_bg.setPosition(m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 400.0f);
+	m_buysell_textfield_bg.setPosition(m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 400.0f);
 	m_buysell_textfield_bg.draw();
 
+	if (m_bAccountIdFocused)
+	{
+		m_buysell_textfield_bg_focus.setPosition(m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 545.0f);
+	}
+	if (m_bStockTradeFocused)
+	{
+		m_buysell_textfield_bg_focus.setPosition(m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 495.0f);
+	}
+	if (m_bPriceFocused)
+	{
+		m_buysell_textfield_bg_focus.setPosition(m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 450.0f);
+	}
+	if (m_bVolumeFocused)
+	{
+		m_buysell_textfield_bg_focus.setPosition(m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 400.0f);
+	}
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisable(GL_TEXTURE_2D);
@@ -2492,6 +3048,15 @@ void panin::renderSellDialog() {
 	bbutil_render_text(m_font14, "PRICE", m_sell_bg.PosX() + 130.0f, m_sell_bg.PosY() + 450.0f, 1.0f,
 			1.0f, 1.0f, 1.0f);
 	bbutil_render_text(m_font14, "VOLUME", m_sell_bg.PosX() + 130.0f, m_sell_bg.PosY() + 400.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, m_sAccID.c_str(), m_sell_bg.PosX() + 430.0f, m_sell_bg.PosY() + 545.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sStockCode.c_str(), m_sell_bg.PosX() + 430.0f, m_sell_bg.PosY() + 495.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sPrice.c_str(), m_sell_bg.PosX() + 430.0f, m_sell_bg.PosY() + 450.0f, 1.0f,
+			1.0f, 1.0f, 1.0f);
+	bbutil_render_text(m_font14, m_sLot.c_str(), m_sell_bg.PosX() + 430.0f, m_sell_bg.PosY() + 400.0f,
 			1.0f, 1.0f, 1.0f, 1.0f);
 
 	bbutil_render_text(m_font14, "Max Buy", m_sell_bg.PosX() + 37.0f, m_sell_bg.PosY() + 335.0f,
@@ -2706,6 +3271,7 @@ void panin::onLeftRelease(float x, float y) {
 				{
 					fprintf(stderr, "Show Menu.\n");
 					//m_bMenuShowAnimation = true;
+					fprintf(stderr, "posisi m_menu_acc_number: %f, %f.\n", m_menu_acc_number.PosX(), m_menu_acc_number.PosY());
 					m_bMenuActive = true;
 				}
 				else
@@ -2737,6 +3303,11 @@ void panin::onLeftRelease(float x, float y) {
 				m_bShowBuy = true;
 				m_btn_buy.isEnabled = false;
 				m_btn_sell.isEnabled = false;
+
+				m_bAccountIdFocused = false;
+				m_bStockTradeFocused = false;
+				m_bPriceFocused = false;
+				m_bVolumeFocused = false;
 				return;
 			}
 		}
@@ -2750,12 +3321,22 @@ void panin::onLeftRelease(float x, float y) {
 				m_bShowSell = true;
 				m_btn_buy.isEnabled = false;
 				m_btn_sell.isEnabled = false;
+
+				m_bAccountIdFocused = false;
+				m_bStockTradeFocused = false;
+				m_bPriceFocused = false;
+				m_bVolumeFocused = false;
 				return;
 			}
 		}
 
 		if (m_bShowSell)
 		{
+			m_bAccountIdFocused = false;
+			m_bStockTradeFocused = false;
+			m_bPriceFocused		= false;
+			m_bVolumeFocused	= false;
+
 			if (m_btn_sell_execute.isWithin(pX, pY))
 			{
 				fprintf(stderr, "button sell execute is released.\n");
@@ -2777,10 +3358,59 @@ void panin::onLeftRelease(float x, float y) {
 				m_btn_buy.isEnabled = true;
 				return;
 			}
+
+			if (periksaPointer(pX, pY, m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 545.0f, 210.0f, 30.0f))
+			{
+				m_bAccountIdFocused = true;
+				if (!m_bVirtualKeyboardShow)
+				{
+					virtualkeyboard_show();
+				}
+				return;
+			}
+
+			if (periksaPointer(pX, pY, m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 495.0f, 210.0f, 30.0f))
+			{
+				m_bStockTradeFocused = true;
+				if (!m_bVirtualKeyboardShow)
+				{
+					virtualkeyboard_show();
+				}
+				return;
+			}
+
+			if (periksaPointer(pX, pY, m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 450.0f, 210.0f, 30.0f))
+			{
+				m_bPriceFocused = true;
+				if (!m_bVirtualKeyboardShow)
+				{
+					virtualkeyboard_show();
+				}
+				return;
+			}
+
+			if (periksaPointer(pX, pY, m_sell_bg.PosX() + 388.0f, m_sell_bg.PosY() + 400.0f, 210.0f, 30.0f))
+			{
+				m_bVolumeFocused = true;
+				if (!m_bVirtualKeyboardShow)
+				{
+					virtualkeyboard_show();
+				}
+				return;
+			}
+
+			if (m_bVirtualKeyboardShow)
+			{
+				virtualkeyboard_hide();
+			}
 		}
 
 		if (m_bShowBuy)
 		{
+			m_bAccountIdFocused = false;
+			m_bStockTradeFocused = false;
+			m_bPriceFocused		= false;
+			m_bVolumeFocused	= false;
 			if (m_btn_buy_execute.isWithin(pX, pY))
 			{
 				fprintf(stderr, "button buy execute is released.\n");
@@ -2802,6 +3432,51 @@ void panin::onLeftRelease(float x, float y) {
 				m_btn_buy.isEnabled = true;
 				return;
 			}
+
+			if (periksaPointer(pX, pY, m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 545.0f, 210.0f, 30.0f))
+			{
+				m_bAccountIdFocused = true;
+				if (!m_bVirtualKeyboardShow)
+				{
+					virtualkeyboard_show();
+				}
+				return;
+			}
+
+			if (periksaPointer(pX, pY, m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 495.0f, 210.0f, 30.0f))
+			{
+				m_bStockTradeFocused = true;
+				if (!m_bVirtualKeyboardShow)
+				{
+					virtualkeyboard_show();
+				}
+				return;
+			}
+
+			if (periksaPointer(pX, pY, m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 450.0f, 210.0f, 30.0f))
+			{
+				m_bPriceFocused = true;
+				if (!m_bVirtualKeyboardShow)
+				{
+					virtualkeyboard_show();
+				}
+				return;
+			}
+
+			if (periksaPointer(pX, pY, m_buy_bg.PosX() + 388.0f, m_buy_bg.PosY() + 400.0f, 210.0f, 30.0f))
+			{
+				m_bVolumeFocused = true;
+				if (!m_bVirtualKeyboardShow)
+				{
+					virtualkeyboard_show();
+				}
+				return;
+			}
+
+			if (m_bVirtualKeyboardShow)
+			{
+				virtualkeyboard_hide();
+			}
 		}
 
 		// menu item di klik
@@ -2809,18 +3484,33 @@ void panin::onLeftRelease(float x, float y) {
 		{
 			if (m_menu_btn_trade_central.isWithin(pX, pY))
 			{
+//				if (m_platform.getOrientation() != 0)
+//				{
+//					m_platform.setOrientation(0);
+//					sleep(3);
+//					m_platform.getSize(m_screenWidth, m_screenHeight);
+//					enable2D();
+//					updateForPotrait();
+//				}
+
 				m_menu_btn_trade_central.isPressed = false;
 				m_bShowSubmenuTC = !m_bShowSubmenuTC;
 				//m_bShowMenu = false;
 				//m_bMenuActive = false;
 				//m_bMenuHideAnimation = true;
+				m_bShowSubmenuInformation = false;
 				return;
 			}
 			if (m_menu_btn_charts.isWithin(pX, pY))
 			{
-				//m_platform.setOrientation(0);
-				//m_chart_bg.load("app/native/assets/charts/chart_bg.png");
-				//m_chart_bg.setPosition(0.0f, 0.0f);
+				if (m_platform.getOrientation() != 1)
+				{
+					m_platform.setOrientation(1);
+					sleep(3);
+					m_platform.getSize(m_screenWidth, m_screenHeight);
+					enable2D_land();
+					updateForLandscape();
+				}
 
 				m_menu_btn_charts.isPressed = false;
 
@@ -2829,31 +3519,58 @@ void panin::onLeftRelease(float x, float y) {
 				m_bMenuActive = false;
 				//m_bMenuHideAnimation = true;
 				m_bShowSubmenuTC = false;
+				m_bShowSubmenuInformation = false;
 				return;
 			}
 			if (m_menu_btn_informations.isWithin(pX, pY))
 			{
+				if (m_platform.getOrientation() != 0)
+				{
+					m_platform.setOrientation(0);
+					sleep(3);
+					m_platform.getSize(m_screenWidth, m_screenHeight);
+					enable2D();
+					updateForPotrait();
+				}
 				m_menu_btn_informations.isPressed = false;
+				m_bShowSubmenuInformation = !m_bShowSubmenuInformation;
 
-				m_state = INFORMATIONS;
-				m_bShowMenu = false;
-				m_bMenuActive = false;
+				//m_state = INFORMATIONS;
+				//m_bShowMenu = false;
+				//m_bMenuActive = false;
 				//m_bMenuHideAnimation = true;
 				m_bShowSubmenuTC = false;
 				return;
 			}
 			if (m_menu_btn_portfolio.isWithin(pX, pY))
 			{
+//				if (m_platform.getOrientation() != 0)
+//				{
+//					m_platform.setOrientation(0);
+//					sleep(3);
+//					m_platform.getSize(m_screenWidth, m_screenHeight);
+//					enable2D();
+//					updateForPotrait();
+//				}
 				m_menu_btn_portfolio.isPressed = false;
 				m_state = PORTFOLIO;
 				m_bShowMenu = false;
 				m_bMenuActive = false;
 				//m_bMenuHideAnimation = true;
 				m_bShowSubmenuTC = false;
+				m_bShowSubmenuInformation = false;
 				return;
 			}
 			if (m_menu_btn_order_trade.isWithin(pX, pY))
 			{
+				if (m_platform.getOrientation() != 0)
+				{
+					m_platform.setOrientation(0);
+					sleep(3);
+					m_platform.getSize(m_screenWidth, m_screenHeight);
+					enable2D();
+					updateForPotrait();
+				}
 				m_menu_btn_order_trade.isPressed = false;
 
 				m_state = ORDER_TRADE;
@@ -2861,6 +3578,7 @@ void panin::onLeftRelease(float x, float y) {
 				m_bMenuActive = false;
 				//m_bMenuHideAnimation = true;
 				m_bShowSubmenuTC = false;
+				m_bShowSubmenuInformation = false;
 				return;
 			}
 			if (m_menu_btn_logout.isWithin(pX, pY))
@@ -2872,6 +3590,7 @@ void panin::onLeftRelease(float x, float y) {
 				m_bMenuActive = false;
 				m_bLogged = false;
 				m_bShowSubmenuTC = false;
+				m_bShowSubmenuInformation = false;
 				loginStatus = NOT_SIGNIN;
 				return;
 			}
@@ -2881,8 +3600,17 @@ void panin::onLeftRelease(float x, float y) {
 				m_bShowMenu = false;
 				m_bMenuActive = false;
 				m_bShowSubmenuTC = false;
+				m_bShowSubmenuInformation = false;
 				if (m_menu_tc_btn_running_trade.isWithin(pX, pY))
 				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
 					m_menu_tc_btn_running_trade.isPressed = false;
 
 					m_state = RUNNING_TRADE;
@@ -2892,6 +3620,14 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_stock_watch.isWithin(pX, pY))
 				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
 					m_menu_tc_btn_stock_watch.isPressed = false;
 
 					m_state = STOCK_WATCH;
@@ -2900,6 +3636,14 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_complete_book.isWithin(pX, pY))
 				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
 					m_menu_tc_btn_complete_book.isPressed = false;
 
 					m_state = COMPLETE_BOOK;
@@ -2908,6 +3652,14 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_stock_quote.isWithin(pX, pY))
 				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
 					m_menu_tc_btn_stock_quote.isPressed = false;
 
 					m_state = STOCK_QUOTE;
@@ -2916,6 +3668,14 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_broker_quote.isWithin(pX, pY))
 				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
 					m_menu_tc_btn_broker_quote.isPressed = false;
 
 					m_state = BROKER_QUOTE;
@@ -2924,6 +3684,14 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_stock_summary.isWithin(pX, pY))
 				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
 					m_menu_tc_btn_stock_summary.isPressed = false;
 
 					m_state = STOCK_SUMMARY;
@@ -2932,6 +3700,14 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_broker_summary.isWithin(pX, pY))
 				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
 					m_menu_tc_btn_broker_summary.isPressed = false;
 
 					m_state = BROKER_SUMMARY;
@@ -2940,6 +3716,14 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_non_regular.isWithin(pX, pY))
 				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
 					m_menu_tc_btn_non_regular.isPressed = false;
 
 					m_state = NON_REGULAR;
@@ -2947,6 +3731,46 @@ void panin::onLeftRelease(float x, float y) {
 					return;
 				}
 			}
+
+			if (m_bShowSubmenuInformation)
+			{
+				m_bShowMenu = false;
+				m_bMenuActive = false;
+				m_bShowSubmenuTC = false;
+				m_bShowSubmenuInformation = false;
+
+				if (m_menu_i_btn_news.isWithin(pX, pY))
+				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
+					m_menu_i_btn_news.isPressed = false;
+					m_state = NEWS;
+					return;
+				}
+
+				if (m_menu_i_btn_compinfo.isWithin(pX, pY))
+				{
+					if (m_platform.getOrientation() != 0)
+					{
+						m_platform.setOrientation(0);
+						sleep(3);
+						m_platform.getSize(m_screenWidth, m_screenHeight);
+						enable2D();
+						updateForPotrait();
+					}
+					m_menu_i_btn_compinfo.isPressed = false;
+					m_state = COMPANY_INFO;
+					return;
+				}
+			}
+
+
 			m_bShowMenu = false;
 			m_bMenuActive = false;
 		}
@@ -3272,6 +4096,20 @@ void panin::onLeftPress(float x, float y) {
 					return;
 				}
 			}
+
+			if (m_bShowSubmenuInformation)
+			{
+				if (m_menu_i_btn_news.isWithin(pX, pY))
+				{
+					m_menu_i_btn_news.isPressed = true;
+					return;
+				}
+				if (m_menu_i_btn_compinfo.isWithin(pX, pY))
+				{
+					m_menu_i_btn_compinfo.isPressed = true;
+					return;
+				}
+			}
 		}
 
 		switch (m_state)
@@ -3384,6 +4222,122 @@ void panin::onKeyPressed(int c) {
 		}
 
 	}
+	else if (m_bAccountIdFocused)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bAccountIdFocused = false;
+			m_bStockTradeFocused = true;
+			m_bPriceFocused = false;
+			m_bVolumeFocused = false;
+			if (!m_bVirtualKeyboardShow)
+			{
+				virtualkeyboard_show();
+			}
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sAccID.length() > 0)
+			{
+				char name [m_sAccID.length()];
+				std::memset(name, 0, m_sAccID.length());
+				std::strncpy(name, m_sAccID.c_str(), m_sAccID.length()-1);
+				m_sAccID = "";
+				m_sAccID = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sAccID = m_sAccID + (char)c;
+		}
+	}
+	else if (m_bStockTradeFocused)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bAccountIdFocused = false;
+			m_bStockTradeFocused = false;
+			m_bPriceFocused = true;
+			m_bVolumeFocused = false;
+			if (!m_bVirtualKeyboardShow)
+			{
+				virtualkeyboard_show();
+			}
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sStockCode.length() > 0)
+			{
+				char name [m_sStockCode.length()];
+				std::memset(name, 0, m_sStockCode.length());
+				std::strncpy(name, m_sStockCode.c_str(), m_sStockCode.length()-1);
+				m_sStockCode = "";
+				m_sStockCode = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sStockCode = m_sStockCode + (char)c;
+		}
+	}
+	else if (m_bPriceFocused)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bAccountIdFocused = false;
+			m_bStockTradeFocused = false;
+			m_bPriceFocused = false;
+			m_bVolumeFocused = true;
+			if (!m_bVirtualKeyboardShow)
+			{
+				virtualkeyboard_show();
+			}
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sPrice.length() > 0)
+			{
+				char name [m_sPrice.length()];
+				std::memset(name, 0, m_sPrice.length());
+				std::strncpy(name, m_sPrice.c_str(), m_sPrice.length()-1);
+				m_sPrice = "";
+				m_sPrice = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sPrice = m_sPrice + (char)c;
+		}
+	}
+	else if (m_bVolumeFocused)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bAccountIdFocused = false;
+			m_bStockTradeFocused = false;
+			m_bPriceFocused = false;
+			m_bVolumeFocused = false;
+			if (m_bVirtualKeyboardShow)
+			{
+				virtualkeyboard_hide();
+			}
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sLot.length() > 0)
+			{
+				char name [m_sLot.length()];
+				std::memset(name, 0, m_sLot.length());
+				std::strncpy(name, m_sLot.c_str(), m_sLot.length()-1);
+				m_sLot = "";
+				m_sLot = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sLot = m_sLot + (char)c;
+		}
+	}
 }
 
 void panin::button::setPosition(float x, float y) {
@@ -3463,8 +4417,8 @@ void * threadLogin(void * Var) {
 	u_pass = myVar.t_myUser.password;
 
 	char * url = new char[1024];
-	std::strcpy(url,
-			"http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=");
+	//std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=");
+	std::strcpy(url, "https://202.53.249.3:443/mi2/marketInfoData?request=login&user=");
 	std::strcat(url, u_name.c_str());
 	std::strcat(url, "&password=");
 	std::strcat(url, u_pass.c_str());
@@ -3472,7 +4426,7 @@ void * threadLogin(void * Var) {
 	fprintf(stderr, "url yang diakses : %s.\n", url);
 	myServerConnection = new ServerConnection();
 
-	if (CURLE_OK == myServerConnection->doHttpGet(url, osStream, 30.0f)) {
+	if (CURLE_OK == myServerConnection->doLogin(url, osStream, 30.0f)) {
 		std::string hasil = osStream.str();
 		fprintf(stderr, "hasil balikan: %s -- %s.\n", hasil.c_str(), osStream.str().c_str());
 		char s1[hasil.length() + 1];
@@ -3481,6 +4435,7 @@ void * threadLogin(void * Var) {
 		char s2[] = "true";
 		if (std::strncmp(s1, s2, std::strlen(s2)) == 0) {
 			loginStatus = SIGNEDIN;
+			osStream.clear();
 			fprintf(stderr, "login berhasil.\n");
 		}
 		else
@@ -3546,6 +4501,12 @@ void panin::ambilDataRunningTrade() {
 
 	fprintf(stderr, "ambilDataRunningTrade.\n");
 	pthread_create(&pth, NULL, threadDataRT, (void*) NULL);
+}
+
+//bool isWithin(float clickX, float clickY) const {
+bool panin::periksaPointer(float pX, float pY, float kiri, float bawah, float lebar, float tinggi)
+{
+	return ((pX >= kiri) && (pX <= kiri + lebar) && (pY >= bawah) && (pY <= bawah  + tinggi));
 }
 
 } /* namespace paninMobile */

@@ -57,6 +57,8 @@ private:
 		NON_REGULAR,
 		CHARTS,
 		INFORMATIONS,
+		NEWS,
+		COMPANY_INFO,
 		PORTFOLIO,
 		ORDER_TRADE,
 		LAST_STATE
@@ -102,10 +104,20 @@ private:
 	bool	m_bMenuShowAnimation;
 	bool	m_bMenuHideAnimation;
 	bool	m_bShowSubmenuTC;
+	bool	m_bShowSubmenuInformation;
 
 	bool	m_bShowInfo;
+
+	// buy and sell
 	bool	m_bShowBuy;
 	bool	m_bShowSell;
+	bool	m_bAccountIdFocused;
+	bool	m_bStockTradeFocused;
+	bool	m_bPriceFocused;
+	bool	m_bVolumeFocused;
+
+	bool	m_bVirtualKeyboardShow;
+
 
 	// home
 	bool	m_bShowHomeInfo;
@@ -332,6 +344,7 @@ private:
 	button m_btn_sell_x;
 
 	Sprite m_buysell_textfield_bg;
+	Sprite m_buysell_textfield_bg_focus;
 
 	Sprite m_textfield_bg;
 	//Sprite m_white_band;
@@ -434,6 +447,9 @@ private:
 
 	// companies
 	Sprite m_cpy_caption;
+	Sprite m_cpy_company;
+	Sprite m_cpy_financial;
+	Sprite m_cpy_ratio;
 	Sprite m_cpy_company1;
 	Sprite m_cpy_financial1;
 	Sprite m_cpy_ratio1;
@@ -451,12 +467,16 @@ private:
 	Sprite m_ca_dividen2;
 	Sprite m_ca_bonus1;
 	Sprite m_ca_bonus2;
+	Sprite m_ca_bonus3;
 	Sprite m_ca_split1;
 	Sprite m_ca_split2;
+	Sprite m_ca_split3;
 	Sprite m_ca_warrant1;
 	Sprite m_ca_warrant2;
+	Sprite m_ca_warrant3;
 	Sprite m_ca_rights1;
 	Sprite m_ca_rights2;
+	Sprite m_ca_rights3;
 	Sprite m_ca_rups1;
 	Sprite m_ca_rups2;
 	button m_ca_btn_dividen;
@@ -545,6 +565,10 @@ private:
 	Sprite m_menu_tc_stock_summary_p;
 	Sprite m_menu_tc_broker_summary_p;
 	Sprite m_menu_tc_non_regular_p;
+	Sprite m_menu_i_news;
+	Sprite m_menu_i_news_p;
+	Sprite m_menu_i_compinfo;
+	Sprite m_menu_i_compinfo_p;
 	button m_menu_btn_trade_central;
 	button m_menu_btn_charts;
 	button m_menu_btn_informations;
@@ -560,6 +584,9 @@ private:
 	button m_menu_tc_btn_stock_summary;
 	button m_menu_tc_btn_broker_summary;
 	button m_menu_tc_btn_non_regular;
+	button m_menu_i_btn_news;
+	button m_menu_i_btn_compinfo;
+
 
 	// password
 	Sprite m_pw_caption;
@@ -585,6 +612,9 @@ private:
 	std::string m_sIhsg_volume;
 	std::string m_sIhsg_percent;
 
+	std::string m_sAccNumber;
+	std::string m_sAccName;
+
 	// buy sell dialog var
 	std::string m_sAccID;
 	std::string m_sStockCode;
@@ -598,6 +628,18 @@ private:
 	float m_footerHeight;
 	float m_headerHeight;
 
+	int companyInfoFlag;
+	int corporateActionFlag;
+
+	std::string m_s_pf_tradingLimit;
+	std::string m_s_pf_ratio;
+	std::string m_s_pf_equity;
+	std::string m_s_pf_cashloan;
+	std::string m_s_pf_stockValue;
+	std::string m_s_pf_nettToday;
+
+	std::string m_s_pf_tableContent[5][10];
+
 	virtual void onLeftPress(float x, float y);
 	virtual void onLeftRelease(float x, float y);
 	virtual void onKeyPressed(int c);
@@ -606,6 +648,8 @@ private:
 
 	// void renderLoading();
 	void enable2D();
+	void enable2D_land();
+
 	void renderHome();
 	void renderHomeSetel();
 	void renderHomeInfo();
@@ -616,11 +660,17 @@ private:
 	void renderBrokerQuote();
 	void renderStockSummary();
 	void renderBrokerSummary();
+
 	void renderNonRegular();
 	void renderCharts();
 	void renderInformations();
+	void renderNews();
+	void renderCompanyInfo();
+	void renderCorporateAction();
 	void renderPortfolio();
 	void renderOrderTrade();
+	void renderResearch();
+
 
 	void renderMenu();
 
@@ -631,12 +681,16 @@ private:
 	void renderSellDialog();
 
 	void update();
+	void updateForLandscape();
+	void updateForPotrait();
 	void updateHome();
 
 	void setConfiguration(eConfiguration conf);
 
 	void periksaLogin();
 	void ambilDataRunningTrade();
+
+	bool periksaPointer(float pX, float pY, float kiri, float bawah, float lebar, float tinggi);
 };
 
 }		/* namespace paninMobile*/
