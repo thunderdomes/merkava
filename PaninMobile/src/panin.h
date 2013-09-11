@@ -61,6 +61,7 @@ private:
 		COMPANY_INFO,
 		PORTFOLIO,
 		ORDER_TRADE,
+		MY_ACCOUNT,
 		LAST_STATE
 	};
 
@@ -490,6 +491,7 @@ private:
 	Sprite m_ac_password;
 	Sprite m_ac_trading_pin;
 	Sprite m_ac_bg_black;
+	Sprite m_ac_bg_black2;
 	Sprite m_ac_textfield_bg;
 	Sprite m_ac_save;
 	button m_btn_save1;
@@ -670,6 +672,7 @@ private:
 	void renderPortfolio();
 	void renderOrderTrade();
 	void renderResearch();
+	void renderMyAccount();
 
 
 	void renderMenu();

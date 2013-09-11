@@ -13,6 +13,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <vector>
+#include <iterator>
 
 class ServerConnection {
 public:
@@ -21,6 +23,8 @@ public:
 
 	bool init(bool bInit);
 	CURLcode doLogin(const char * url, std::ostream& os, long timeout);
+	CURLcode doHttpGet2 (const char * url, std::ostream& os, long timeout);
+//	CURLcode doRTStart(const char * url, std::ostream& os, long timeout);
 	CURLcode doHttpPost(const std::string& url, std::ostream& os, long timeout);
 	CURLcode doHttpGet (const char * url, std::ostream& os, long timeout);
 	CURLcode doHttpPut (const std::string& url, long timeout);
@@ -30,6 +34,12 @@ private:
 
 	std::ostringstream stream;
 	std::ostringstream stream_login;
+	std::ostringstream stream_RT;
+
+	std::vector<std::string> vCookies;
+
+	struct curl_slist *cookies;
+	char * sCookies;
 
 };
 

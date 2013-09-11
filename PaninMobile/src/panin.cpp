@@ -852,6 +852,17 @@ panin::panin(platform &myPlatform) :
 	m_ac_password.load("app/native/assets/password/pw_caption.png");
 	m_ac_password.setPosition(m_latar.PosX() + 27.0f,
 			m_headerHeight - m_ac_password.Height() - 20.0f);
+	m_ac_bg_black.load("app/native/assets/password/ac_bg1.png");
+	m_ac_bg_black.setPosition(m_latar.PosX(),m_ac_password.PosY() - m_ac_bg_black.Height() - 20.0f );
+	m_ac_trading_pin.load("app/native/assets/password/pw_caption.png");
+	m_ac_trading_pin.setPosition(m_latar.PosX() + 27.0f,
+			m_headerHeight - m_ac_trading_pin.Height() - 20.0f);
+	m_ac_bg_black2 = m_ac_bg_black;
+	m_ac_bg_black2.setPosition(m_latar.PosX(),m_ac_trading_pin.PosY() - m_ac_bg_black2.Height() - 20.0f);
+
+	m_ac_trading_pin.load("app/native/assets/password/pw_caption.png");
+	m_ac_trading_pin.setPosition(m_latar.PosX() + 27.0f,
+			m_headerHeight - m_ac_trading_pin.Height() - 20.0f);
 
 
 	// menu
@@ -1211,12 +1222,19 @@ panin::panin(platform &myPlatform) :
 	m_chart_btn_3year.isEnabled = true;
 	m_chart_btn_3year.setPosition(m_chart_btn_1year.posX + m_chart_btn_1year.sizeX + 10.0f, m_chart_btn_1year.posY);
 
+	// tradelist
+	m_tl_order_caption.load("app/native/assets/orderlist/orderlist_caption.png");
+	m_tl_order_caption.setPosition(m_latar.PosX() + 27.0f,	m_headerHeight - m_tl_order_caption.Height() - 20.0f);
+	m_tl_order_table_caption.load("app/native/assets/orderlist/orderlist_table_title.png");
+	m_tl_order_table_caption.setPosition(m_latar.PosX(),	m_tl_order_caption.PosY() - m_tl_order_table_caption.Height() - 20.0f);
+	m_tl_tradelist_caption.load("app/native/assets/orderlist/tradelist_caption.png");
+	m_tl_tradelist_caption.setPosition(m_latar.PosX() + 27.0f,	m_tl_order_table_caption.PosY() - m_tl_tradelist_caption.Height() - 190.0f);
+	m_tl_tradelist_table_caption.load("app/native/assets/orderlist/orderlist_table_title.png");
+	m_tl_tradelist_table_caption.setPosition(m_latar.PosX(),	m_tl_tradelist_caption.PosY() - m_tl_order_table_caption.Height() - 20.0f);
 
 
-
-
-	//m_state = HOME;
-	m_state = RUNNING_TRADE;
+	m_state = HOME;
+	//m_state = RUNNING_TRADE;
 	m_ePosX = 0.0f;
 	m_ePosY = 0.0f;
 	m_bMenuShowAnimation = false;
@@ -1396,6 +1414,11 @@ void panin::run() {
 		case ORDER_TRADE:
 			update();
 			renderOrderTrade();
+			break;
+
+		case MY_ACCOUNT:
+			update();
+			renderMyAccount();
 			break;
 
 		default:
@@ -2396,10 +2419,7 @@ void panin::renderCharts() {
 //		renderSellDialog();
 //	}
 
-	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation) {
-		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
-		renderMenu();
-	}
+
 
 	// latar chart
 	GLfloat vertices[8];
@@ -2446,13 +2466,13 @@ void panin::renderCharts() {
 	ekav[2] = m_screenWidth;
 	ekav[3] = m_screenHeight/2;
 
-    glVertexPointer(2, GL_FLOAT, 0, vertices);
-    glTexCoordPointer(2, GL_FLOAT, 0, vertices);
-
-    glEnableClientState(GL_COLOR_ARRAY);
-    glColorPointer(4, GL_FLOAT, 0, colors);
-
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//    glVertexPointer(2, GL_FLOAT, 0, vertices);
+//    glTexCoordPointer(2, GL_FLOAT, 0, vertices);
+//
+//    glEnableClientState(GL_COLOR_ARRAY);
+//    glColorPointer(4, GL_FLOAT, 0, colors);
+//
+//    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 //	GLfloat dashedLine[1296];
 //	float a, b;
@@ -2476,12 +2496,18 @@ void panin::renderCharts() {
 //	glDrawArrays(GL_LINES, 0, 648);
 
 
-	glLineWidth(4.0f);
-	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
-	glVertexPointer(2, GL_FLOAT, 0, ekav);
-	glTexCoordPointer(2, GL_FLOAT, 0, eka);
-	glDrawArrays(GL_LINES, 0, 2);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+//	glLineWidth(4.0f);
+//	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
+//	glVertexPointer(2, GL_FLOAT, 0, ekav);
+//	glTexCoordPointer(2, GL_FLOAT, 0, eka);
+//	glDrawArrays(GL_LINES, 0, 2);
+//	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation) {
+		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
+		renderMenu();
+	}
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -2796,11 +2822,79 @@ void panin::renderOrderTrade() {
 
 	m_latar.draw();
 
-	addHeader();
-
 	m_tl_order_caption.draw();
 	m_tl_order_table_caption.draw();
+	m_tl_tradelist_caption.draw();
+	m_tl_tradelist_table_caption.draw();
 
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	float text_width, text_height, pos_x, pos_y;
+
+	// order list item
+	bbutil_measure_text(m_font11, "12:34:56", &text_width, &text_height);
+	pos_x = (m_tl_order_table_caption.PosX() + (175.0f - text_width)/2);
+	pos_y = m_tl_order_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "12:34:56", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "PANS", &text_width, &text_height);
+	pos_x = (m_tl_order_table_caption.PosX() + 175.0f + (165.0f - text_width)/2);
+	pos_y = m_tl_order_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "PANS", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "S", &text_width, &text_height);
+	pos_x = (m_tl_order_table_caption.PosX() + 340.0f + (130.0f - text_width)/2);
+	pos_y = m_tl_order_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "S", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "1000", &text_width, &text_height);
+	pos_x = (m_tl_order_table_caption.PosX() + 470.0f + (135.0f - text_width)/2);
+	pos_y = m_tl_order_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "1000", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "100000", &text_width, &text_height);
+	pos_x = (m_tl_order_table_caption.PosX() + 605.0f + (165.0f - text_width)/2);
+	pos_y = m_tl_order_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "100000", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	// trade list item
+	bbutil_measure_text(m_font11, "12:34:56", &text_width, &text_height);
+	pos_x = (m_tl_tradelist_table_caption.PosX() + (175.0f - text_width)/2);
+	pos_y = m_tl_tradelist_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "12:34:56", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "PANS", &text_width, &text_height);
+	pos_x = (m_tl_tradelist_table_caption.PosX() + 175.0f + (165.0f - text_width)/2);
+	pos_y = m_tl_tradelist_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "PANS", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "S", &text_width, &text_height);
+	pos_x = (m_tl_tradelist_table_caption.PosX() + 340.0f + (130.0f - text_width)/2);
+	pos_y = m_tl_tradelist_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "S", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "1000", &text_width, &text_height);
+	pos_x = (m_tl_tradelist_table_caption.PosX() + 470.0f + (135.0f - text_width)/2);
+	pos_y = m_tl_tradelist_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "1000", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_measure_text(m_font11, "100000", &text_width, &text_height);
+	pos_x = (m_tl_tradelist_table_caption.PosX() + 605.0f + (165.0f - text_width)/2);
+	pos_y = m_tl_tradelist_table_caption.PosY() - 30.0f;
+	bbutil_render_text(m_font11, "100000", pos_x, pos_y, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	bbutil_render_text(m_font14, "", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	addHeader();
 	addFooter();
 
 	if (m_bShowBuy) {
@@ -2862,6 +2956,48 @@ void panin::renderResearch() {
 	m_platform.finishRender();
 }
 
+void panin::renderMyAccount() {
+	m_platform.beginRender();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	m_latar.draw();
+	m_ac_password.draw();
+	m_ac_textfield_bg.draw();
+	m_ac_trading_pin.draw();
+	m_btn_save1.draw();
+	m_btn_save2.draw();
+
+	addHeader();
+
+	m_tl_order_caption.draw();
+	m_tl_order_table_caption.draw();
+
+	addFooter();
+
+	if (m_bShowBuy) {
+		renderBuyDialog();
+	}
+
+	if (m_bShowSell) {
+		renderSellDialog();
+	}
+
+	if (m_bShowMenu || m_bMenuShowAnimation || m_bMenuHideAnimation) {
+		//glTranslatef(m_ePosX, m_ePosY, 0.0f);
+		renderMenu();
+	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+	m_platform.finishRender();
+}
 
 
 void panin::addHeader() {
@@ -3484,6 +3620,7 @@ void panin::onLeftRelease(float x, float y) {
 		{
 			if (m_menu_btn_trade_central.isWithin(pX, pY))
 			{
+				fprintf(stderr, "klik m_menu_btn_trade_central.\n");
 //				if (m_platform.getOrientation() != 0)
 //				{
 //					m_platform.setOrientation(0);
@@ -3503,6 +3640,7 @@ void panin::onLeftRelease(float x, float y) {
 			}
 			if (m_menu_btn_charts.isWithin(pX, pY))
 			{
+				fprintf(stderr, "klik m_menu_btn_charts.\n");
 				if (m_platform.getOrientation() != 1)
 				{
 					m_platform.setOrientation(1);
@@ -3524,14 +3662,15 @@ void panin::onLeftRelease(float x, float y) {
 			}
 			if (m_menu_btn_informations.isWithin(pX, pY))
 			{
-				if (m_platform.getOrientation() != 0)
-				{
-					m_platform.setOrientation(0);
-					sleep(3);
-					m_platform.getSize(m_screenWidth, m_screenHeight);
-					enable2D();
-					updateForPotrait();
-				}
+				fprintf(stderr, "klik m_menu_btn_informations.\n");
+//				if (m_platform.getOrientation() != 0)
+//				{
+//					m_platform.setOrientation(0);
+//					sleep(3);
+//					m_platform.getSize(m_screenWidth, m_screenHeight);
+//					enable2D();
+//					updateForPotrait();
+//				}
 				m_menu_btn_informations.isPressed = false;
 				m_bShowSubmenuInformation = !m_bShowSubmenuInformation;
 
@@ -3544,14 +3683,15 @@ void panin::onLeftRelease(float x, float y) {
 			}
 			if (m_menu_btn_portfolio.isWithin(pX, pY))
 			{
-//				if (m_platform.getOrientation() != 0)
-//				{
-//					m_platform.setOrientation(0);
-//					sleep(3);
-//					m_platform.getSize(m_screenWidth, m_screenHeight);
-//					enable2D();
-//					updateForPotrait();
-//				}
+				fprintf(stderr, "klik m_menu_btn_informations.\n");
+				if (m_platform.getOrientation() != 0)
+				{
+					m_platform.setOrientation(0);
+					sleep(3);
+					m_platform.getSize(m_screenWidth, m_screenHeight);
+					enable2D();
+					updateForPotrait();
+				}
 				m_menu_btn_portfolio.isPressed = false;
 				m_state = PORTFOLIO;
 				m_bShowMenu = false;
@@ -3563,6 +3703,7 @@ void panin::onLeftRelease(float x, float y) {
 			}
 			if (m_menu_btn_order_trade.isWithin(pX, pY))
 			{
+				fprintf(stderr, "klik m_menu_btn_order_trade.\n");
 				if (m_platform.getOrientation() != 0)
 				{
 					m_platform.setOrientation(0);
@@ -3581,8 +3722,30 @@ void panin::onLeftRelease(float x, float y) {
 				m_bShowSubmenuInformation = false;
 				return;
 			}
+			if (m_menu_btn_my_account.isWithin(pX, pY))
+			{
+				fprintf(stderr, "klik m_menu_btn_my_account.\n");
+				if (m_platform.getOrientation() != 0)
+				{
+					m_platform.setOrientation(0);
+					sleep(3);
+					m_platform.getSize(m_screenWidth, m_screenHeight);
+					enable2D();
+					updateForPotrait();
+				}
+				m_menu_btn_my_account.isPressed = false;
+
+				m_state = MY_ACCOUNT;
+				m_bShowMenu = false;
+				m_bMenuActive = false;
+				//m_bMenuHideAnimation = true;
+				m_bShowSubmenuTC = false;
+				m_bShowSubmenuInformation = false;
+				return;
+			}
 			if (m_menu_btn_logout.isWithin(pX, pY))
 			{
+				fprintf(stderr, "klik m_menu_btn_logout.\n");
 				m_menu_btn_logout.isPressed = false;
 
 				m_state = HOME;
@@ -3603,6 +3766,7 @@ void panin::onLeftRelease(float x, float y) {
 				m_bShowSubmenuInformation = false;
 				if (m_menu_tc_btn_running_trade.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_tc_btn_running_trade.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3614,12 +3778,13 @@ void panin::onLeftRelease(float x, float y) {
 					m_menu_tc_btn_running_trade.isPressed = false;
 
 					m_state = RUNNING_TRADE;
-					//ambilDataRunningTrade();
+					ambilDataRunningTrade();
 					//m_bMenuHideAnimation = true;
 					return;
 				}
 				if (m_menu_tc_btn_stock_watch.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_tc_btn_stock_watch.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3636,6 +3801,7 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_complete_book.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_tc_btn_complete_book.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3652,6 +3818,7 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_stock_quote.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_tc_btn_stock_quote.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3668,6 +3835,7 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_broker_quote.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_tc_btn_broker_quote.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3684,6 +3852,7 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_stock_summary.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_tc_btn_stock_summary.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3700,6 +3869,7 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_broker_summary.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_tc_btn_broker_summary.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3716,6 +3886,7 @@ void panin::onLeftRelease(float x, float y) {
 				}
 				if (m_menu_tc_btn_non_regular.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_tc_btn_non_regular.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3741,6 +3912,7 @@ void panin::onLeftRelease(float x, float y) {
 
 				if (m_menu_i_btn_news.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_i_btn_news.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -3756,6 +3928,7 @@ void panin::onLeftRelease(float x, float y) {
 
 				if (m_menu_i_btn_compinfo.isWithin(pX, pY))
 				{
+					fprintf(stderr, "klik m_menu_i_btn_compinfo.\n");
 					if (m_platform.getOrientation() != 0)
 					{
 						m_platform.setOrientation(0);
@@ -4045,6 +4218,11 @@ void panin::onLeftPress(float x, float y) {
 			if (m_menu_btn_order_trade.isWithin(pX, pY))
 			{
 				m_menu_btn_order_trade.isPressed = true;
+				return;
+			}
+			if (m_menu_btn_my_account.isWithin(pX, pY))
+			{
+				m_menu_btn_my_account.isPressed = true;
 				return;
 			}
 			if (m_menu_btn_logout.isWithin(pX, pY))
@@ -4417,8 +4595,8 @@ void * threadLogin(void * Var) {
 	u_pass = myVar.t_myUser.password;
 
 	char * url = new char[1024];
-	//std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=");
-	std::strcpy(url, "https://202.53.249.3:443/mi2/marketInfoData?request=login&user=");
+	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=login&user=");
+	//std::strcpy(url, "https://202.53.249.3:443/mi2/marketInfoData?request=login&user=");
 	std::strcat(url, u_name.c_str());
 	std::strcat(url, "&password=");
 	std::strcat(url, u_pass.c_str());
@@ -4443,6 +4621,12 @@ void * threadLogin(void * Var) {
 			loginStatus = SIGN_FAILED;
 			fprintf(stderr, "login gagal.\n");
 		}
+//		for (int i = 0; i < 10; ++i)
+//		{
+//			hasil = osStream.str();
+//			fprintf(stderr, "hasil balikan: %s -- %s.\n", hasil.c_str(), osStream.str().c_str());
+//			sleep(3);
+//		}
 	}
 	else
 	{
@@ -4458,8 +4642,8 @@ void panin::periksaLogin() {
 	//std::string hasil;
 	pthread_t pth;
 
-	myUser.username = "test-mob";
-	myUser.password = "336433";
+	myUser.username = "test6";
+	myUser.password = "123456";
 	//myUser.username = m_u_name;
 	//myUser.password = m_u_pass;
 
@@ -4474,25 +4658,47 @@ void panin::periksaLogin() {
 
 void * threadDataRT(void* var) {
 	char * url = new char[1024];
-	std::strcpy(url,
-			"http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+	//std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+
+	std::strcpy(url,"http://202.53.249.2:8080/mi2/marketInfoData?request=currencies&act=start");
 
 	fprintf(stderr, "url yang diakses : %s.\n", url);
 	if (myServerConnection == NULL) {
 		myServerConnection = new ServerConnection();
 	}
 
-	myServerConnection->doHttpGet(url, osStream, 30.0f);
+	fprintf(stderr, "Sebelum akses url.\n");
+	osStream.clear();
+	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f))
+	{
+		std::string hasil = osStream.str();
+		fprintf(stderr, "hasil balikan start running trade: >>%s<<.\n", hasil.c_str());
+	}
 
+	sleep(2);
+	fprintf(stderr, "Sesudah akses url.\n");
 	std::memset(url, 0, 1024 * sizeof(url[0]));
 	std::strcpy(url,
 			"http://202.53.249.2:8080/mi2/marketInfoData?request=dataStream");
 	osStream.clear();
 	fprintf(stderr, "osStream.clear().\n");
-	if (CURLE_OK == myServerConnection->doHttpGet(url, osStream, 30.0f)) {
+	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f)) {
+
+		int i = 0;
+		for (;;)
+		{
+			++i;
+			if (i > 20)
+				break;
+			std::string hasil = osStream.str();
+			fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
+			sleep(1);
+		}
 		std::string hasil = osStream.str();
 		fprintf(stderr, hasil.c_str());
 	}
+	std::string hasil = osStream.str();
+	fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
 	return NULL;
 }
 
