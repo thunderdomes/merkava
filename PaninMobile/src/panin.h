@@ -642,6 +642,8 @@ private:
 
 	std::string m_s_pf_tableContent[5][10];
 
+	std::vector<std::string> m_vRT;
+
 	virtual void onLeftPress(float x, float y);
 	virtual void onLeftRelease(float x, float y);
 	virtual void onKeyPressed(int c);

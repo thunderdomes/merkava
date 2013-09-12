@@ -234,16 +234,10 @@ CURLcode ServerConnection::doLogin(const char * url, std::ostream& os, long time
 
 CURLcode ServerConnection::doHttpGet2 (const char * url, std::ostream& os, long timeout)
 {
-	fprintf(stderr, "periksa 1.\n");
 	CURLcode code(CURLE_FAILED_INIT);
-
-//	CURL * m_curl_handle1;
-//	curl_global_init(CURL_GLOBAL_ALL);
-//	m_curl_handle1 = curl_easy_init();
 
 	init(true);
 
-	fprintf(stderr, "periksa 2.\n");
 	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEFUNCTION, &write_data)))
 			fprintf(stderr, "error at CURLOPT_WRITEFUNCTION.\n");
 	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_WRITEDATA, &stream)))
@@ -264,7 +258,6 @@ CURLcode ServerConnection::doHttpGet2 (const char * url, std::ostream& os, long 
 			fprintf(stderr, "error at CURLOPT_COOKIEFILE.\n");
 	if (CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_COOKIE, sCookies)))
 		fprintf(stderr, "error at CURLOPT_COOKIE.\n");
-	fprintf(stderr, "eka cookies:::: %s.\n", sCookies);
 	if (CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_COOKIELIST, sCookies)))
 		fprintf(stderr, "error at CURLOPT_COOKIE.\n");
 	if(CURLE_OK != (code = curl_easy_setopt(m_curl_handle, CURLOPT_VERBOSE, 1L)))
@@ -279,15 +272,9 @@ CURLcode ServerConnection::doHttpGet2 (const char * url, std::ostream& os, long 
 			fprintf(stderr, "error at CURLOPT_CERTINFO.\n");
 
 
-	fprintf(stderr, "periksa 3.\n");
-	//code = curl_easy_perform(m_curl_handle);
-	fprintf(stderr, "--- cookies 1----------------------------------------.\n");
-	print_cookies(m_curl_handle);
 	if (CURLE_OK != (code = curl_easy_perform(m_curl_handle)))
 		fprintf(stderr, "error at curl_easy_perform.\n");
-	fprintf(stderr, "--- cookies 2----------------------------------------.\n");
-	print_cookies(m_curl_handle);
-	fprintf(stderr, "periksa 4.\n");
+
 	init(false);
 	//curl_easy_cleanup(m_curl_handle);
 	return code;

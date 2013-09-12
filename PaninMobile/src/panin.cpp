@@ -39,8 +39,25 @@ ServerConnection * myServerConnection;
 std::ostringstream osStream;
 std::ostringstream osStreamLogin;
 
+bool bIsGettingRT;
+
 
 namespace paninMobile {
+
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, elems);
+    return elems;
+}
 
 panin::panin(platform &myPlatform) :
 		PlatformEventHandler(), m_platform(myPlatform),
@@ -1735,21 +1752,130 @@ void panin::renderRunningTrade() {
 
 	float myY = m_rt_table_title.PosY() - 30;
 
-	do {
-		bbutil_render_text(m_font9, "11:11:11", 10.0f, myY, 1.0f, 0.0f, 0.0f,
-				1.0f);
-		bbutil_render_text(m_font9, "B", 135.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
-		bbutil_render_text(m_font9, "KAEF", 195.0f, myY, 1.0f, 0.0f, 0.0f,
-				1.0f);
-		bbutil_render_text(m_font9, "RG", 285.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
-		bbutil_render_text(m_font9, "990", 355.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
-		bbutil_render_text(m_font9, "990", 420.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
-		bbutil_render_text(m_font9, "0", 485.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
-		bbutil_render_text(m_font9, "RG", 550.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
-		bbutil_render_text(m_font9, "RG", 625.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
-		bbutil_render_text(m_font9, "RG", 705.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
-		myY -= 30.0f;
-	} while (myY > m_footerHeight);
+	if (bIsGettingRT)
+	{
+		std::string hasil = osStream.str();
+		if (hasil.length() > 0)
+		{
+			std::vector<std::string> vRTStream;
+			vRTStream = split(osStream.str(), '\n');
+
+			//vector <int>::size_type ukuran;
+
+			if (vRTStream.capacity() > 0)
+			{
+				fprintf(stderr, "----------------------\n");
+				for (std::vector<std::string>::iterator iter = vRTStream.begin(); iter != vRTStream.end(); ++iter)
+				{
+					std::basic_string <char>::size_type pos_start, pos_end;
+					pos_start	= (*iter).find('[');
+					pos_end	= (*iter).find(']');
+					std::string s1 = (*iter).substr(pos_start +1, s1.length() - (s1.length() - pos_end) - pos_start -1);
+					//fprintf(stderr, "hasil RT: %s.\n", s1.c_str());
+
+					std::vector<std::string>::size_type batas = 45;
+					m_vRT.push_back(s1);
+					if (m_vRT.capacity() > batas)
+					{
+						//fprintf(stderr, "erase data. %d\n", m_vRT.size());
+						m_vRT.erase(m_vRT.begin());
+					}
+//					do
+//					{
+//						fprintf(stderr, "erase data. %d\n", m_vRT.size());
+//						m_vRT.erase(m_vRT.begin());
+//					} while (m_vRT.capacity() > batas);
+				}
+			}
+		}
+
+		if (m_vRT.capacity() > 0)
+		{
+			fprintf(stderr, "m_vRT size: %d\n", m_vRT.size());
+			std::vector<std::string>::iterator iter = m_vRT.begin();
+			do {
+				std::string s1 = *iter;
+				fprintf(stderr, "%s\n", s1.c_str());
+				std::vector<std::string> vs1;
+				vs1 = split(s1, ',');
+
+				int j = 0;
+				for (std::vector<std::string>::iterator i = vs1.begin(); i != vs1.end(); ++i)
+				{
+					std::string s2 = *iter;
+					char * c1 = new char[2];
+					std::memset(c1, 0, 2);
+					std::strncpy(c1, s2.c_str(), 1);
+					char c2[] = "\"";
+					if (std::strncmp(c1, c2, 1) == 0)
+					{
+						s2 = s2.substr(1, s2.length()-2);
+					}
+
+					if (j == 0)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 10.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 1)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 135.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 2)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 195.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 3)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 285.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 4)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 355.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 5)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 420.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 6)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 485.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 7)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 550.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 8)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 625.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+					if (j == 9)
+					{
+						bbutil_render_text(m_font9, s2.c_str(), 705.0f, myY, 1.0f, 0.0f, 0.0f,1.0f);
+					}
+
+					++j;
+				}
+				myY -= 30.0f;
+				++iter;
+			} while (/*myY > m_footerHeight ||*/ iter != m_vRT.end());
+		}
+	}
+
+//	do {
+//		bbutil_render_text(m_font9, "11:11:11", 10.0f, myY, 1.0f, 0.0f, 0.0f,
+//				1.0f);
+//		bbutil_render_text(m_font9, "B", 135.0f, myY, 1.0f, 0.0f, 0.0f, 1.0f);
+//		bbutil_render_text(m_font9, "KAEF", 195.0f, myY, 1.0f, 0.0f, 0.0f,
+//				1.0f);
+//		bbutil_render_text(m_font9, "RG", 285.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
+//		bbutil_render_text(m_font9, "990", 355.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+//		bbutil_render_text(m_font9, "990", 420.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+//		bbutil_render_text(m_font9, "0", 485.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+//		bbutil_render_text(m_font9, "RG", 550.0f, myY, 1.0f, 1.0f, 0.0f, 1.0f);
+//		bbutil_render_text(m_font9, "RG", 625.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
+//		bbutil_render_text(m_font9, "RG", 705.0f, myY, 1.0f, 1.0f, 1.0f, 1.0f);
+//		myY -= 30.0f;
+//	} while (myY > m_footerHeight);
 
 	glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -4621,6 +4747,7 @@ void * threadLogin(void * Var) {
 			loginStatus = SIGN_FAILED;
 			fprintf(stderr, "login gagal.\n");
 		}
+
 //		for (int i = 0; i < 10; ++i)
 //		{
 //			hasil = osStream.str();
@@ -4652,6 +4779,8 @@ void panin::periksaLogin() {
 	myThreadVar[0].t_myUser.password = myUser.password;
 
 	virtualkeyboard_hide();
+	osStream.str("");
+	osStream.clear();
 	pthread_create(&pth, NULL, threadLogin, (void*) myThreadVar);
 
 }
@@ -4668,6 +4797,7 @@ void * threadDataRT(void* var) {
 	}
 
 	fprintf(stderr, "Sebelum akses url.\n");
+	osStream.str("");
 	osStream.clear();
 	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f))
 	{
@@ -4680,31 +4810,44 @@ void * threadDataRT(void* var) {
 	std::memset(url, 0, 1024 * sizeof(url[0]));
 	std::strcpy(url,
 			"http://202.53.249.2:8080/mi2/marketInfoData?request=dataStream");
+	osStream.str("");
 	osStream.clear();
 	fprintf(stderr, "osStream.clear().\n");
-	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f)) {
 
-		int i = 0;
-		for (;;)
-		{
-			++i;
-			if (i > 20)
-				break;
-			std::string hasil = osStream.str();
-			fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
-			sleep(1);
-		}
-		std::string hasil = osStream.str();
-		fprintf(stderr, hasil.c_str());
+	bIsGettingRT = true;
+	do
+	{
+		osStream.str("");
+		osStream.clear();
+		myServerConnection->doHttpGet2(url, osStream, 3.0f);
+
+//		std::string hasil = osStream.str();
+//		fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
 	}
-	std::string hasil = osStream.str();
-	fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
+	while (bIsGettingRT);
+//	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 3.0f)) {
+//		int i = 0;
+//		for (;;)
+//		{
+//			++i;
+//			if (i > 20)
+//				break;
+//			std::string hasil = osStream.str();
+//			fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
+//			sleep(1);
+//		}
+//		//std::string hasil = osStream.str();
+//		//fprintf(stderr, hasil.c_str());
+//	}
+//	std::string hasil = osStream.str();
+//	fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
 	return NULL;
 }
 
 void panin::ambilDataRunningTrade() {
 	pthread_t pth;
 
+	m_vRT.clear();
 	fprintf(stderr, "ambilDataRunningTrade.\n");
 	pthread_create(&pth, NULL, threadDataRT, (void*) NULL);
 }
