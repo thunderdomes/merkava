@@ -873,14 +873,33 @@ panin::panin(platform &myPlatform) :
 	m_ac_bg_black.setPosition(m_latar.PosX(),m_ac_password.PosY() - m_ac_bg_black.Height() - 20.0f );
 	m_ac_trading_pin.load("app/native/assets/password/pw_caption.png");
 	m_ac_trading_pin.setPosition(m_latar.PosX() + 27.0f,
-			m_headerHeight - m_ac_trading_pin.Height() - 20.0f);
+			m_ac_bg_black.PosY() - m_ac_trading_pin.Height() - 20.0f);
 	m_ac_bg_black2 = m_ac_bg_black;
 	m_ac_bg_black2.setPosition(m_latar.PosX(),m_ac_trading_pin.PosY() - m_ac_bg_black2.Height() - 20.0f);
+	m_ac_save.load("app/native/assets/password/btn_save.png");
+	m_ac_save_p.load("app/native/assets/password/btn_save_p.png");
+	m_ac_save2.load("app/native/assets/password/btn_save.png");;
+	m_ac_save2_p.load("app/native/assets/password/btn_save_p.png");;
 
-	m_ac_trading_pin.load("app/native/assets/password/pw_caption.png");
-	m_ac_trading_pin.setPosition(m_latar.PosX() + 27.0f,
-			m_headerHeight - m_ac_trading_pin.Height() - 20.0f);
+	m_btn_save1.regular = &m_ac_save;
+	m_btn_save1.pressed = &m_ac_save_p;
+	m_btn_save1.sizeX = m_ac_save.Width();
+	m_btn_save1.sizeY = m_ac_save.Height();
+	m_btn_save1.font = m_font;
+	m_btn_save1.text = "";
+	m_btn_save1.isPressed = false;
+	m_btn_save1.isEnabled = true;
+	m_btn_save1.setPosition(m_ac_bg_black.PosX() + m_ac_bg_black.Width() - m_ac_save.Width() - 55.0f, m_ac_bg_black.PosY() + 50.0f);
 
+	m_btn_save2.regular = &m_ac_save2;
+	m_btn_save2.pressed = &m_ac_save2_p;
+	m_btn_save2.sizeX = m_ac_save2.Width();
+	m_btn_save2.sizeY = m_ac_save2.Height();
+	m_btn_save2.font = m_font;
+	m_btn_save2.text = "";
+	m_btn_save2.isPressed = false;
+	m_btn_save2.isEnabled = true;
+	m_btn_save2.setPosition(m_ac_bg_black2.PosX() + m_ac_bg_black2.Width() - m_ac_save2.Width() - 55.0f, m_ac_bg_black2.PosY() + 50.0f);
 
 	// menu
 	fprintf(stderr, "Load menu.\n");
@@ -1755,6 +1774,7 @@ void panin::renderRunningTrade() {
 	if (bIsGettingRT)
 	{
 		std::string hasil = osStream.str();
+		std::vector<std::string>::size_type nol = 0;
 		if (hasil.length() > 0)
 		{
 			std::vector<std::string> vRTStream;
@@ -1762,7 +1782,7 @@ void panin::renderRunningTrade() {
 
 			//vector <int>::size_type ukuran;
 
-			if (vRTStream.capacity() > 0)
+			if (vRTStream.capacity() > nol)
 			{
 				fprintf(stderr, "----------------------\n");
 				for (std::vector<std::string>::iterator iter = vRTStream.begin(); iter != vRTStream.end(); ++iter)
@@ -1789,7 +1809,7 @@ void panin::renderRunningTrade() {
 			}
 		}
 
-		if (m_vRT.capacity() > 0)
+		if (m_vRT.capacity() > nol)
 		{
 			fprintf(stderr, "m_vRT size: %d\n", m_vRT.size());
 			std::vector<std::string>::iterator iter = m_vRT.begin();
@@ -1802,7 +1822,7 @@ void panin::renderRunningTrade() {
 				int j = 0;
 				for (std::vector<std::string>::iterator i = vs1.begin(); i != vs1.end(); ++i)
 				{
-					std::string s2 = *iter;
+					std::string s2 = *i;
 					char * c1 = new char[2];
 					std::memset(c1, 0, 2);
 					std::strncpy(c1, s2.c_str(), 1);
@@ -1857,7 +1877,7 @@ void panin::renderRunningTrade() {
 				}
 				myY -= 30.0f;
 				++iter;
-			} while (/*myY > m_footerHeight ||*/ iter != m_vRT.end());
+			} while (myY > m_footerHeight || iter != m_vRT.end());
 		}
 	}
 
@@ -3053,12 +3073,10 @@ void panin::renderResearch() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_latar.draw();
-	m_research_caption.draw();
 
 	addHeader();
 
-	m_tl_order_caption.draw();
-	m_tl_order_table_caption.draw();
+	m_research_caption.draw();
 
 	addFooter();
 
@@ -3092,16 +3110,16 @@ void panin::renderMyAccount() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_latar.draw();
-	m_ac_password.draw();
-	m_ac_textfield_bg.draw();
-	m_ac_trading_pin.draw();
-	m_btn_save1.draw();
-	m_btn_save2.draw();
 
 	addHeader();
 
-	m_tl_order_caption.draw();
-	m_tl_order_table_caption.draw();
+	m_ac_password.draw();
+	m_ac_bg_black.draw();
+	//m_ac_textfield_bg.draw();
+	m_ac_trading_pin.draw();
+	m_ac_bg_black2.draw();
+	m_btn_save1.draw();
+	m_btn_save2.draw();
 
 	addFooter();
 
@@ -4787,16 +4805,15 @@ void panin::periksaLogin() {
 
 void * threadDataRT(void* var) {
 	char * url = new char[1024];
-	//std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
 
-	std::strcpy(url,"http://202.53.249.2:8080/mi2/marketInfoData?request=currencies&act=start");
+	//std::strcpy(url,"http://202.53.249.2:8080/mi2/marketInfoData?request=currencies&act=start");
 
 	fprintf(stderr, "url yang diakses : %s.\n", url);
 	if (myServerConnection == NULL) {
 		myServerConnection = new ServerConnection();
 	}
 
-	fprintf(stderr, "Sebelum akses url.\n");
 	osStream.str("");
 	osStream.clear();
 	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f))
@@ -4805,14 +4822,11 @@ void * threadDataRT(void* var) {
 		fprintf(stderr, "hasil balikan start running trade: >>%s<<.\n", hasil.c_str());
 	}
 
-	sleep(2);
-	fprintf(stderr, "Sesudah akses url.\n");
 	std::memset(url, 0, 1024 * sizeof(url[0]));
 	std::strcpy(url,
 			"http://202.53.249.2:8080/mi2/marketInfoData?request=dataStream");
 	osStream.str("");
 	osStream.clear();
-	fprintf(stderr, "osStream.clear().\n");
 
 	bIsGettingRT = true;
 	do
@@ -4825,22 +4839,17 @@ void * threadDataRT(void* var) {
 //		fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
 	}
 	while (bIsGettingRT);
-//	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 3.0f)) {
-//		int i = 0;
-//		for (;;)
-//		{
-//			++i;
-//			if (i > 20)
-//				break;
-//			std::string hasil = osStream.str();
-//			fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
-//			sleep(1);
-//		}
-//		//std::string hasil = osStream.str();
-//		//fprintf(stderr, hasil.c_str());
-//	}
-//	std::string hasil = osStream.str();
-//	fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
+
+	if (!bIsGettingRT)
+	{
+		osStream.str("");
+		osStream.clear();
+		std::memset(url, 0, 1024 * sizeof(url[0]));
+		std::strcpy(url,
+				"http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=stop");
+		myServerConnection->doHttpGet2(url, osStream, 30.0f);
+	}
+
 	return NULL;
 }
 

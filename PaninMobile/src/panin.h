@@ -494,6 +494,9 @@ private:
 	Sprite m_ac_bg_black2;
 	Sprite m_ac_textfield_bg;
 	Sprite m_ac_save;
+	Sprite m_ac_save_p;
+	Sprite m_ac_save2;
+	Sprite m_ac_save2_p;
 	button m_btn_save1;
 	button m_btn_save2;
 
