@@ -1390,7 +1390,8 @@ void panin::run() {
 		case RUNNING_TRADE:
 			update();
 			renderRunningTrade();
-			ambilDataRunningTrade();
+			//sleep(5);
+			//ambilDataRunningTrade();
 			break;
 
 		case STOCK_WATCH:
@@ -1883,7 +1884,7 @@ void panin::renderRunningTrade() {
 				}
 				myY -= 30.0f;
 				++iter;
-			} while (myY > m_footerHeight || iter != m_vRT.end());
+			} while (/*myY > m_footerHeight ||*/ iter != m_vRT.end());
 		}
 	}
 
@@ -5051,9 +5052,9 @@ void panin::periksaLogin() {
 
 void * threadDataRT(void* var) {
 	char * url = new char[1024];
-	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+	//std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
 
-	//std::strcpy(url,"http://202.53.249.2:8080/mi2/marketInfoData?request=currencies&act=start");
+	std::strcpy(url,"http://202.53.249.2:8080/mi2/marketInfoData?request=currencies&act=start");
 
 	fprintf(stderr, "url yang diakses : %s.\n", url);
 	if (myServerConnection == NULL) {
@@ -5079,7 +5080,11 @@ void * threadDataRT(void* var) {
 	{
 		osStream.str("");
 		osStream.clear();
-		myServerConnection->doHttpGet2(url, osStream, 3.0f);
+		if (CURLE_OK != myServerConnection->doHttpGet2(url, osStream, 3.0f))
+		{
+			bIsGettingRT = false;
+			break;
+		}
 
 //		std::string hasil = osStream.str();
 //		fprintf(stderr, "hasil balikan start dataStream: >>%s<<.\n", hasil.c_str());
@@ -5093,7 +5098,7 @@ void * threadDataRT(void* var) {
 		std::memset(url, 0, 1024 * sizeof(url[0]));
 		std::strcpy(url,
 				"http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=stop");
-		myServerConnection->doHttpGet2(url, osStream, 30.0f);
+		if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f));
 	}
 
 	return NULL;
