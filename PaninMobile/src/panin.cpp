@@ -40,6 +40,11 @@ std::ostringstream osStream;
 std::ostringstream osStreamLogin;
 
 bool bIsGettingRT;
+bool bIsGettingSQ;
+bool bIsGettingBQ;
+bool bIsGettingSW;
+bool bIsGettingSS;
+bool bIsGettingBS;
 
 
 namespace paninMobile {
@@ -1385,6 +1390,7 @@ void panin::run() {
 		case RUNNING_TRADE:
 			update();
 			renderRunningTrade();
+			ambilDataRunningTrade();
 			break;
 
 		case STOCK_WATCH:
@@ -1945,7 +1951,7 @@ void panin::renderStockWatch() {
 	m_sw_btn_banking.draw();
 	m_sw_btn_mining.draw();
 	m_sw_btn_cons.draw();
-	m_sw_btn_plus_green.draw();
+	//m_sw_btn_plus_green.draw();
 
 	for (int i = 0; i < 5; ++i) {
 		for (int j = 0; j < 3; ++j) {
@@ -3121,6 +3127,10 @@ void panin::renderMyAccount() {
 	m_btn_save1.draw();
 	m_btn_save2.draw();
 
+	if (m_bOldPaswordFocus)
+	{
+
+	}
 	addFooter();
 
 	if (m_bShowBuy) {
@@ -4147,7 +4157,9 @@ void panin::onLeftRelease(float x, float y) {
 			case INFORMATIONS:
 			case PORTFOLIO:
 			case ORDER_TRADE:
-			break;
+				break;
+			case MY_ACCOUNT:
+				break;
 		}
 	}
 
@@ -4489,7 +4501,72 @@ void panin::onLeftPress(float x, float y) {
 			case INFORMATIONS:
 			case PORTFOLIO:
 			case ORDER_TRADE:
-			break;
+				break;
+
+			case MY_ACCOUNT:
+				m_bOldPaswordFocus = false;
+				m_bNewPaswordFocus = false;
+				m_bConfirmPwdFocus = false;
+				m_bOldPinFocus = false;
+				m_bNewPinFocus = false;
+				m_bConfirmPinFocus = false;
+
+				if (periksaPointer(pX, pY, m_ac_bg_black.PosX() + 60.0f, m_ac_bg_black.PosY() + 340.0f, 600.0f, 25.0f))
+				{
+					m_bOldPaswordFocus = true;
+					if (!m_bVirtualKeyboardShow)
+					{
+						virtualkeyboard_show();
+					}
+				}
+				else if (periksaPointer(pX, pY, m_ac_bg_black.PosX() + 60.0f, m_ac_bg_black.PosY() + 240.0f, 600.0f, 25.0f))
+				{
+					m_bNewPaswordFocus = true;
+					if (!m_bVirtualKeyboardShow)
+					{
+						virtualkeyboard_show();
+					}
+				}
+				else if (periksaPointer(pX, pY, m_ac_bg_black.PosX() + 60.0f, m_ac_bg_black.PosY() + 145.0f, 600.0f, 25.0f))
+				{
+					m_bConfirmPwdFocus = true;
+					if (!m_bVirtualKeyboardShow)
+					{
+						virtualkeyboard_show();
+					}
+				}
+				else if (periksaPointer(pX, pY, m_ac_bg_black2.PosX() + 60.0f, m_ac_bg_black2.PosY() + 340.0f, 600.0f, 25.0f))
+				{
+					m_bOldPinFocus = true;
+					if (!m_bVirtualKeyboardShow)
+					{
+						virtualkeyboard_show();
+					}
+				}
+				else if (periksaPointer(pX, pY, m_ac_bg_black2.PosX() + 60.0f, m_ac_bg_black2.PosY() + 240.0f, 600.0f, 25.0f))
+				{
+					m_bNewPinFocus = true;
+					if (!m_bVirtualKeyboardShow)
+					{
+						virtualkeyboard_show();
+					}
+				}
+				else if (periksaPointer(pX, pY, m_ac_bg_black2.PosX() + 60.0f, m_ac_bg_black2.PosY() + 145.0f, 600.0f, 25.0f))
+				{
+					m_bConfirmPinFocus = true;
+					if (!m_bVirtualKeyboardShow)
+					{
+						virtualkeyboard_show();
+					}
+				}
+				else
+				{
+					if (!m_bVirtualKeyboardShow)
+					{
+						virtualkeyboard_hide();
+					}
+				}
+				break;
 		}
 	}
 }
@@ -4658,6 +4735,175 @@ void panin::onKeyPressed(int c) {
 		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
 		{
 			m_sLot = m_sLot + (char)c;
+		}
+	}
+	else if (m_bOldPaswordFocus)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bOldPaswordFocus = false;
+			m_bNewPaswordFocus = false;
+			m_bConfirmPwdFocus = false;
+			m_bOldPinFocus = false;
+			m_bNewPinFocus = false;
+			m_bConfirmPinFocus = false;
+			//UpdatePassword();
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sOldPass.length() > 0)
+			{
+				char name [m_sOldPass.length()];
+				std::memset(name, 0, m_sOldPass.length());
+				std::strncpy(name, m_sOldPass.c_str(), m_sOldPass.length()-1);
+				m_sOldPass = "";
+				m_sOldPass = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sOldPass = m_sOldPass + (char)c;
+		}
+
+	}
+	else if (m_bNewPaswordFocus)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bOldPaswordFocus = false;
+			m_bNewPaswordFocus = false;
+			m_bConfirmPwdFocus = false;
+			m_bOldPinFocus = false;
+			m_bNewPinFocus = false;
+			m_bConfirmPinFocus = false;
+			//UpdatePassword();
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sNewPass.length() > 0)
+			{
+				char name [m_sNewPass.length()];
+				std::memset(name, 0, m_sNewPass.length());
+				std::strncpy(name, m_sNewPass.c_str(), m_sNewPass.length()-1);
+				m_sNewPass = "";
+				m_sNewPass = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sNewPass = m_sNewPass + (char)c;
+		}
+	}
+	else if (m_bConfirmPwdFocus)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bOldPaswordFocus = false;
+			m_bNewPaswordFocus = false;
+			m_bConfirmPwdFocus = false;
+			m_bOldPinFocus = false;
+			m_bNewPinFocus = false;
+			m_bConfirmPinFocus = false;
+			//UpdatePassword();
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sConfirmPass.length() > 0)
+			{
+				char name [m_sConfirmPass.length()];
+				std::memset(name, 0, m_sConfirmPass.length());
+				std::strncpy(name, m_sConfirmPass.c_str(), m_sConfirmPass.length()-1);
+				m_sConfirmPass = "";
+				m_sConfirmPass = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sConfirmPass = m_sConfirmPass + (char)c;
+		}
+	}
+	else if (m_bOldPinFocus)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bOldPaswordFocus = false;
+			m_bNewPaswordFocus = false;
+			m_bConfirmPwdFocus = false;
+			m_bOldPinFocus = false;
+			m_bNewPinFocus = false;
+			m_bConfirmPinFocus = false;
+			//UpdatePassword();
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sOldPin.length() > 0)
+			{
+				char name [m_sOldPin.length()];
+				std::memset(name, 0, m_sOldPin.length());
+				std::strncpy(name, m_sOldPin.c_str(), m_sOldPin.length()-1);
+				m_sOldPin = "";
+				m_sOldPin = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sOldPin = m_sOldPin + (char)c;
+		}
+	}
+	else if (m_bNewPinFocus)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bOldPaswordFocus = false;
+			m_bNewPaswordFocus = false;
+			m_bConfirmPwdFocus = false;
+			m_bOldPinFocus = false;
+			m_bNewPinFocus = false;
+			m_bConfirmPinFocus = false;
+			//UpdatePassword();
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sNewPin.length() > 0)
+			{
+				char name [m_sNewPin.length()];
+				std::memset(name, 0, m_sNewPin.length());
+				std::strncpy(name, m_sNewPin.c_str(), m_sNewPin.length()-1);
+				m_sNewPin = "";
+				m_sNewPin = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sNewPin = m_sNewPin + (char)c;
+		}
+	}
+	else if (m_bConfirmPinFocus)
+	{
+		if (c == KEYCODE_RETURN)
+		{
+			m_bOldPaswordFocus = false;
+			m_bNewPaswordFocus = false;
+			m_bConfirmPwdFocus = false;
+			m_bOldPinFocus = false;
+			m_bNewPinFocus = false;
+			m_bConfirmPinFocus = false;
+			//UpdatePassword();
+		}
+		else if (c == KEYCODE_BACKSPACE)
+		{
+			if (m_sConfirmPin.length() > 0)
+			{
+				char name [m_sConfirmPin.length()];
+				std::memset(name, 0, m_sConfirmPin.length());
+				std::strncpy(name, m_sConfirmPin.c_str(), m_sConfirmPin.length()-1);
+				m_sConfirmPin = "";
+				m_sConfirmPin = name;
+			}
+		}
+		else if (c >= UNICODE_BASIC_LATIN_FIRST && c <= UNICODE_BASIC_LATIN_LAST)
+		{
+			m_sConfirmPin = m_sConfirmPin + (char)c;
 		}
 	}
 }
@@ -4859,6 +5105,271 @@ void panin::ambilDataRunningTrade() {
 	m_vRT.clear();
 	fprintf(stderr, "ambilDataRunningTrade.\n");
 	pthread_create(&pth, NULL, threadDataRT, (void*) NULL);
+}
+
+void * threadDataSQ(void* var) {
+	char * url = new char[1024];
+	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+
+	fprintf(stderr, "url yang diakses : %s.\n", url);
+	if (myServerConnection == NULL) {
+		myServerConnection = new ServerConnection();
+	}
+
+	osStream.str("");
+	osStream.clear();
+	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f))
+	{
+		std::string hasil = osStream.str();
+		fprintf(stderr, "hasil balikan start running trade: >>%s<<.\n", hasil.c_str());
+	}
+
+	std::memset(url, 0, 1024 * sizeof(url[0]));
+	std::strcpy(url,
+			"http://202.53.249.2:8080/mi2/marketInfoData?request=dataStream");
+	osStream.str("");
+	osStream.clear();
+
+	bIsGettingSQ = true;
+	do
+	{
+		osStream.str("");
+		osStream.clear();
+		myServerConnection->doHttpGet2(url, osStream, 3.0f);
+	}
+	while (bIsGettingSQ);
+
+	if (!bIsGettingSQ)
+	{
+		osStream.str("");
+		osStream.clear();
+		std::memset(url, 0, 1024 * sizeof(url[0]));
+		std::strcpy(url,
+				"http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=stop");
+		myServerConnection->doHttpGet2(url, osStream, 30.0f);
+	}
+
+	return NULL;
+}
+
+void panin::ambilDataStockQuote() {
+	pthread_t pth;
+
+	m_vSQ.clear();
+	fprintf(stderr, "ambilDataRunningTrade.\n");
+	pthread_create(&pth, NULL, threadDataSQ, (void*) NULL);
+}
+
+void * threadDataBQ(void* var) {
+	char * url = new char[1024];
+	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+
+	fprintf(stderr, "url yang diakses : %s.\n", url);
+	if (myServerConnection == NULL) {
+		myServerConnection = new ServerConnection();
+	}
+
+	osStream.str("");
+	osStream.clear();
+	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f))
+	{
+		std::string hasil = osStream.str();
+		fprintf(stderr, "hasil balikan start running trade: >>%s<<.\n", hasil.c_str());
+	}
+
+	std::memset(url, 0, 1024 * sizeof(url[0]));
+	std::strcpy(url,
+			"http://202.53.249.2:8080/mi2/marketInfoData?request=dataStream");
+	osStream.str("");
+	osStream.clear();
+
+	bIsGettingBQ = true;
+	do
+	{
+		osStream.str("");
+		osStream.clear();
+		myServerConnection->doHttpGet2(url, osStream, 3.0f);
+	}
+	while (bIsGettingBQ);
+
+	if (!bIsGettingBQ)
+	{
+		osStream.str("");
+		osStream.clear();
+		std::memset(url, 0, 1024 * sizeof(url[0]));
+		std::strcpy(url,
+				"http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=stop");
+		myServerConnection->doHttpGet2(url, osStream, 30.0f);
+	}
+
+	return NULL;
+}
+
+void panin::ambilDataBrokerQuote() {
+	pthread_t pth;
+
+	m_vBQ.clear();
+	fprintf(stderr, "ambilDataRunningTrade.\n");
+	pthread_create(&pth, NULL, threadDataBQ, (void*) NULL);
+}
+
+void * threadDataSW(void* var) {
+	char * url = new char[1024];
+	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+
+	fprintf(stderr, "url yang diakses : %s.\n", url);
+	if (myServerConnection == NULL) {
+		myServerConnection = new ServerConnection();
+	}
+
+	osStream.str("");
+	osStream.clear();
+	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f))
+	{
+		std::string hasil = osStream.str();
+		fprintf(stderr, "hasil balikan start running trade: >>%s<<.\n", hasil.c_str());
+	}
+
+	std::memset(url, 0, 1024 * sizeof(url[0]));
+	std::strcpy(url,
+			"http://202.53.249.2:8080/mi2/marketInfoData?request=dataStream");
+	osStream.str("");
+	osStream.clear();
+
+	bIsGettingSW = true;
+	do
+	{
+		osStream.str("");
+		osStream.clear();
+		myServerConnection->doHttpGet2(url, osStream, 3.0f);
+	}
+	while (bIsGettingSW);
+
+	if (!bIsGettingSW)
+	{
+		osStream.str("");
+		osStream.clear();
+		std::memset(url, 0, 1024 * sizeof(url[0]));
+		std::strcpy(url,
+				"http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=stop");
+		myServerConnection->doHttpGet2(url, osStream, 30.0f);
+	}
+
+	return NULL;
+}
+
+void panin::ambilDataStockWatch() {
+	pthread_t pth;
+
+	m_vSW.clear();
+	fprintf(stderr, "ambilDataRunningTrade.\n");
+	pthread_create(&pth, NULL, threadDataSW, (void*) NULL);
+}
+
+void * threadDataSS(void* var) {
+	char * url = new char[1024];
+	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+
+	fprintf(stderr, "url yang diakses : %s.\n", url);
+	if (myServerConnection == NULL) {
+		myServerConnection = new ServerConnection();
+	}
+
+	osStream.str("");
+	osStream.clear();
+	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f))
+	{
+		std::string hasil = osStream.str();
+		fprintf(stderr, "hasil balikan start running trade: >>%s<<.\n", hasil.c_str());
+	}
+
+	std::memset(url, 0, 1024 * sizeof(url[0]));
+	std::strcpy(url,
+			"http://202.53.249.2:8080/mi2/marketInfoData?request=dataStream");
+	osStream.str("");
+	osStream.clear();
+
+	bIsGettingSS = true;
+	do
+	{
+		osStream.str("");
+		osStream.clear();
+		myServerConnection->doHttpGet2(url, osStream, 3.0f);
+	}
+	while (bIsGettingSS);
+
+	if (!bIsGettingSS)
+	{
+		osStream.str("");
+		osStream.clear();
+		std::memset(url, 0, 1024 * sizeof(url[0]));
+		std::strcpy(url,
+				"http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=stop");
+		myServerConnection->doHttpGet2(url, osStream, 30.0f);
+	}
+
+	return NULL;
+}
+
+void panin::ambilDataStockSummary() {
+	pthread_t pth;
+
+	m_vSS.clear();
+	fprintf(stderr, "ambilDataRunningTrade.\n");
+	pthread_create(&pth, NULL, threadDataSS, (void*) NULL);
+}
+
+void * threadDataBS(void* var) {
+	char * url = new char[1024];
+	std::strcpy(url, "http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=start");
+
+	fprintf(stderr, "url yang diakses : %s.\n", url);
+	if (myServerConnection == NULL) {
+		myServerConnection = new ServerConnection();
+	}
+
+	osStream.str("");
+	osStream.clear();
+	if (CURLE_OK == myServerConnection->doHttpGet2(url, osStream, 30.0f))
+	{
+		std::string hasil = osStream.str();
+		fprintf(stderr, "hasil balikan start running trade: >>%s<<.\n", hasil.c_str());
+	}
+
+	std::memset(url, 0, 1024 * sizeof(url[0]));
+	std::strcpy(url,
+			"http://202.53.249.2:8080/mi2/marketInfoData?request=dataStream");
+	osStream.str("");
+	osStream.clear();
+
+	bIsGettingBS = true;
+	do
+	{
+		osStream.str("");
+		osStream.clear();
+		myServerConnection->doHttpGet2(url, osStream, 3.0f);
+	}
+	while (bIsGettingBS);
+
+	if (!bIsGettingBS)
+	{
+		osStream.str("");
+		osStream.clear();
+		std::memset(url, 0, 1024 * sizeof(url[0]));
+		std::strcpy(url,
+				"http://202.53.249.2:8080/mi2/marketInfoData?request=runningTrade&act=stop");
+		myServerConnection->doHttpGet2(url, osStream, 30.0f);
+	}
+
+	return NULL;
+}
+
+void panin::ambilDataBrokerSummary() {
+	pthread_t pth;
+
+	m_vBS.clear();
+	fprintf(stderr, "ambilDataRunningTrade.\n");
+	pthread_create(&pth, NULL, threadDataBS, (void*) NULL);
 }
 
 //bool isWithin(float clickX, float clickY) const {

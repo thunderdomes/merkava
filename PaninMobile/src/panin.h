@@ -126,6 +126,20 @@ private:
 	bool	m_bUsernameFocus;
 	bool	m_bPasswordFocus;
 
+	// my account
+	bool	m_bOldPaswordFocus;
+	bool	m_bNewPaswordFocus;
+	bool	m_bConfirmPwdFocus;
+	bool	m_bOldPinFocus;
+	bool	m_bNewPinFocus;
+	bool	m_bConfirmPinFocus;
+	std::string m_sOldPass;
+	std::string m_sNewPass;
+	std::string m_sConfirmPass;
+	std::string m_sOldPin;
+	std::string m_sNewPin;
+	std::string m_sConfirmPin;
+
 	struct button {
 		float posX;
 		float posY;
@@ -493,6 +507,7 @@ private:
 	Sprite m_ac_bg_black;
 	Sprite m_ac_bg_black2;
 	Sprite m_ac_textfield_bg;
+	Sprite m_ac_tf_focus;
 	Sprite m_ac_save;
 	Sprite m_ac_save_p;
 	Sprite m_ac_save2;
@@ -646,6 +661,13 @@ private:
 	std::string m_s_pf_tableContent[5][10];
 
 	std::vector<std::string> m_vRT;
+	std::vector<std::string> m_vSQ;
+	std::vector<std::string> m_vBQ;
+	std::vector<std::string> m_vSW;
+	std::vector<std::string> m_vSS;
+	std::vector<std::string> m_vBS;
+
+
 
 	virtual void onLeftPress(float x, float y);
 	virtual void onLeftRelease(float x, float y);
@@ -697,6 +719,11 @@ private:
 
 	void periksaLogin();
 	void ambilDataRunningTrade();
+	void ambilDataStockQuote();
+	void ambilDataBrokerQuote();
+	void ambilDataStockWatch();
+	void ambilDataStockSummary();
+	void ambilDataBrokerSummary();
 
 	bool periksaPointer(float pX, float pY, float kiri, float bawah, float lebar, float tinggi);
 };
